@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <item
+        android:id="@+id/map_icon"
+        android:icon="@drawable/ic_mapmarker2"
+        android:title="Map"/>
+
+    <item
+        android:id="@+id/leaderboard_icon"
+        android:icon="@drawable/ic_podium"
+        android:title="B Hero"/>
+
+    <item
+        android:id="@+id/profile_icon"
+        android:icon="@drawable/ic_profiletie"
+        android:title="Profile"/>
+
+    <item
+        android:id="@+id/request_blood"
+        android:icon="@drawable/ic_ivbag"
+        android:title="Request Blood"
+        />
+
+
+</menu>
