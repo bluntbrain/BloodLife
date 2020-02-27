@@ -11,8 +11,8 @@
 
     <com.mikhaellopez.circularprogressbar.CircularProgressBar
         android:id="@+id/cirle_bar"
-        android:layout_width="70dp"
-        android:layout_height="70dp"
+        android:layout_width="60dp"
+        android:layout_height="60dp"
         app:background_progressbar_color="@color/white"
         app:background_progressbar_width="5dp"
         app:layout_constraintBottom_toBottomOf="parent"
@@ -21,6 +21,6 @@
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintVertical_bias="0.9"
         app:progressbar_color="@color/colorPrimary"
-        app:progressbar_width="5dp" />
+        app:progressbar_width="4dp" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
