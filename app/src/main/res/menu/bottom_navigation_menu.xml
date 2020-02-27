@@ -4,22 +4,22 @@
     <item
         android:id="@+id/map_icon"
         android:icon="@drawable/ic_mapmarker2"
-        android:title="Map"/>
+        android:title="@string/navigationbar_map"/>
 
     <item
         android:id="@+id/leaderboard_icon"
         android:icon="@drawable/ic_podium"
-        android:title="B Hero"/>
+        android:title="@string/navigationbar_bhero"/>
 
     <item
         android:id="@+id/profile_icon"
         android:icon="@drawable/ic_profiletie"
-        android:title="Profile"/>
+        android:title="@string/navigationbar_profile"/>
 
     <item
         android:id="@+id/request_blood"
         android:icon="@drawable/ic_ivbag"
-        android:title="Request Blood"
+        android:title="@string/navigationbar_request"
         />
 
 
