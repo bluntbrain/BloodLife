@@ -17,11 +17,11 @@ public class WelcomeLoading extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_welcome_loading);
-        animationDuration=8000;
+        animationDuration=6000;
         mCircularProgressBar=findViewById(R.id.cirle_bar);
         mCircularProgressBar.setProgressWithAnimation(100, animationDuration);
 
-        new CountDownTimer(8000,5000)
+        new CountDownTimer(6000,5000)
         {
 
             @Override
@@ -32,7 +32,7 @@ public class WelcomeLoading extends AppCompatActivity {
 
             @Override
             public void onFinish() {
-                Intent i = new Intent(getApplicationContext(), MainActivity.class);
+                Intent i = new Intent(getApplicationContext(), LoginActivity.class);
                 startActivity(i);
             }
         }.start();

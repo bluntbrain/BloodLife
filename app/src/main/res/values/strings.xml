@@ -4,5 +4,7 @@
     <string name="navigationbar_bhero">B Hero</string>
     <string name="navigationbar_request">Request</string>
     <string name="navigationbar_profile">Profile</string>
+    <string name="password">Password</string>
+    <string name="mobilenumber">Mobile Number</string>
 
 </resources>
