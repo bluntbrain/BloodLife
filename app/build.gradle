@@ -31,4 +31,5 @@ dependencies {
     implementation 'com.google.android.gms:play-services-maps:17.0.0'
     implementation 'com.google.android.material:material:1.0.0'
     implementation 'com.mikhaellopez:circularprogressbar:1.0.0'
+    implementation 'com.skyfishjy.ripplebackground:library:1.0.1'
 }
