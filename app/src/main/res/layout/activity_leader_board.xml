@@ -6,6 +6,29 @@
     android:layout_height="match_parent"
     tools:context=".LeaderBoard">
 
+    <com.github.florent37.diagonallayout.DiagonalLayout
+        android:layout_width="match_parent"
+        android:layout_height="250dp"
+        app:diagonal_angle="20"
+        app:layout_constraintBottom_toTopOf="@+id/bottomNavigation"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.0"
+        app:diagonal_direction="left"
+        app:diagonal_position="bottom"
+        android:elevation="10dp">
+
+        <com.flaviofaria.kenburnsview.KenBurnsView
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:src="@drawable/picone"
+            android:scaleType="centerCrop"/>
+
+
+
+    </com.github.florent37.diagonallayout.DiagonalLayout>
+
     <com.google.android.material.bottomnavigation.BottomNavigationView
         android:id="@+id/bottomNavigation"
         android:layout_width="match_parent"
