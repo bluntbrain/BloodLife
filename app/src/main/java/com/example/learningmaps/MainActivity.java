@@ -1,24 +1,27 @@
 package com.example.learningmaps;
 
 import android.content.Intent;
+import android.location.Location;
 import android.os.Bundle;
 import android.view.MenuItem;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.fragment.app.FragmentActivity;
 
-import com.google.android.gms.maps.CameraUpdateFactory;
+import com.google.android.gms.location.FusedLocationProviderClient;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.SupportMapFragment;
-import com.google.android.gms.maps.model.LatLng;
-import com.google.android.gms.maps.model.MarkerOptions;
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.Task;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 
 public class MainActivity extends FragmentActivity implements OnMapReadyCallback {
 
     private GoogleMap mMap;
-    BottomNavigationView mBottomNavigationView;
+    private BottomNavigationView mBottomNavigationView;
+    private FusedLocationProviderClient mFusedLocationProviderClient;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -39,13 +42,28 @@ public class MainActivity extends FragmentActivity implements OnMapReadyCallback
 
         mMap = googleMap;
         mMap.getUiSettings().setCompassEnabled(true);
-        // Add a marker in Sydney, Australia, and move the camera.
-        LatLng sydney = new LatLng(13.345389, 74.796837);
-        mMap.addMarker(new MarkerOptions().position(sydney));
-        mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(sydney,12));
+        mMap.getUiSettings().setZoomControlsEnabled(true);
+
+       mFusedLocationProviderClient=new FusedLocationProviderClient(MainActivity.this);
+       mFusedLocationProviderClient.getLastLocation().addOnCompleteListener(new OnCompleteListener<Location>() {
+           @Override
+           public void onComplete(@NonNull Task<Location> task) {
+               if(task.isSuccessful())
+               {
+                   Location location=task.getResult();
+               }
+               else
+               {
+                   Toast.makeText(MainActivity.this,"Error",Toast.LENGTH_LONG).show();
+               }
+           }
+       });
+        //LatLng user_location=new LatLng(location.getLatitude(),location.getLongitude());
+        //mMap.addMarker(new MarkerOptions().position(user_location));
+        //mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(user_location,10));
         mMap.setMapType(GoogleMap.MAP_TYPE_NORMAL);
 
-
+        /*
         LatLng udupi =new LatLng(13.5,74.8);
         mMap.addMarker(new MarkerOptions().position(udupi));
 
@@ -66,6 +84,7 @@ public class MainActivity extends FragmentActivity implements OnMapReadyCallback
 
         LatLng manglore5=new LatLng(10,75);
         mMap.addMarker(new MarkerOptions().position(manglore5));
+        */
     }
 
     private BottomNavigationView.OnNavigationItemSelectedListener mOnNavigationItemSelectedListener

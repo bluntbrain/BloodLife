@@ -6,5 +6,9 @@
     <string name="navigationbar_profile">Profile</string>
     <string name="password">Password</string>
     <string name="mobilenumber">Mobile Number</string>
-
+    <string name="profile_rateus">Rate us</string>
+    <string name="profile_feedback">Feedback</string>
+    <string name="profile_developers">Meet our team</string>
+    <string name="about">About us</string>
+    <string name="tnc">TnC</string>
 </resources>
