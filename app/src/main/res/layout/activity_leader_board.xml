@@ -9,22 +9,22 @@
     <com.github.florent37.diagonallayout.DiagonalLayout
         android:layout_width="match_parent"
         android:layout_height="250dp"
+        android:id="@+id/dialoglay"
         app:diagonal_angle="20"
+        app:diagonal_direction="left"
+        app:diagonal_position="bottom"
         app:layout_constraintBottom_toTopOf="@+id/bottomNavigation"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.0"
-        app:diagonal_direction="left"
-        app:diagonal_position="bottom"
-        android:elevation="10dp">
+        app:layout_constraintVertical_bias="0.0">
 
         <com.flaviofaria.kenburnsview.KenBurnsView
+            android:id="@+id/kenburns"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:src="@drawable/picone"
-            android:scaleType="centerCrop"/>
-
+            android:scaleType="centerCrop"
+            android:src="@drawable/picone" />
 
 
     </com.github.florent37.diagonallayout.DiagonalLayout>
@@ -42,4 +42,21 @@
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintVertical_bias="1.0"
         app:menu="@menu/bottom_navigation_menu" />
+
+    <androidx.cardview.widget.CardView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:cardCornerRadius="80dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.11"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.27999997">
+
+        <androidx.appcompat.widget.AppCompatImageView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            app:srcCompat="@drawable/bherologo" />
+    </androidx.cardview.widget.CardView>
 </androidx.constraintlayout.widget.ConstraintLayout>
