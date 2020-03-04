@@ -3,6 +3,7 @@
     package="com.example.learningmaps">
 
     <uses-permission android:name="android.permission.INTERNET" />
+    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
     <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
     <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
 
@@ -17,7 +18,9 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity android:name=".SignupActivity"></activity>
+        <activity android:name=".FeedBack"></activity>
+        <activity android:name=".RateUs" />
+        <activity android:name=".SignupActivity" />
         <activity android:name=".LoginActivity" />
         <activity android:name=".WelcomeLoading">
             <intent-filter>
@@ -29,6 +32,7 @@
         <activity android:name=".Request" />
         <activity android:name=".Profile" />
         <activity android:name=".LeaderBoard" />
+        <activity android:name=".SliderActivity" />
         <activity android:name=".MainActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />

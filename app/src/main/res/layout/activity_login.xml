@@ -8,14 +8,13 @@
     android:background="@drawable/loginback">
 
     <EditText
-        android:id="@+id/mobile"
+        android:id="@+id/username"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:background="@drawable/mobilebutton"
         android:gravity="center"
         android:hint="@string/mobilenumber"
 
-        android:inputType="number"
         android:textSize="16sp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
@@ -55,9 +54,9 @@
         android:id="@+id/signuptext"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Signup isntead"
-        android:textSize="14sp"
+        android:text="Signup instead"
         android:textColor="@color/signuptext"
+        android:textSize="14sp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
