@@ -49,15 +49,15 @@ public class LoginActivity extends AppCompatActivity {
 
                     ParseUser.logInInBackground(username.getText().toString(), password.getText().toString(), new LogInCallback() {
                         public void done(ParseUser user, ParseException e) {
-                            if (user != null) {
+                            if (user != null && e==null) {
                                 // Hooray! The user is logged in.
 
                                 Intent i = new Intent(getApplicationContext(), MainActivity.class);
                                 startActivity(i);
                             } else {
                                 // Signup failed. Look at the ParseException to see what happened.
-                                //Toast.makeText(getApplicationContext(), "Wrong Credentials"+e.toString(), Toast.LENGTH_LONG).show();
-
+                                //T.makeText(getApplicationContext(), "Wrong Credentials"+e.toString(), Toast.LENGTH_LONG).show();
+                                Toast.makeText(getApplicationContext(),e.toString(),Toast.LENGTH_LONG).show();
                             }
                         }
                     });

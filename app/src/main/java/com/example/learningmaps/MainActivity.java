@@ -1,27 +1,22 @@
 package com.example.learningmaps;
 
 import android.content.Intent;
-import android.location.Location;
 import android.os.Bundle;
 import android.view.MenuItem;
-import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.fragment.app.FragmentActivity;
 
-import com.google.android.gms.location.FusedLocationProviderClient;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.SupportMapFragment;
-import com.google.android.gms.tasks.OnCompleteListener;
-import com.google.android.gms.tasks.Task;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 
 public class MainActivity extends FragmentActivity implements OnMapReadyCallback {
 
     private GoogleMap mMap;
     private BottomNavigationView mBottomNavigationView;
-    private FusedLocationProviderClient mFusedLocationProviderClient;
+    //private FusedLocationProviderClient mFusedLocationProviderClient;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -43,7 +38,7 @@ public class MainActivity extends FragmentActivity implements OnMapReadyCallback
         mMap = googleMap;
         mMap.getUiSettings().setCompassEnabled(true);
         mMap.getUiSettings().setZoomControlsEnabled(true);
-
+        /*
        mFusedLocationProviderClient=new FusedLocationProviderClient(MainActivity.this);
        mFusedLocationProviderClient.getLastLocation().addOnCompleteListener(new OnCompleteListener<Location>() {
            @Override
@@ -58,6 +53,8 @@ public class MainActivity extends FragmentActivity implements OnMapReadyCallback
                }
            }
        });
+
+         */
         //LatLng user_location=new LatLng(location.getLatitude(),location.getLongitude());
         //mMap.addMarker(new MarkerOptions().position(user_location));
         //mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(user_location,10));

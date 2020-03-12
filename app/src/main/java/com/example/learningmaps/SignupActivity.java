@@ -15,7 +15,9 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import com.parse.Parse;
 import com.parse.ParseException;
+import com.parse.ParseObject;
 import com.parse.ParseUser;
+import com.parse.SaveCallback;
 import com.parse.SignUpCallback;
 
 import java.util.ArrayList;
@@ -24,7 +26,7 @@ public class SignupActivity extends AppCompatActivity {
 
     private ImageView male,female;
     private Button done;
-    private EditText name,userid,email,phoneno,password;
+    private EditText name,email,phoneno,password;
     private String BloodGroup,gender;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -38,7 +40,7 @@ public class SignupActivity extends AppCompatActivity {
         );
 //SPINNER CODE
 
-        Spinner spinner = findViewById(R.id.spinner);
+        final Spinner spinner = findViewById(R.id.spinner);
         ArrayList<String> arrayList = new ArrayList<>();
         arrayList.add("A+");
         arrayList.add("A-");
@@ -63,7 +65,7 @@ public class SignupActivity extends AppCompatActivity {
         });
 //IMAGE CODE
         name=findViewById(R.id.signup_name);
-        userid=findViewById(R.id.signup_userid);
+       // userid=findViewById(R.id.signup_userid);
         email=findViewById(R.id.signup_email);
         phoneno=findViewById(R.id.signup_phoneno);
         password=findViewById(R.id.signup_password);
@@ -93,31 +95,50 @@ public class SignupActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
 
-                if(name.getText()==null || userid.getText()==null||email.getText()==null || phoneno.getText()==null|| password.getText()==null || gender==null)
+                if(name.getText()==null ||email.getText()==null || phoneno.getText()==null|| password.getText()==null || gender==null)
                 {
                     Toast.makeText(SignupActivity.this,"Fields Empty",Toast.LENGTH_LONG).show();
                 }
                 else {
 
                     ParseUser user = new ParseUser();
-                    user.setUsername(userid.getText().toString());
+                    user.setUsername(phoneno.getText().toString());
                     user.setPassword(password.getText().toString());
                     user.setEmail(email.getText().toString());
-                    user.put("name", name.getText().toString());
-                    user.put("phoneno", phoneno.getText().toString());
-                    user.put("type", BloodGroup);
-                    user.put("gender", gender);
                     user.signUpInBackground(new SignUpCallback() {
                         @Override
                         public void done(ParseException e) {
                             if (e == null) {
-                                Intent i = new Intent(SignupActivity.this, SliderActivity.class);
-                                startActivity(i);
+
+                                ParseObject profile =new ParseObject("Profile");
+                                profile.put("username",phoneno.getText().toString());
+                                profile.put("name",name.getText().toString());
+                                profile.put("type",spinner.getSelectedItem().toString());
+                                profile.put("email",email.getText().toString());
+                                profile.put("gender",gender);
+                                profile.saveInBackground(new SaveCallback() {
+                                    @Override
+                                    public void done(ParseException e) {
+                                        if(e==null){
+                                            Intent i = new Intent(SignupActivity.this, SliderActivity.class);
+                                            startActivity(i);
+                                        }
+                                        else{
+                                            Toast.makeText(SignupActivity.this, e.toString(), Toast.LENGTH_LONG).show();
+                                        }
+
+                                    }
+                                });
+
                             } else {
                                 Toast.makeText(SignupActivity.this, e.toString(), Toast.LENGTH_LONG).show();
                             }
                         }
                     });
+
+
+
+
                 }
 
             }

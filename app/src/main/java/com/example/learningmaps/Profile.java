@@ -2,11 +2,13 @@ package com.example.learningmaps;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.view.LayoutInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.ImageView;
 
 import androidx.annotation.NonNull;
+import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.google.android.material.bottomnavigation.BottomNavigationView;
@@ -30,15 +32,19 @@ public class Profile extends AppCompatActivity {
         rateus.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent i=new Intent(getApplicationContext(),RateUs.class);
-                startActivity(i);
+                AlertDialog.Builder builder=new AlertDialog.Builder(Profile.this);
+                View view= LayoutInflater.from(Profile.this).inflate(R.layout.activity_rate_us,null);
+                builder.setView(view);
+                builder.show();
             }
         });
         feedback.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent i=new Intent(getApplicationContext(),FeedBack.class);
-                startActivity(i);
+                AlertDialog.Builder builder=new AlertDialog.Builder(Profile.this);
+                View view= LayoutInflater.from(Profile.this).inflate(R.layout.activity_feed_back,null);
+                builder.setView(view);
+                builder.show();
             }
         });
 
