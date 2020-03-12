@@ -18,7 +18,8 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity android:name=".FeedBack"></activity>
+        <activity android:name=".RequestBlood"></activity>
+        <activity android:name=".FeedBack" />
         <activity android:name=".RateUs" />
         <activity android:name=".SignupActivity" />
         <activity android:name=".LoginActivity" />
