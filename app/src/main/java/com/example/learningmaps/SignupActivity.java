@@ -1,8 +1,10 @@
 package com.example.learningmaps;
 
+import android.app.ProgressDialog;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
@@ -99,12 +101,18 @@ public class SignupActivity extends AppCompatActivity {
                 {
                     Toast.makeText(SignupActivity.this,"Fields Empty",Toast.LENGTH_LONG).show();
                 }
-                else {
+                else if(phoneno.getTextSize()>10){
+                    Toast.makeText(SignupActivity.this,"Invalid Number",Toast.LENGTH_LONG).show();
+                } else {
 
+                    ProgressDialog progressDialog=new ProgressDialog(SignupActivity.this);
+                    progressDialog.setMessage("Signing Up");
+                    progressDialog.show();
                     ParseUser user = new ParseUser();
                     user.setUsername(phoneno.getText().toString());
                     user.setPassword(password.getText().toString());
                     user.setEmail(email.getText().toString());
+
                     user.signUpInBackground(new SignUpCallback() {
                         @Override
                         public void done(ParseException e) {
@@ -137,12 +145,24 @@ public class SignupActivity extends AppCompatActivity {
                     });
 
 
-
+                    progressDialog.dismiss();
 
                 }
+
 
             }
         });
 
+    }
+
+    public void rootlayouttap(View view)
+    {
+        try {
+            InputMethodManager methodManager = (InputMethodManager) getSystemService(INPUT_METHOD_SERVICE);
+            methodManager.hideSoftInputFromWindow(getCurrentFocus().getWindowToken(), 0);
+        }catch (Exception e)
+        {
+
+        }
     }
 }

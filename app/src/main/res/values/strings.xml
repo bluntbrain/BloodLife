@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">LearningMaps</string>
+    <string name="app_name">BloodLife</string>
     <string name="navigationbar_map">Map</string>
     <string name="navigationbar_bhero">B Hero</string>
     <string name="navigationbar_request">Request</string>

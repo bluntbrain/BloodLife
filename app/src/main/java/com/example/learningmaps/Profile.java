@@ -1,27 +1,35 @@
 package com.example.learningmaps;
 
+import android.app.ProgressDialog;
 import android.content.Intent;
+import android.net.Uri;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.ImageView;
+import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.google.android.material.bottomnavigation.BottomNavigationView;
+import com.parse.ParseUser;
 
 public class Profile extends AppCompatActivity {
 
-    private ImageView rateus,feedback;
+    private ImageView rateus,feedback,TnC,logoutlogo;
+    private TextView logouttext;
 
     BottomNavigationView mBottomNavigationView;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_profile);
+        TnC=findViewById(R.id.tnc);
+        logoutlogo=findViewById(R.id.logoutlogo);
+        logouttext=findViewById(R.id.logouttext);
         rateus=findViewById(R.id.rateuspic);
         feedback=findViewById(R.id.feedbackpic);
 
@@ -47,6 +55,38 @@ public class Profile extends AppCompatActivity {
                 builder.show();
             }
         });
+
+        TnC.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Uri uri = Uri.parse("https://www.websitepolicies.com/policies/view/iQcUErSr");
+                Intent intent = new Intent(Intent.ACTION_VIEW, uri);
+                startActivity(intent);
+            }
+        });
+
+        logouttext.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                ParseUser.logOut();
+                Intent intent= new Intent(Profile.this,LoginActivity.class);
+                startActivity(intent);
+            }
+        });
+
+        logoutlogo.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                final ProgressDialog progressDialog=new ProgressDialog(Profile.this);
+                progressDialog.setMessage("Logging Out");
+                progressDialog.show();
+                ParseUser.logOut();
+                progressDialog.dismiss();
+                Intent intent= new Intent(Profile.this,LoginActivity.class);
+                startActivity(intent);
+            }
+        });
+
 
     }
 

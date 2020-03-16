@@ -1,8 +1,10 @@
 package com.example.learningmaps;
 
+import android.app.ProgressDialog;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
@@ -45,8 +47,15 @@ public class LoginActivity extends AppCompatActivity {
                 if(username.getText().toString().equals("") || password.getText().toString().equals(""))
                 {
                     Toast.makeText(LoginActivity.this,"Fields Empty",Toast.LENGTH_LONG).show();
-                }else {
+                }
+                else if(username.getTextSize()>10){
 
+                    Toast.makeText(LoginActivity.this,"Invalid Number",Toast.LENGTH_LONG).show();
+
+                }else{
+                    final ProgressDialog progressDialog=new ProgressDialog(LoginActivity.this);
+                    progressDialog.setMessage("Logging In");
+                    progressDialog.show();
                     ParseUser.logInInBackground(username.getText().toString(), password.getText().toString(), new LogInCallback() {
                         public void done(ParseUser user, ParseException e) {
                             if (user != null && e==null) {
@@ -59,6 +68,7 @@ public class LoginActivity extends AppCompatActivity {
                                 //T.makeText(getApplicationContext(), "Wrong Credentials"+e.toString(), Toast.LENGTH_LONG).show();
                                 Toast.makeText(getApplicationContext(),e.toString(),Toast.LENGTH_LONG).show();
                             }
+                            progressDialog.dismiss();
                         }
                     });
                 }
@@ -73,5 +83,16 @@ public class LoginActivity extends AppCompatActivity {
             }
         });
 
+    }
+
+    public void rootlayouttap(View view)
+    {
+        try {
+            InputMethodManager methodManager = (InputMethodManager) getSystemService(INPUT_METHOD_SERVICE);
+            methodManager.hideSoftInputFromWindow(getCurrentFocus().getWindowToken(), 0);
+        }catch (Exception e)
+        {
+
+        }
     }
 }
