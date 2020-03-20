@@ -7,6 +7,7 @@ import android.os.Bundle;
 import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.ImageView;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
@@ -42,6 +43,7 @@ public class MainActivity extends FragmentActivity implements OnMapReadyCallback
 
     //private LatLng userLocation;
     ParseGeoPoint currentUserLocation;
+    private ImageView mylocation;
     private CardView buttonforrequest;
     private CameraPosition mCameraPosition; // for altering camera
     private PlacesClient mPlacesClient; // for places api
@@ -91,7 +93,7 @@ public class MainActivity extends FragmentActivity implements OnMapReadyCallback
         SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager()
                 .findFragmentById(R.id.map);
         mapFragment.getMapAsync(this);
-
+        mylocation=findViewById(R.id.mylocation);
         buttonforrequest=findViewById(R.id.buttontorequestpage);
         mBottomNavigationView=findViewById(R.id.bottomNavigation);
         mBottomNavigationView.setOnNavigationItemSelectedListener(mOnNavigationItemSelectedListener);
@@ -106,6 +108,15 @@ public class MainActivity extends FragmentActivity implements OnMapReadyCallback
                 startActivity(intent);
             }
         });
+
+        //mylocation.setOnClickListener(new View.OnClickListener() {
+          //  @Override
+          //  public void onClick(View v) {
+             //   if(mMap.getMyLocation() != null) { // Check to ensure coordinates aren't null, probably a better way of doing this...
+               //     mMap.setCenterCoordinate(new LatLngZoom(mapView.getMyLocation().getLatitude(), mapView.getMyLocation().getLongitude(), 20), true);
+               // }
+           // }
+       // });
 
 
     }
@@ -128,8 +139,9 @@ public class MainActivity extends FragmentActivity implements OnMapReadyCallback
 
 
         mMap = googleMap;
-        mMap.getUiSettings().setCompassEnabled(true);
+        //mMap.getUiSettings().setCompassEnabled(true);
         mMap.getUiSettings().setZoomControlsEnabled(true);
+        mMap.getUiSettings().setMyLocationButtonEnabled(true);
 
         getLocationPermission();
 
@@ -141,6 +153,7 @@ public class MainActivity extends FragmentActivity implements OnMapReadyCallback
 
         //showCurrentPlace();
         addallrequests();
+        allcamps();
 
 
 
@@ -253,9 +266,35 @@ public class MainActivity extends FragmentActivity implements OnMapReadyCallback
      * Prompts the user to select the current place from a list of likely places, and shows the
      * current place on the map - provided the user has granted location permission.
      */
+    private void allcamps()
+    {
+        ParseQuery<ParseObject> campAll = ParseQuery.getQuery("Camps");
+        campAll.whereExists("camplocation");
+        campAll.findInBackground(new FindCallback<ParseObject>() {
+            @Override
+            public void done(List<ParseObject> objects, ParseException e) {
+                if(e==null) {
+                    if (objects.size() > 0) {
+                        for (int i = 0; i < objects.size(); i++) {
+                            LatLng Location = new LatLng(objects.get(i).getParseGeoPoint("camplocation").getLatitude(), objects.get(i).getParseGeoPoint("camplocation").getLongitude());
+                            //MarkerOptions campmarker=new MarkerOptions().position(Location).title("Camp");
+                            //campmarker.setIcon(BitmapDescriptorFactory.fromResource(R.drawable.my_marker_icon)));
 
+                            Marker marker = mMap.addMarker(new MarkerOptions().position(Location).title("Camp"));
+                            marker.showInfoWindow();
+                          //  marker.setIcon(BitmapDescriptorFactory.fromResource(R.drawable.ic_mapmarker2));
+                        }
 
-    private void addallrequests()
+                    }
+                }else {
+                    Toast.makeText(MainActivity.this,e.toString(),Toast.LENGTH_LONG).show();
+
+                }
+            }
+        });
+    }
+
+   private void addallrequests()
     {
         ParseQuery<ParseObject> queryAll = ParseQuery.getQuery("Requests");
         queryAll.whereExists("victimlocation");

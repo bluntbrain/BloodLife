@@ -13,39 +13,36 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:background="@drawable/textbox"
-        android:ems="10"
         android:gravity="center"
         android:hint="E-Mail"
         android:inputType="textPersonName"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.393"
+        app:layout_constraintHorizontal_bias="0.394"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.374" />
+        app:layout_constraintVertical_bias="0.18"/>
 
     <EditText
         android:id="@+id/signup_phoneno"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:background="@drawable/textbox"
-        android:ems="10"
         android:gravity="center"
         android:hint="Phone No"
         android:inputType="phone"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.393"
+        app:layout_constraintHorizontal_bias="0.394"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.467" />
+        app:layout_constraintVertical_bias="0.28" />
 
     <EditText
         android:id="@+id/signup_name"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:background="@drawable/textbox"
-        android:ems="10"
         android:gravity="center"
         android:hint="Name"
         android:inputType="textPersonName"
@@ -54,23 +51,22 @@
         app:layout_constraintHorizontal_bias="0.393"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.176" />
+        app:layout_constraintVertical_bias="0.38" />
 
     <EditText
         android:id="@+id/signup_password"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:background="@drawable/textbox"
-        android:ems="10"
         android:gravity="center"
         android:hint="Password"
         android:inputType="textPassword"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.393"
+        app:layout_constraintHorizontal_bias="0.431"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.571" />
+        app:layout_constraintVertical_bias="0.48" />
 
     <ImageView
         android:id="@+id/maleimage"
@@ -118,6 +114,21 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintVertical_bias="1.0" />
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="45dp"
+        android:layout_marginLeft="45dp"
+        android:layout_marginEnd="45dp"
+        android:layout_marginRight="45dp"
+        android:text="@string/signupinfo"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.110000014" />
+
 
     <ImageView
         android:id="@+id/imageView5"

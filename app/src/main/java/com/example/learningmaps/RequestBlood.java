@@ -9,6 +9,7 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.Spinner;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
@@ -28,6 +29,7 @@ public class RequestBlood extends AppCompatActivity {
     private Button done;
     private String Status,BloodGroup,Gender;
     private EditText name, mobile, units, place;
+    private TextView postbloodcamp;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -42,6 +44,14 @@ public class RequestBlood extends AppCompatActivity {
         Bundle bundle = getIntent().getParcelableExtra("bundle");
         userlocation = bundle.getParcelable("userlocation");
 //SPINNER CODE
+        postbloodcamp=findViewById(R.id.postbloodcamp);
+        postbloodcamp.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent post=new Intent(RequestBlood.this,PostCamps.class);
+                startActivity(post);
+            }
+        });
         name=findViewById(R.id.name);
         mobile=findViewById(R.id.mobile);
         place=findViewById(R.id.place);

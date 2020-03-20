@@ -48,11 +48,12 @@ public class LoginActivity extends AppCompatActivity {
                 {
                     Toast.makeText(LoginActivity.this,"Fields Empty",Toast.LENGTH_LONG).show();
                 }
-                else if(username.getTextSize()>10){
+                //else if(username.getTextSize()!=10){
 
-                    Toast.makeText(LoginActivity.this,"Invalid Number",Toast.LENGTH_LONG).show();
+                  //  Toast.makeText(LoginActivity.this,"Invalid Number",Toast.LENGTH_LONG).show();
 
-                }else{
+               // }
+                else{
                     final ProgressDialog progressDialog=new ProgressDialog(LoginActivity.this);
                     progressDialog.setMessage("Logging In");
                     progressDialog.show();
@@ -94,5 +95,11 @@ public class LoginActivity extends AppCompatActivity {
         {
 
         }
+    }
+
+    public void onBackPressed(){
+        finishAffinity();
+        finish();
+
     }
 }

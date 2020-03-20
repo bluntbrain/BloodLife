@@ -27,24 +27,25 @@
         app:layout_constraintBottom_toTopOf="@id/bottomNavigation"
 
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.78"
+        app:layout_constraintHorizontal_bias="0.642"
 
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.205"
+        app:layout_constraintVertical_bias="0.319"
         app:srcCompat="@drawable/ic_logout_one" />
 
     <androidx.appcompat.widget.AppCompatImageView
+        android:id="@+id/editprofile"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         app:layout_constraintBottom_toTopOf="@id/bottomNavigation"
+
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.24"
 
-        app:layout_constraintHorizontal_bias="0.467"
         app:layout_constraintStart_toStartOf="parent"
-
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.206"
+        app:layout_constraintVertical_bias="0.32"
         app:srcCompat="@drawable/ic_edit" />
 
     <TextView
@@ -56,23 +57,24 @@
         app:layout_constraintBottom_toTopOf="@id/bottomNavigation"
         app:layout_constraintEnd_toEndOf="parent"
 
-        app:layout_constraintHorizontal_bias="0.90"
+        app:layout_constraintHorizontal_bias="0.76"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.205" />
+        app:layout_constraintVertical_bias="0.32" />
 
     <TextView
+        android:id="@+id/editprofiletext"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="edit profile"
         android:textColor="@color/white"
         app:layout_constraintBottom_toTopOf="@id/bottomNavigation"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.606"
 
+        app:layout_constraintHorizontal_bias="0.35"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.205" />
+        app:layout_constraintVertical_bias="0.32" />
 
     <androidx.cardview.widget.CardView
         android:id="@+id/cardView"
@@ -81,12 +83,12 @@
         app:cardCornerRadius="80dp"
         app:layout_constraintBottom_toTopOf="@id/bottomNavigation"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.09"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.13">
+        app:layout_constraintVertical_bias="0.06999999">
 
         <ImageView
+            android:id="@+id/profilepic"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:src="@drawable/mask" />
@@ -94,19 +96,18 @@
 
 
     <TextView
-        android:id="@+id/textView3"
+        android:id="@+id/nameprofile"
         android:layout_width="wrap_content"
 
         android:layout_height="wrap_content"
 
-        android:text="Michael John"
         android:textColor="@color/white"
         android:textSize="28sp"
         app:layout_constraintBottom_toTopOf="@+id/bottomNavigation"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toEndOf="@+id/cardView"
+        app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.131" />
+        app:layout_constraintVertical_bias="0.25" />
 
     <com.google.android.material.bottomnavigation.BottomNavigationView
         android:id="@+id/bottomNavigation"
@@ -123,7 +124,7 @@
         app:menu="@menu/bottom_navigation_menu" />
 
     <ImageView
-        android:id="@+id/imageView4"
+        android:id="@+id/imagestatus"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         app:layout_constraintBottom_toTopOf="@+id/bottomNavigation"
@@ -135,10 +136,9 @@
         app:srcCompat="@drawable/ic_trophy" />
 
     <TextView
-        android:id="@+id/textView2"
+        android:id="@+id/typeprofile"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="O+"
         android:textColor="@color/white"
         android:textSize="28sp"
         app:layout_constraintBottom_toTopOf="@+id/bottomNavigation"
@@ -148,10 +148,9 @@
         app:layout_constraintVertical_bias="0.433" />
 
     <TextView
-        android:id="@+id/textView4"
+        android:id="@+id/unitsprofile"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="14"
         android:textColor="@color/white"
         android:textSize="28sp"
         app:layout_constraintBottom_toTopOf="@+id/bottomNavigation"

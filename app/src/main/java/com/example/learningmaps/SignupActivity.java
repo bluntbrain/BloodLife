@@ -100,12 +100,12 @@ public class SignupActivity extends AppCompatActivity {
                 if(name.getText()==null ||email.getText()==null || phoneno.getText()==null|| password.getText()==null || gender==null)
                 {
                     Toast.makeText(SignupActivity.this,"Fields Empty",Toast.LENGTH_LONG).show();
-                }
-                else if(phoneno.getTextSize()>10){
-                    Toast.makeText(SignupActivity.this,"Invalid Number",Toast.LENGTH_LONG).show();
-                } else {
+               // }
+               // else if(phoneno.getTextSize()>10){
+                   // Toast.makeText(SignupActivity.this,"Invalid Number",Toast.LENGTH_LONG).show();
+                }else {
 
-                    ProgressDialog progressDialog=new ProgressDialog(SignupActivity.this);
+                    final ProgressDialog progressDialog=new ProgressDialog(SignupActivity.this);
                     progressDialog.setMessage("Signing Up");
                     progressDialog.show();
                     ParseUser user = new ParseUser();
@@ -134,6 +134,7 @@ public class SignupActivity extends AppCompatActivity {
                                         else{
                                             Toast.makeText(SignupActivity.this, e.toString(), Toast.LENGTH_LONG).show();
                                         }
+
 
                                     }
                                 });

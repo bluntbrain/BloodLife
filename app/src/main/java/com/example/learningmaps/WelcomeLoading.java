@@ -27,11 +27,11 @@ public class WelcomeLoading extends AppCompatActivity {
                 .build()
         );
         flag=0;
-        animationDuration=2400;
+        animationDuration=1800;
         mCircularProgressBar=findViewById(R.id.cirle_bar);
         mCircularProgressBar.setProgressWithAnimation(100, animationDuration);
 
-        new CountDownTimer(2800,5000)
+        new CountDownTimer(2000,5000)
         {
 
             @Override

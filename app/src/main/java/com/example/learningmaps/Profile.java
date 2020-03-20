@@ -9,18 +9,25 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.google.android.material.bottomnavigation.BottomNavigationView;
+import com.parse.GetCallback;
+import com.parse.ParseException;
+import com.parse.ParseObject;
+import com.parse.ParseQuery;
 import com.parse.ParseUser;
 
 public class Profile extends AppCompatActivity {
 
-    private ImageView rateus,feedback,TnC,logoutlogo;
+    private ImageView rateus,feedback,TnC,logoutlogo,editprofile,editprofiletext;
     private TextView logouttext;
+    private TextView nameprofile,unitsprofile,typeprofile;
+    private ImageView statusprofile;
 
     BottomNavigationView mBottomNavigationView;
     @Override
@@ -28,14 +35,42 @@ public class Profile extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_profile);
         TnC=findViewById(R.id.tnc);
+        nameprofile=findViewById(R.id.nameprofile);
+        unitsprofile=findViewById(R.id.unitsprofile);
+        typeprofile=findViewById(R.id.typeprofile);
+       // statusprofile=findViewById(R.id.imagestatus);
         logoutlogo=findViewById(R.id.logoutlogo);
         logouttext=findViewById(R.id.logouttext);
         rateus=findViewById(R.id.rateuspic);
         feedback=findViewById(R.id.feedbackpic);
+        editprofile=findViewById(R.id.editprofile);
+       // editprofiletext=findViewById(R.id.editprofiletext);
 
 
         mBottomNavigationView=findViewById(R.id.bottomNavigation);
         mBottomNavigationView.setOnNavigationItemSelectedListener(mOnNavigationItemSelectedListener);
+
+        try {
+            ParseQuery<ParseObject> query = ParseQuery.getQuery("Profile");
+            //ParseQuery<ParseObject> query =new ParseQuery.getQuery("Profile");
+            query.whereEqualTo("username", ParseUser.getCurrentUser().getUsername().toString());
+            query.getFirstInBackground(new GetCallback<ParseObject>() {
+                @Override
+                public void done(ParseObject object, ParseException e) {
+                    if (e == null && object != null) {
+                        nameprofile.setText(object.get("name") + "");
+                        typeprofile.setText(object.get("type") + "");
+                        String holaunits = object.get("unitsdonated").toString();
+                        unitsprofile.setText(holaunits);
+                    }
+
+                }
+            });
+        }catch (Exception e)
+        {
+            e.printStackTrace();
+            Toast.makeText(Profile.this,e.toString(),Toast.LENGTH_LONG).show();
+        }
 
         rateus.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -87,6 +122,19 @@ public class Profile extends AppCompatActivity {
             }
         });
 
+        editprofile.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                //Intent intent=new Intent(Profile.this,UploadPicture.class);
+               // startActivity(intent);
+            }
+        });
+
+
+    }
+
+    public void loadingdata()
+    {
 
     }
 

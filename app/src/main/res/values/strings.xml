@@ -2,7 +2,7 @@
     <string name="app_name">BloodLife</string>
     <string name="navigationbar_map">Map</string>
     <string name="navigationbar_bhero">B Hero</string>
-    <string name="navigationbar_request">Request</string>
+    <string name="navigationbar_request">Donate</string>
     <string name="navigationbar_profile">Profile</string>
     <string name="password">Password</string>
     <string name="mobilenumber">Mobile Number</string>
@@ -11,4 +11,5 @@
     <string name="profile_developers">Meet our team</string>
     <string name="about">About us</string>
     <string name="tnc">TnC</string>
+    <string name="signupinfo">Became a donor first to request blood or post blood camps</string>
 </resources>
