@@ -35,7 +35,7 @@ public class LoginActivity extends AppCompatActivity {
                 .build()
         );
 
-        signup=findViewById(R.id.signuptext);
+        signup=findViewById(R.id.signuptext2);
         username=findViewById(R.id.username);
         password=findViewById(R.id.password);
         login=findViewById(R.id.login);

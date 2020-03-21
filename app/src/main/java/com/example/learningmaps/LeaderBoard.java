@@ -92,4 +92,11 @@ public class LeaderBoard extends AppCompatActivity {
             return false;
         }
     };
+
+    public void onBackPressed(){
+        finishAffinity();
+        Intent i =new Intent(LeaderBoard.this,MainActivity.class);
+        startActivity(i);
+
+    }
 }

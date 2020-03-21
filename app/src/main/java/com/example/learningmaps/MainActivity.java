@@ -5,9 +5,11 @@ import android.content.pm.PackageManager;
 import android.location.Location;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.LayoutInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.ImageView;
+import android.widget.RelativeLayout;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
@@ -31,6 +33,7 @@ import com.google.android.gms.tasks.Task;
 import com.google.android.libraries.places.api.Places;
 import com.google.android.libraries.places.api.net.PlacesClient;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
+import com.google.android.material.bottomsheet.BottomSheetDialog;
 import com.parse.FindCallback;
 import com.parse.ParseException;
 import com.parse.ParseGeoPoint;
@@ -101,7 +104,7 @@ public class MainActivity extends FragmentActivity implements OnMapReadyCallback
         buttonforrequest.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent= new Intent(MainActivity.this,RequestBlood.class);
+                Intent intent= new Intent(MainActivity.this,RequestsTabs.class);
                 Bundle args= new Bundle();
                 args.putParcelable("userlocation",currentUserLocation);
                 intent.putExtra("bundle", args);
@@ -154,6 +157,18 @@ public class MainActivity extends FragmentActivity implements OnMapReadyCallback
         //showCurrentPlace();
         addallrequests();
         allcamps();
+
+        mMap.setOnMarkerClickListener(new GoogleMap.OnMarkerClickListener() {
+            @Override
+            public boolean onMarkerClick(Marker marker) {
+                final BottomSheetDialog bottomSheetDialog=new BottomSheetDialog(MainActivity.this,R.style.BottomSheetDialogTheme);
+                View bottomSheetView = LayoutInflater.from(getApplicationContext()).inflate(R.layout.activity_request_bottom_sheet,(RelativeLayout)findViewById(R.id.bottomsheetcontainer));
+             //   bottomSheetView.findViewById(R.id.)
+                bottomSheetDialog.setContentView(bottomSheetView);
+                bottomSheetDialog.show();
+                return false;
+            }
+        });
 
 
 
@@ -332,7 +347,7 @@ public class MainActivity extends FragmentActivity implements OnMapReadyCallback
                     break;
 
                 case R.id.leaderboard_icon:
-                    Intent a=new Intent(MainActivity.this,LeaderBoard.class);
+                    Intent a=new Intent(MainActivity.this,BheroLoading.class);
                     startActivity(a);
                     break;
 

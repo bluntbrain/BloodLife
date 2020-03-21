@@ -14,52 +14,17 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        android:background="@drawable/rectangleback">
+        android:background="#EF2558"
+        android:orientation="vertical">
 
-
-
-        <androidx.constraintlayout.widget.ConstraintLayout
-            android:layout_width="match_parent"
-            android:layout_height="match_parent">
-
-            <androidx.appcompat.widget.AppCompatImageView
-                android:id="@+id/requests_backbutton"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintHorizontal_bias="0.02"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent"
-                app:layout_constraintVertical_bias="0.094"
-                app:srcCompat="@drawable/ic_arrow_back_black_24dp" />
-
-            <com.skyfishjy.library.RippleBackground
-                android:layout_height="match_parent"
+            <pl.droidsonroids.gif.GifImageView
                 android:layout_width="match_parent"
-                app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent"
-                android:id="@+id/ripple"
-                app:rb_color="@color/ripple"
-                app:rb_radius="16dp"
-                app:rb_rippleAmount="4"
-                app:rb_duration="3000"
-                app:rb_scale="6">
-
-
-                <ImageView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    app:srcCompat="@drawable/requests_icon"
-                    android:layout_centerInParent="true"
-                    ></ImageView>
-            </com.skyfishjy.library.RippleBackground>
+                android:layout_height="match_parent"
+                android:src="@drawable/requestsgif"
+                />
 
 
 
-        </androidx.constraintlayout.widget.ConstraintLayout>
 
 
     </LinearLayout>

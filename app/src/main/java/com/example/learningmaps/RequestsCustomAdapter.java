@@ -1,5 +1,6 @@
 package com.example.learningmaps;
 
+import android.graphics.Color;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -54,8 +55,12 @@ public class RequestsCustomAdapter extends RecyclerView.Adapter<RequestsCustomAd
         AddingItemsRequests currentItem=mlist.get(position);
 
         holder.request_type.setText(currentItem.getType());
+        if(currentItem.getStatus()=="critical")
+        {
+            holder.request_status.setTextColor(Color.parseColor("#FF215D"));
+        }
         holder.request_status.setText("Status : "+ currentItem.getStatus());
-        holder.request_units.setText(currentItem.getUnits());
+        holder.request_units.setText("Units: "+currentItem.getUnits());
         holder.request_name.setText(currentItem.getName());
         holder.request_mobile.setText(currentItem.getMobile());
         holder.request_location.setText(currentItem.getLocation());

@@ -20,7 +20,10 @@
         android:roundIcon="@mipmap/applogoo"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity android:name=".PostCamps"></activity>
+        <activity android:name=".RequestBottomSheet"></activity>
+        <activity android:name=".RequestsTabs" />
+        <activity android:name=".BheroLoading" />
+        <activity android:name=".PostCamps" />
         <activity android:name=".UploadPicture" />
         <activity android:name=".RequestBlood" />
         <activity android:name=".FeedBack" />

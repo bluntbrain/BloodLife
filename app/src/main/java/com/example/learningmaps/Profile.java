@@ -151,7 +151,7 @@ public class Profile extends AppCompatActivity {
                     break;
 
                 case R.id.leaderboard_icon:
-                    Intent a=new Intent(Profile.this,LeaderBoard.class);
+                    Intent a=new Intent(Profile.this,BheroLoading.class);
                     startActivity(a);
                     break;
 
