@@ -1,6 +1,9 @@
 package com.example.learningmaps;
 
+import android.content.Intent;
 import android.os.Bundle;
+import android.view.View;
+import android.widget.ImageView;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.viewpager.widget.ViewPager;
@@ -13,6 +16,7 @@ public class RequestsTabs extends AppCompatActivity {
     private TabLayout tablayout;
     private AppBarLayout appbarlayout;
     private ViewPager viewpager;
+    private ImageView backbutton;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -21,6 +25,7 @@ public class RequestsTabs extends AppCompatActivity {
         tablayout=findViewById(R.id.tablayout_id);
         viewpager=findViewById(R.id.viewpager_id);
         appbarlayout=findViewById(R.id.appbarid);
+        backbutton=findViewById(R.id.requesttab_backbutton);
         ViewPagerAdapter adapter=new ViewPagerAdapter(getSupportFragmentManager());
         adapter.AddFragment(new FragmentOldRequest(),"Requested");
         adapter.AddFragment(new FragmentMakeRequests(),"Request Blood");
@@ -28,6 +33,14 @@ public class RequestsTabs extends AppCompatActivity {
 
         viewpager.setAdapter(adapter);
         tablayout.setupWithViewPager(viewpager);
+
+        backbutton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent i=new Intent(RequestsTabs.this,MainActivity.class);
+                startActivity(i);
+            }
+        });
 
     }
 }

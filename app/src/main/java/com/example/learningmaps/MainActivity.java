@@ -161,11 +161,22 @@ public class MainActivity extends FragmentActivity implements OnMapReadyCallback
         mMap.setOnMarkerClickListener(new GoogleMap.OnMarkerClickListener() {
             @Override
             public boolean onMarkerClick(Marker marker) {
-                final BottomSheetDialog bottomSheetDialog=new BottomSheetDialog(MainActivity.this,R.style.BottomSheetDialogTheme);
-                View bottomSheetView = LayoutInflater.from(getApplicationContext()).inflate(R.layout.activity_request_bottom_sheet,(RelativeLayout)findViewById(R.id.bottomsheetcontainer));
-             //   bottomSheetView.findViewById(R.id.)
-                bottomSheetDialog.setContentView(bottomSheetView);
-                bottomSheetDialog.show();
+                if(marker.getTitle()=="Camp")
+                {
+                    Toast.makeText(MainActivity.this,"Camping",Toast.LENGTH_LONG).show();
+                    BottomSheetDialog bottomSheetDialogCamp = new BottomSheetDialog(MainActivity.this, R.style.BottomSheetDialogTheme);
+                    View bottomSheetView = LayoutInflater.from(getApplicationContext()).inflate(R.layout.activity_blood_camp_bottom_sheet, (RelativeLayout) findViewById(R.id.campbottomsheetcontainer));
+                    //   bottomSheetView.findViewById(R.id.)
+                    bottomSheetDialogCamp.setContentView(bottomSheetView);
+                    bottomSheetDialogCamp.show();
+
+                }else {
+                    BottomSheetDialog bottomSheetDialog = new BottomSheetDialog(MainActivity.this, R.style.BottomSheetDialogTheme);
+                    View bottomSheetView = LayoutInflater.from(getApplicationContext()).inflate(R.layout.activity_request_bottom_sheet, (RelativeLayout) findViewById(R.id.bottomsheetcontainer));
+                    //   bottomSheetView.findViewById(R.id.)
+                    bottomSheetDialog.setContentView(bottomSheetView);
+                    bottomSheetDialog.show();
+                }
                 return false;
             }
         });
@@ -331,9 +342,6 @@ public class MainActivity extends FragmentActivity implements OnMapReadyCallback
             }
         });
     }
-
-
-
 
     private BottomNavigationView.OnNavigationItemSelectedListener mOnNavigationItemSelectedListener
             = new BottomNavigationView.OnNavigationItemSelectedListener() {

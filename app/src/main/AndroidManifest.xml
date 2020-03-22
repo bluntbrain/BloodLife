@@ -20,7 +20,8 @@
         android:roundIcon="@mipmap/applogoo"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity android:name=".RequestBottomSheet"></activity>
+        <activity android:name=".BloodCampBottomSheet"></activity>
+        <activity android:name=".RequestBottomSheet" />
         <activity android:name=".RequestsTabs" />
         <activity android:name=".BheroLoading" />
         <activity android:name=".PostCamps" />
@@ -52,6 +53,9 @@
         <meta-data
             android:name="com.google.android.geo.API_KEY"
             android:value="@string/map_key" />
+        <meta-data
+            android:name="preloaded_fonts"
+            android:resource="@array/preloaded_fonts" />
     </application>
 
 </manifest>
