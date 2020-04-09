@@ -11,12 +11,13 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.google.android.material.bottomnavigation.BottomNavigationView;
-import com.parse.ParseException;
-import com.parse.ParseObject;
-import com.parse.ParseQuery;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
 
 import java.util.ArrayList;
-import java.util.List;
 
 public class Request extends AppCompatActivity {
 
@@ -25,6 +26,8 @@ public class Request extends AppCompatActivity {
     private RecyclerView.LayoutManager mLayoutManager;
    // private RippleBackground mRippleBackground;
    // private ImageView mImageView;
+    private DatabaseReference mReference;
+    private ArrayList<AddingItemsRequests> data;
 
     BottomNavigationView mBottomNavigationView;
     @Override
@@ -36,59 +39,52 @@ public class Request extends AppCompatActivity {
        // mRippleBackground.startRippleAnimation();
         mBottomNavigationView=findViewById(R.id.bottomNavigation);
         mBottomNavigationView.setOnNavigationItemSelectedListener(mOnNavigationItemSelectedListener);
-        ArrayList<AddingItemsRequests> requestsArrayList=new ArrayList<>();
-        requestsArrayList =addlistdata(requestsArrayList);
-       // requestsArrayList.add(new AddingItemsRequests("Lovish Badlani","O+","mandavi emerald","9413119402","Critical","14"));
-     //  requestsArrayList.add(new AddingItemsRequests("Naman Sharma","AB+","block 14","9413119402","Emergency","12"));
-       // requestsArrayList.add(new AddingItemsRequests("Anukriti Mehta","B+","mandavi emerald","9413119402","Critical","14"));
-      //  requestsArrayList.add(new AddingItemsRequests("Lovish Badlani","O+","mandavi emerald","9413119402","Critical","14"));
-      //  requestsArrayList.add(new AddingItemsRequests("Lovish Badlani","O+","mandavi emerald","9413119402","Critical","14"));
-      //  requestsArrayList.add(new AddingItemsRequests("Lovish Badlani","O+","mandavi emerald","9413119402","Critical","14"));
-      //  requestsArrayList.add(new AddingItemsRequests("Lovish Badlani","O+","mandavi emerald","9413119402","Critical","14"));
-      //  requestsArrayList.add(new AddingItemsRequests("Lovish Badlani","O+","mandavi emerald","9413119402","Critical","14"));
+        data=new ArrayList<>();
+
+        addlistdata();
 
         mRecyclerView=findViewById(R.id.recyclerView);
         mRecyclerView.setHasFixedSize(true);
         mLayoutManager=new LinearLayoutManager(this);
         mRecyclerView.setLayoutManager(mLayoutManager);
 
-        mAdapter= new RequestsCustomAdapter(requestsArrayList);
-        mRecyclerView.setAdapter(mAdapter);
 
-        //mImageView.setOnClickListener(new View.OnClickListener() {
-          //  @Override
-           // public void onClick(View v) {
-            //    Intent i = new Intent(getApplicationContext(), MainActivity.class);
-              //  startActivity(i);
-            //}
-       // });
 
 
 
     }
 
-    public  ArrayList<AddingItemsRequests> addlistdata( ArrayList<AddingItemsRequests> datao)
+    public  void addlistdata( )
     {
 
-        final ArrayList<AddingItemsRequests> data=datao;
-        ParseQuery<ParseObject> queryall = ParseQuery.getQuery("Requests");
-        try {
-            List<ParseObject> objects = queryall.find();
-            for (int hole = objects.size()-1; hole >= 0; hole--) {
-                //Toast.makeText(Request.this, "Server not responding", Toast.LENGTH_LONG).show();
 
-                data.add(new AddingItemsRequests(objects.get(hole).get("victimname") + "", objects.get(hole).get("victimtype") + "", objects.get(hole).get("victimplace") + "", objects.get(hole).get("victimphone") + "", objects.get(hole).get("victimstatus") + "", objects.get(hole).get("victimunits").toString()));
 
+        mReference= FirebaseDatabase.getInstance().getReference("BloodRequests");
+        mReference.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+
+                for(DataSnapshot snapshot: dataSnapshot.getChildren()){
+
+                    String victim_type = snapshot.child("victim_bloodtype").getValue().toString();
+                    String victim_name = snapshot.child("victim_name").getValue().toString();
+                    String victim_place = snapshot.child("victim_hospital").getValue().toString();
+                    String victim_phone =snapshot.child("phone").getValue().toString();
+                    String victim_status =snapshot.child("victim_status").getValue().toString();
+                    String victim_units = "20";
+                    data.add(new AddingItemsRequests(victim_name,victim_type,victim_place,victim_phone,victim_status,victim_units));
+                }
+                mAdapter= new RequestsCustomAdapter(data);
+                mRecyclerView.setAdapter(mAdapter);
             }
-        }catch (ParseException e)
-        {
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {
+                Toast.makeText(Request.this,"Server Respond :"+databaseError.getMessage(),Toast.LENGTH_LONG).show();
+            }
+        });
 
-            Toast.makeText(Request.this, "Server not responding", Toast.LENGTH_LONG).show();
-
-        }
 
 
-        return data;
     }
 
 

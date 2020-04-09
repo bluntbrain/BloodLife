@@ -8,6 +8,7 @@ import android.widget.ImageView;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.viewpager.widget.ViewPager;
 
+import com.google.android.gms.maps.model.LatLng;
 import com.google.android.material.appbar.AppBarLayout;
 import com.google.android.material.tabs.TabLayout;
 
@@ -17,6 +18,7 @@ public class RequestsTabs extends AppCompatActivity {
     private AppBarLayout appbarlayout;
     private ViewPager viewpager;
     private ImageView backbutton;
+    private LatLng mycoordinates;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -30,6 +32,9 @@ public class RequestsTabs extends AppCompatActivity {
         adapter.AddFragment(new FragmentOldRequest(),"Requested");
         adapter.AddFragment(new FragmentMakeRequests(),"Request Blood");
         adapter.AddFragment(new FragmentPostCamp(),"Post Camp");
+
+        Bundle bundle = getIntent().getParcelableExtra("bundle");
+        mycoordinates = bundle.getParcelable("userlocation");
 
         viewpager.setAdapter(adapter);
         tablayout.setupWithViewPager(viewpager);

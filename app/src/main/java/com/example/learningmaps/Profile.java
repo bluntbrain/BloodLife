@@ -16,29 +16,42 @@ import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.google.android.material.bottomnavigation.BottomNavigationView;
-import com.parse.GetCallback;
-import com.parse.ParseException;
-import com.parse.ParseObject;
-import com.parse.ParseQuery;
-import com.parse.ParseUser;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
+import com.squareup.picasso.Picasso;
+
+import de.hdodenhof.circleimageview.CircleImageView;
 
 public class Profile extends AppCompatActivity {
 
     private ImageView rateus,feedback,TnC,logoutlogo,editprofile,editprofiletext;
     private TextView logouttext;
     private TextView nameprofile,unitsprofile,typeprofile;
-    private ImageView statusprofile;
+    private CircleImageView profilepic;
+
+    private DatabaseReference mReference;
+    private FirebaseUser mUser;
 
     BottomNavigationView mBottomNavigationView;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_profile);
+
+        mUser= FirebaseAuth.getInstance().getCurrentUser();
+
+
         TnC=findViewById(R.id.tnc);
         nameprofile=findViewById(R.id.nameprofile);
         unitsprofile=findViewById(R.id.unitsprofile);
         typeprofile=findViewById(R.id.typeprofile);
        // statusprofile=findViewById(R.id.imagestatus);
+        profilepic=findViewById(R.id.profilepic);
         logoutlogo=findViewById(R.id.logoutlogo);
         logouttext=findViewById(R.id.logouttext);
         rateus=findViewById(R.id.rateuspic);
@@ -50,6 +63,8 @@ public class Profile extends AppCompatActivity {
         mBottomNavigationView=findViewById(R.id.bottomNavigation);
         mBottomNavigationView.setOnNavigationItemSelectedListener(mOnNavigationItemSelectedListener);
 
+        loadProfile();
+        /*
         try {
             ParseQuery<ParseObject> query = ParseQuery.getQuery("Profile");
             //ParseQuery<ParseObject> query =new ParseQuery.getQuery("Profile");
@@ -71,6 +86,7 @@ public class Profile extends AppCompatActivity {
             e.printStackTrace();
             Toast.makeText(Profile.this,e.toString(),Toast.LENGTH_LONG).show();
         }
+        */
 
         rateus.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -103,22 +119,31 @@ public class Profile extends AppCompatActivity {
         logouttext.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                ParseUser.logOut();
+                ProgressDialog progressDialog=new ProgressDialog(Profile.this);
+                progressDialog.setMessage("Logging Out");
+                progressDialog.show();
+              //  ParseUser.logOut();
+                FirebaseAuth.getInstance().signOut();
                 Intent intent= new Intent(Profile.this,LoginActivity.class);
+                intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_NEW_TASK);
                 startActivity(intent);
+                progressDialog.dismiss();
             }
         });
 
         logoutlogo.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                final ProgressDialog progressDialog=new ProgressDialog(Profile.this);
+                ProgressDialog progressDialog=new ProgressDialog(Profile.this);
                 progressDialog.setMessage("Logging Out");
                 progressDialog.show();
-                ParseUser.logOut();
-                progressDialog.dismiss();
+               // ParseUser.logOut();
+                FirebaseAuth.getInstance().signOut();
                 Intent intent= new Intent(Profile.this,LoginActivity.class);
+                intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_NEW_TASK);
                 startActivity(intent);
+                progressDialog.dismiss();
+
             }
         });
 
@@ -133,9 +158,34 @@ public class Profile extends AppCompatActivity {
 
     }
 
-    public void loadingdata()
-    {
+    private void loadProfile(){
+        String id=mUser.getUid();
+        mReference= FirebaseDatabase.getInstance().getReference("Users").child(id);
+        mReference.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                nameprofile.setText(dataSnapshot.child("name").getValue().toString());
+                typeprofile.setText(dataSnapshot.child("bloodtype").getValue().toString());
+                unitsprofile.setText(dataSnapshot.child("units_donated").getValue().toString());
+                String img=dataSnapshot.child("imageURL").getValue().toString();
+                if(img.equals("default"))
+                {
+                    Picasso.get().load(R.drawable.tryimage).into(profilepic);
+                }else
+                {
+                    Picasso.get().load(img).into(profilepic);
 
+                }
+
+
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {
+                Toast.makeText(Profile.this,databaseError.getMessage(),Toast.LENGTH_SHORT).show();
+
+            }
+        });
     }
 
     private BottomNavigationView.OnNavigationItemSelectedListener mOnNavigationItemSelectedListener

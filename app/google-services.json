@@ -1,0 +1,48 @@
+{
+  "project_info": {
+    "project_number": "152518792260",
+    "firebase_url": "https://learningmaps-8174d.firebaseio.com",
+    "project_id": "learningmaps-8174d",
+    "storage_bucket": "learningmaps-8174d.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:152518792260:android:b0ba098795af61cc29d811",
+        "android_client_info": {
+          "package_name": "com.example.learningmaps"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "152518792260-ogqa33b8u89d8r0k39v2ff2lghdsmtuh.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.example.learningmaps",
+            "certificate_hash": "51c02df40573fe4ba9ef78a0aba848bfbb81b41c"
+          }
+        },
+        {
+          "client_id": "152518792260-o3vj9mk9efpusaiqhl306e899jubr0b8.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCZ7FK5pNEPmzycM752bc4n471mhSD3Pa0"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "152518792260-o3vj9mk9efpusaiqhl306e899jubr0b8.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

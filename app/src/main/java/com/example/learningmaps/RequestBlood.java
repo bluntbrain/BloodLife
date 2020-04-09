@@ -2,6 +2,7 @@ package com.example.learningmaps;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.text.TextUtils;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
@@ -9,27 +10,38 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.Spinner;
-import android.widget.TextView;
 import android.widget.Toast;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
+import com.google.android.gms.maps.model.LatLng;
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.OnFailureListener;
+import com.google.android.gms.tasks.Task;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
 import com.parse.Parse;
-import com.parse.ParseException;
-import com.parse.ParseGeoPoint;
-import com.parse.ParseObject;
-import com.parse.ParseUser;
-import com.parse.SaveCallback;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 
 public class RequestBlood extends AppCompatActivity {
-    private ParseGeoPoint userlocation;
+   // private ParseGeoPoint userlocation;
+    private LatLng mycoordinates;
     private ImageView i1,i2;
     private Button done;
     private String Status,BloodGroup,Gender;
     private EditText name, mobile, units, place;
-    private TextView postbloodcamp;
+    private String CurrentUserName;
+
+    private DatabaseReference mReference;
+    private FirebaseUser mUser;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -41,17 +53,14 @@ public class RequestBlood extends AppCompatActivity {
                 .build()
         );
 
+        mUser= FirebaseAuth.getInstance().getCurrentUser();
+
+        gettingCurrentUserName();
+
         Bundle bundle = getIntent().getParcelableExtra("bundle");
-        userlocation = bundle.getParcelable("userlocation");
-//SPINNER CODE
-        postbloodcamp=findViewById(R.id.postbloodcamp);
-        postbloodcamp.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent post=new Intent(RequestBlood.this,PostCamps.class);
-                startActivity(post);
-            }
-        });
+        mycoordinates = bundle.getParcelable("userlocation");
+        //SPINNER CODE
+
         name=findViewById(R.id.name);
         mobile=findViewById(R.id.mobile);
         place=findViewById(R.id.place);
@@ -132,10 +141,15 @@ public class RequestBlood extends AppCompatActivity {
             @Override
             public void onClick(View v) {
 
-                if(name.getText()==null || place.getText()==null || mobile.getText()==null || Gender==null || Status==null || BloodGroup==null || units.getText()==null){
-                    Toast.makeText(RequestBlood.this,"Fields Empty",Toast.LENGTH_LONG).show();
+                if (TextUtils.isEmpty(name.getText()) || TextUtils.isEmpty(place.getText()) || TextUtils.isEmpty(units.getText()) || TextUtils.isEmpty(mobile.getText())
+                        || TextUtils.isEmpty(Gender) || TextUtils.isEmpty(BloodGroup) || TextUtils.isEmpty(Status)) {
+                    Toast.makeText(RequestBlood.this, "Fields Empty", Toast.LENGTH_LONG).show();
+                }else{
+
+                    uploadRequest();
                 }
-                else {
+                /*
+                 {
                     ParseObject parseObject = new ParseObject("Requests");
                     parseObject.put("username", ParseUser.getCurrentUser().getUsername());
                     parseObject.put("victimname", name.getText().toString());
@@ -159,11 +173,73 @@ public class RequestBlood extends AppCompatActivity {
                         }
                     });
                 }
-
+                */
             }
         });
 
 
 
+
+    }
+
+    private void gettingCurrentUserName(){
+
+        DatabaseReference Reference = FirebaseDatabase.getInstance().getReference("Users").child(mUser.getUid());
+        Reference.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+
+                CurrentUserName=dataSnapshot.child("name").getValue().toString();
+
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {
+
+                CurrentUserName="Anomolous";
+
+
+            }
+        });
+
+    }
+
+    private void uploadRequest(){
+         mReference = FirebaseDatabase.getInstance().getReference();
+        HashMap<String,String> hashMap= new HashMap<>();
+        hashMap.put("id",mUser.getUid());
+        hashMap.put("name",CurrentUserName);
+        hashMap.put("victim_name",name.getText()+"");
+        hashMap.put("victim_hospital",place.getText()+"");
+        hashMap.put("victim_bloodtype",BloodGroup);
+        hashMap.put("victim_status",Status);
+        hashMap.put("victim_gender",Gender);
+        hashMap.put("phone",mobile.getText().toString());
+        hashMap.put("victim_lat",mycoordinates.latitude+"");
+        hashMap.put("victim_long",mycoordinates.longitude+"");
+
+
+        mReference.child("BloodRequests").push().setValue(hashMap).addOnCompleteListener(new OnCompleteListener<Void>() {
+            @Override
+            public void onComplete(@NonNull Task<Void> task) {
+                if(task.isSuccessful()){
+                    Toast.makeText(RequestBlood.this, "Request Successful", Toast.LENGTH_LONG).show();
+                    Intent i = new Intent(RequestBlood.this, MainActivity.class);
+                    i.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_NEW_TASK);
+
+                    startActivity(i);
+
+                }else{
+                    Toast.makeText(RequestBlood.this,task.getException().getMessage(),Toast.LENGTH_LONG).show();
+
+                }
+
+            }
+        }).addOnFailureListener(new OnFailureListener() {
+            @Override
+            public void onFailure(@NonNull Exception e) {
+                Toast.makeText(RequestBlood.this,e.getMessage(),Toast.LENGTH_LONG).show();
+            }
+        });
     }
 }

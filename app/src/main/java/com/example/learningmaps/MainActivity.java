@@ -3,13 +3,16 @@ package com.example.learningmaps;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.location.Location;
+import android.net.Uri;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
@@ -34,9 +37,13 @@ import com.google.android.libraries.places.api.Places;
 import com.google.android.libraries.places.api.net.PlacesClient;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.android.material.bottomsheet.BottomSheetDialog;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
 import com.parse.FindCallback;
 import com.parse.ParseException;
-import com.parse.ParseGeoPoint;
 import com.parse.ParseObject;
 import com.parse.ParseQuery;
 
@@ -45,7 +52,8 @@ import java.util.List;
 public class MainActivity extends FragmentActivity implements OnMapReadyCallback {
 
     //private LatLng userLocation;
-    ParseGeoPoint currentUserLocation;
+   // ParseGeoPoint currentUserLocation;
+    private LatLng mycoordinatesl;
     private ImageView mylocation;
     private CardView buttonforrequest;
     private CameraPosition mCameraPosition; // for altering camera
@@ -57,6 +65,8 @@ public class MainActivity extends FragmentActivity implements OnMapReadyCallback
     private static final int DEFAULT_ZOOM = 12;
     private static final int PERMISSIONS_REQUEST_ACCESS_FINE_LOCATION = 1;
     private boolean mLocationPermissionGranted;
+
+    private DatabaseReference mReference;
 
     // The geographical location where the device is currently located. That is, the last-known
     // location retrieved by the Fused Location Provider.
@@ -87,7 +97,7 @@ public class MainActivity extends FragmentActivity implements OnMapReadyCallback
         mPlacesClient = Places.createClient(this);
 
 
-        //Construct a fusedlocprovider client
+
 
         mFusedLocationProviderClient = LocationServices.getFusedLocationProviderClient(this);
 
@@ -104,22 +114,14 @@ public class MainActivity extends FragmentActivity implements OnMapReadyCallback
         buttonforrequest.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent= new Intent(MainActivity.this,RequestsTabs.class);
+                Intent intent= new Intent(MainActivity.this, RequestsTabs.class);
                 Bundle args= new Bundle();
-                args.putParcelable("userlocation",currentUserLocation);
+                args.putParcelable("userlocation",mycoordinatesl);
                 intent.putExtra("bundle", args);
                 startActivity(intent);
             }
         });
 
-        //mylocation.setOnClickListener(new View.OnClickListener() {
-          //  @Override
-          //  public void onClick(View v) {
-             //   if(mMap.getMyLocation() != null) { // Check to ensure coordinates aren't null, probably a better way of doing this...
-               //     mMap.setCenterCoordinate(new LatLngZoom(mapView.getMyLocation().getLatitude(), mapView.getMyLocation().getLongitude(), 20), true);
-               // }
-           // }
-       // });
 
 
     }
@@ -155,12 +157,13 @@ public class MainActivity extends FragmentActivity implements OnMapReadyCallback
         getDeviceLocation();
 
         //showCurrentPlace();
-        addallrequests();
-        allcamps();
+         addallrequests();
+        //allcamps();
 
         mMap.setOnMarkerClickListener(new GoogleMap.OnMarkerClickListener() {
             @Override
             public boolean onMarkerClick(Marker marker) {
+                marker.hideInfoWindow();
                 if(marker.getTitle()=="Camp")
                 {
                     Toast.makeText(MainActivity.this,"Camping",Toast.LENGTH_LONG).show();
@@ -171,9 +174,27 @@ public class MainActivity extends FragmentActivity implements OnMapReadyCallback
                     bottomSheetDialogCamp.show();
 
                 }else {
+
+                    String[] allsheetdata=marker.getTitle().split("-");
                     BottomSheetDialog bottomSheetDialog = new BottomSheetDialog(MainActivity.this, R.style.BottomSheetDialogTheme);
                     View bottomSheetView = LayoutInflater.from(getApplicationContext()).inflate(R.layout.activity_request_bottom_sheet, (RelativeLayout) findViewById(R.id.bottomsheetcontainer));
-                    //   bottomSheetView.findViewById(R.id.)
+                    TextView namesheet =bottomSheetView.findViewById(R.id.namesheet);namesheet.setText(allsheetdata[0]);
+                    TextView statussheet =bottomSheetView.findViewById(R.id.statussheets);statussheet.setText(allsheetdata[3]);
+                    TextView unitssheet =bottomSheetView.findViewById(R.id.unitssheet);unitssheet.setText(allsheetdata[1]);
+                    TextView bloodtypesheet =bottomSheetView.findViewById(R.id.bloodtypesheet);bloodtypesheet.setText(allsheetdata[2]);
+                    TextView gendersheet =bottomSheetView.findViewById(R.id.gendersheet);gendersheet.setText(allsheetdata[4]);
+                    TextView hospitalsheet =bottomSheetView.findViewById(R.id.locationsheet);hospitalsheet.setText(allsheetdata[5]);
+                    final TextView phonesheet =bottomSheetView.findViewById(R.id.phonesheet);phonesheet.setText(allsheetdata[6]);
+
+                    Button btnsheet = bottomSheetView.findViewById(R.id.buttonsheet);
+                    btnsheet.setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View v) {
+                            Intent intent = new Intent(Intent.ACTION_DIAL);
+                            intent.setData(Uri.parse("tel:"+phonesheet.getText().toString()));
+                            startActivity(intent);
+                        }
+                    });
                     bottomSheetDialog.setContentView(bottomSheetView);
                     bottomSheetDialog.show();
                 }
@@ -206,10 +227,8 @@ public class MainActivity extends FragmentActivity implements OnMapReadyCallback
                                 mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(
                                         new LatLng(mLastKnownLocation.getLatitude(),
                                                 mLastKnownLocation.getLongitude()), DEFAULT_ZOOM));
+                                 mycoordinatesl=new LatLng(mLastKnownLocation.getLatitude(),mLastKnownLocation.getLongitude());
 
-                                 currentUserLocation = new ParseGeoPoint(mLastKnownLocation.getLatitude(),mLastKnownLocation.getLongitude());
-                               //userLocation = new LatLng(mLastKnownLocation.getLatitude(),mLastKnownLocation.getLongitude());
-                                //mMap.addMarker(new MarkerOptions().position(userLocation));
 
                             }
                         } else {
@@ -322,23 +341,32 @@ public class MainActivity extends FragmentActivity implements OnMapReadyCallback
 
    private void addallrequests()
     {
-        ParseQuery<ParseObject> queryAll = ParseQuery.getQuery("Requests");
-        queryAll.whereExists("victimlocation");
-        queryAll.findInBackground(new FindCallback<ParseObject>() {
+        mReference= FirebaseDatabase.getInstance().getReference("BloodRequests");
+        mReference.addValueEventListener(new ValueEventListener() {
             @Override
-            public void done(List<ParseObject> objects, ParseException e) {
-                if(e==null)
-                {
-                    for(int i = 0; i < objects.size(); i++)
-                    {
-                        LatLng Location = new LatLng(objects.get(i).getParseGeoPoint("victimlocation").getLatitude(), objects.get(i).getParseGeoPoint("victimlocation").getLongitude());
-                        Marker marker= mMap.addMarker(new MarkerOptions().position(Location).title(objects.get(i).getString("victimtype")));
-                        marker.showInfoWindow();
-                    }
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+
+                for(DataSnapshot snapshot: dataSnapshot.getChildren()){
+                    Double Lat = Double.parseDouble(snapshot.child("victim_lat").getValue().toString());
+                    Double Long = Double.parseDouble(snapshot.child("victim_long").getValue().toString());
+                    String Title = snapshot.child("victim_name").getValue().toString()+"-"+
+                            "12"+"-"+
+                            snapshot.child("victim_bloodtype").getValue().toString()+"-"+
+                            snapshot.child("victim_status").getValue().toString()+"-"+
+                            snapshot.child("victim_gender").getValue().toString()+"-"+
+                            snapshot.child("victim_hospital").getValue().toString()+"-"+
+                            snapshot.child("phone").getValue().toString()+"-"
+                            ;
+                    LatLng Location = new LatLng(Lat,Long);
+                    Marker requestmarker =mMap.addMarker(new MarkerOptions().position(Location).title(Title));
+                    requestmarker.hideInfoWindow();
+
                 }
-                else {
-                    Toast.makeText(MainActivity.this,e.toString(),Toast.LENGTH_LONG).show();
-                }
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {
+                Toast.makeText(MainActivity.this,"Server Respond :"+databaseError.getMessage(),Toast.LENGTH_LONG).show();
             }
         });
     }
