@@ -20,7 +20,9 @@
         android:roundIcon="@mipmap/applogoo"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity android:name=".BloodCampBottomSheet"></activity>
+        <activity android:name=".DeleteRequest"></activity>
+        <activity android:name=".ForgotPassword" />
+        <activity android:name=".BloodCampBottomSheet" />
         <activity android:name=".RequestBottomSheet" />
         <activity android:name=".RequestsTabs" />
         <activity android:name=".BheroLoading" />

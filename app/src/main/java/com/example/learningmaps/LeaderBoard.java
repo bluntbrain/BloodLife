@@ -6,23 +6,50 @@ import android.view.MenuItem;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
 import com.daimajia.androidanimations.library.Techniques;
 import com.daimajia.androidanimations.library.YoYo;
 import com.flaviofaria.kenburnsview.KenBurnsView;
 import com.flaviofaria.kenburnsview.Transition;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
+
+import java.util.ArrayList;
 
 public class LeaderBoard extends AppCompatActivity {
     private BottomNavigationView mBottomNavigationView;
     private KenBurnsView kbv ;
     private int flag;
 
+    private RecyclerView mRecyclerView;
+    private BHeroCustomAdapter mAdapter;
+    private RecyclerView.LayoutManager mLayoutManager;
+    private DatabaseReference mReference;
+    private ArrayList<AddingItemsBHero> data;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_leader_board);
         kbv= findViewById(R.id.kenburns);
+
+        data=new ArrayList<>();
+
+        mRecyclerView=findViewById(R.id.bherocontainer);
+        mRecyclerView.setHasFixedSize(true);
+        mLayoutManager=new LinearLayoutManager(this);
+        mRecyclerView.setLayoutManager(mLayoutManager);
+
+        addheroes();
+
+
+
 
         mBottomNavigationView=findViewById(R.id.bottomNavigation);
         mBottomNavigationView.setOnNavigationItemSelectedListener(mOnNavigationItemSelectedListener);
@@ -58,6 +85,30 @@ public class LeaderBoard extends AppCompatActivity {
 
             }
         });
+    }
+
+    private void addheroes(){
+
+        mReference= FirebaseDatabase.getInstance().getReference("Donoted");
+        mReference.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                for(DataSnapshot snapshot : dataSnapshot.getChildren()){
+                    String name = snapshot.child("name").getValue().toString();
+                    String dp = snapshot.child("imageURl").getValue().toString();
+                    data.add(new AddingItemsBHero(name,dp));
+                }
+
+                mAdapter= new BHeroCustomAdapter(data);
+                mRecyclerView.setAdapter(mAdapter);
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {
+
+            }
+        });
+
     }
 
     private BottomNavigationView.OnNavigationItemSelectedListener mOnNavigationItemSelectedListener

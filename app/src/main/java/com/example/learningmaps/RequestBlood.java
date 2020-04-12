@@ -226,8 +226,9 @@ public class RequestBlood extends AppCompatActivity {
                     Toast.makeText(RequestBlood.this, "Request Successful", Toast.LENGTH_LONG).show();
                     Intent i = new Intent(RequestBlood.this, MainActivity.class);
                     i.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_NEW_TASK);
-
                     startActivity(i);
+                    finish();
+
 
                 }else{
                     Toast.makeText(RequestBlood.this,task.getException().getMessage(),Toast.LENGTH_LONG).show();

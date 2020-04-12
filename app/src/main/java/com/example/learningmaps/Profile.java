@@ -2,9 +2,7 @@ package com.example.learningmaps;
 
 import android.app.ProgressDialog;
 import android.content.Intent;
-import android.net.Uri;
 import android.os.Bundle;
-import android.view.LayoutInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.ImageView;
@@ -12,7 +10,6 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
-import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.google.android.material.bottomnavigation.BottomNavigationView;
@@ -46,7 +43,7 @@ public class Profile extends AppCompatActivity {
         mUser= FirebaseAuth.getInstance().getCurrentUser();
 
 
-        TnC=findViewById(R.id.tnc);
+        //TnC=findViewById(R.id.tnc);
         nameprofile=findViewById(R.id.nameprofile);
         unitsprofile=findViewById(R.id.unitsprofile);
         typeprofile=findViewById(R.id.typeprofile);
@@ -54,8 +51,8 @@ public class Profile extends AppCompatActivity {
         profilepic=findViewById(R.id.profilepic);
         logoutlogo=findViewById(R.id.logoutlogo);
         logouttext=findViewById(R.id.logouttext);
-        rateus=findViewById(R.id.rateuspic);
-        feedback=findViewById(R.id.feedbackpic);
+      //  rateus=findViewById(R.id.rateuspic);
+      //  feedback=findViewById(R.id.feedbackpic);
         editprofile=findViewById(R.id.editprofile);
        // editprofiletext=findViewById(R.id.editprofiletext);
 
@@ -88,6 +85,7 @@ public class Profile extends AppCompatActivity {
         }
         */
 
+        /*
         rateus.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -115,6 +113,8 @@ public class Profile extends AppCompatActivity {
                 startActivity(intent);
             }
         });
+
+         */
 
         logouttext.setOnClickListener(new View.OnClickListener() {
             @Override

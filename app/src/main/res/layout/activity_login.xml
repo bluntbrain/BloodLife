@@ -12,9 +12,9 @@
         android:id="@+id/username"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:background="@drawable/mobilebutton"
+        android:background="@drawable/loginbutton"
         android:gravity="center"
-        android:hint="@string/mobilenumber"
+        android:hint="Email"
 
         android:textSize="16sp"
         app:layout_constraintBottom_toBottomOf="parent"
@@ -63,6 +63,18 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintVertical_bias="0.929" />
+
+    <TextView
+        android:id="@+id/clicktoforget"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="forgot password"
+        android:textColor="#2D509B"
+        app:layout_constraintBottom_toTopOf="@+id/login"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/password"
+        app:layout_constraintVertical_bias="0.29000002" />
 
     <TextView
         android:id="@+id/signuptext2"

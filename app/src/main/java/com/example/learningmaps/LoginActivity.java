@@ -19,14 +19,13 @@ import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
-import com.parse.Parse;
 
 public class LoginActivity extends AppCompatActivity {
 
     private EditText username;
     private EditText password;
     private Button login;
-    private TextView signup;
+    private TextView signup,clicktoforgot;
 
     private FirebaseAuth mAuth;
 
@@ -36,58 +35,20 @@ public class LoginActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
 
-        Parse.initialize(new Parse.Configuration.Builder(this)
-                .applicationId("EpQmd1UQ4LCPsqG65sqHKSJ04Yk5V1e4VK631IKc")
-                .clientKey("Vm0egZoggfRMZFVfXCaOkm3XfErzApy6BXqZjHUk")
-                .server("https://parseapi.back4app.com")
-                .build()
-        );
-
         mAuth=FirebaseAuth.getInstance();
 
         signup=findViewById(R.id.signuptext2);
         username=findViewById(R.id.username);
         password=findViewById(R.id.password);
         login=findViewById(R.id.login);
+        clicktoforgot=findViewById(R.id.clicktoforget);
 
         login.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                //ParseUser.logOut();
+
                 FirebaseAuth.getInstance().signOut();
                 loginUser();
-                /*
-                if(username.getText().toString().equals("") || password.getText().toString().equals(""))
-                {
-                    Toast.makeText(LoginActivity.this,"Fields Empty",Toast.LENGTH_LONG).show();
-                }
-                //else if(username.getTextSize()!=10){
-
-                  //  Toast.makeText(LoginActivity.this,"Invalid Number",Toast.LENGTH_LONG).show();
-
-               // }
-                else{
-                    final ProgressDialog progressDialog=new ProgressDialog(LoginActivity.this);
-                    progressDialog.setMessage("Logging In");
-                    progressDialog.show();
-                    ParseUser.logInInBackground(username.getText().toString(), password.getText().toString(), new LogInCallback() {
-                        public void done(ParseUser user, ParseException e) {
-                            if (user != null && e==null) {
-                                // Hooray! The user is logged in.
-
-                                Intent i = new Intent(getApplicationContext(), MainActivity.class);
-                                startActivity(i);
-                            } else {
-                                // Signup failed. Look at the ParseException to see what happened.
-                                //T.makeText(getApplicationContext(), "Wrong Credentials"+e.toString(), Toast.LENGTH_LONG).show();
-                                Toast.makeText(getApplicationContext(),e.toString(),Toast.LENGTH_LONG).show();
-                            }
-                            progressDialog.dismiss();
-                        }
-                    });
-                }
-
-                 */
             }
         });
 
@@ -98,6 +59,15 @@ public class LoginActivity extends AppCompatActivity {
                 startActivity(i);
             }
         });
+
+        clicktoforgot.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent i = new Intent(LoginActivity.this,ForgotPassword.class);
+                startActivity(i);
+            }
+        });
+
 
     }
 
@@ -114,8 +84,8 @@ public class LoginActivity extends AppCompatActivity {
 
     private void loginUser(){
 
-        String emailbtn=username.getText()+"";
-        String passwordbtn= password.getText()+"";
+        String emailbtn=username.getText().toString();
+        String passwordbtn= password.getText().toString();
 
         if(TextUtils.isEmpty(emailbtn) || TextUtils.isEmpty(passwordbtn))
         {
@@ -130,8 +100,8 @@ public class LoginActivity extends AppCompatActivity {
         {
             ProgressDialog progressDialog =new ProgressDialog(LoginActivity.this);
             progressDialog.setMessage("Signing In");
+            progressDialog.setCancelable(false);
             progressDialog.show();
-
             mAuth.signInWithEmailAndPassword(emailbtn,passwordbtn).addOnCompleteListener(new OnCompleteListener<AuthResult>() {
                 @Override
                 public void onComplete(@NonNull Task<AuthResult> task) {

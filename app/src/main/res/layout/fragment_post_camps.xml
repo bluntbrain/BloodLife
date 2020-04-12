@@ -28,13 +28,13 @@
         android:layout_marginRight="25dp"
         android:fontFamily="@font/allerta"
         android:gravity="center"
-        android:text="Post camps nearby, get help to reach out many"
+        android:text="Post camps nearby, get help in reaching out many"
         android:textColor="#EF2558"
         android:textSize="20sp"
+        app:layout_constraintBottom_toTopOf="@id/gotobloodcampactivity"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/campsarehere"
-        app:layout_constraintBottom_toTopOf="@id/gotobloodcampactivity"/>
+        app:layout_constraintTop_toBottomOf="@+id/campsarehere" />
 
     <TextView
         android:id="@+id/gotobloodcampactivity"
@@ -42,7 +42,7 @@
         android:layout_height="wrap_content"
         android:background="@drawable/loginbutton"
         android:gravity="center"
-        android:text="Request Blood Now"
+        android:text="Post Now"
         android:textSize="18sp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"

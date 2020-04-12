@@ -41,7 +41,7 @@
             <pl.droidsonroids.gif.GifImageView
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:src="@drawable/requestsgif" />
+                android:src="@drawable/giphycamp" />
         </androidx.constraintlayout.widget.ConstraintLayout>
 
     </com.google.android.material.appbar.AppBarLayout>

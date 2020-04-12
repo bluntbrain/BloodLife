@@ -39,7 +39,7 @@ public class BheroLoading extends AppCompatActivity {
         }.start();
 
 
-        new CountDownTimer(5000,5000)
+        new CountDownTimer(3600,5000)
         {
 
             @Override

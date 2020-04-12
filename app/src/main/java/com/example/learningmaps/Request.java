@@ -1,8 +1,14 @@
 package com.example.learningmaps;
 
 import android.content.Intent;
+import android.net.Uri;
 import android.os.Bundle;
+import android.view.LayoutInflater;
 import android.view.MenuItem;
+import android.view.View;
+import android.widget.Button;
+import android.widget.RelativeLayout;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
@@ -11,6 +17,7 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.google.android.material.bottomnavigation.BottomNavigationView;
+import com.google.android.material.bottomsheet.BottomSheetDialog;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
@@ -22,7 +29,7 @@ import java.util.ArrayList;
 public class Request extends AppCompatActivity {
 
     private RecyclerView mRecyclerView;
-    private RecyclerView.Adapter mAdapter;
+    private RequestsCustomAdapter mAdapter;
     private RecyclerView.LayoutManager mLayoutManager;
    // private RippleBackground mRippleBackground;
    // private ImageView mImageView;
@@ -52,6 +59,7 @@ public class Request extends AppCompatActivity {
 
 
 
+
     }
 
     public  void addlistdata( )
@@ -74,8 +82,44 @@ public class Request extends AppCompatActivity {
                     String victim_units = "20";
                     data.add(new AddingItemsRequests(victim_name,victim_type,victim_place,victim_phone,victim_status,victim_units));
                 }
+
                 mAdapter= new RequestsCustomAdapter(data);
                 mRecyclerView.setAdapter(mAdapter);
+
+                mAdapter.setOnItemClickListener(new RequestsCustomAdapter.OnItemClickListener() {
+                    @Override
+                    public void OnItemClick(int position) {
+                        View v= mRecyclerView.getLayoutManager().findViewByPosition(position);
+                        TextView alldata= v.findViewById(R.id.dataofitem);
+                        String sheetdata = alldata.getText().toString();
+                        String[] allsheetdata = sheetdata.split("-");
+                        BottomSheetDialog bottomSheetDialog = new BottomSheetDialog(Request.this, R.style.BottomSheetDialogTheme);
+                        View bottomSheetView = LayoutInflater.from(getApplicationContext()).inflate(R.layout.activity_request_bottom_sheet, (RelativeLayout) findViewById(R.id.bottomsheetcontainer));
+
+                        TextView namesheet =bottomSheetView.findViewById(R.id.namesheet);namesheet.setText(allsheetdata[0]);
+                        TextView statussheet =bottomSheetView.findViewById(R.id.statussheets);statussheet.setText(allsheetdata[3]);
+                        TextView unitssheet =bottomSheetView.findViewById(R.id.unitssheet);unitssheet.setText(allsheetdata[1]);
+                        TextView bloodtypesheet =bottomSheetView.findViewById(R.id.bloodtypesheet);bloodtypesheet.setText(allsheetdata[2]);
+                        TextView gendersheet =bottomSheetView.findViewById(R.id.gendersheet);gendersheet.setText(allsheetdata[4]);
+                        TextView hospitalsheet =bottomSheetView.findViewById(R.id.locationsheet);hospitalsheet.setText(allsheetdata[5]);
+                        final TextView phonesheet =bottomSheetView.findViewById(R.id.phonesheet);phonesheet.setText(allsheetdata[6]);
+
+                        Button btnsheet = bottomSheetView.findViewById(R.id.buttonsheet);
+                        btnsheet.setOnClickListener(new View.OnClickListener() {
+                            @Override
+                            public void onClick(View v) {
+                                Intent intent = new Intent(Intent.ACTION_DIAL);
+                                intent.setData(Uri.parse("tel:"+phonesheet.getText().toString()));
+                                startActivity(intent);
+                            }
+                        });
+
+
+
+                        bottomSheetDialog.setContentView(bottomSheetView);
+                        bottomSheetDialog.show();
+                    }
+                });
             }
             @Override
             public void onCancelled(@NonNull DatabaseError databaseError) {
