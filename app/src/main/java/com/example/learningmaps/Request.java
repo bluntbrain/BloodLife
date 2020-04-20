@@ -26,6 +26,8 @@ import com.google.firebase.database.ValueEventListener;
 
 import java.util.ArrayList;
 
+import pl.droidsonroids.gif.GifImageView;
+
 public class Request extends AppCompatActivity {
 
     private RecyclerView mRecyclerView;
@@ -35,6 +37,7 @@ public class Request extends AppCompatActivity {
    // private ImageView mImageView;
     private DatabaseReference mReference;
     private ArrayList<AddingItemsRequests> data;
+    private GifImageView loading;
 
     BottomNavigationView mBottomNavigationView;
     @Override
@@ -44,6 +47,7 @@ public class Request extends AppCompatActivity {
        // mImageView=findViewById(R.id.requests_backbutton);
        // mRippleBackground=findViewById(R.id.ripple);
        // mRippleBackground.startRippleAnimation();
+        loading=findViewById(R.id.request_loading);
         mBottomNavigationView=findViewById(R.id.bottomNavigation);
         mBottomNavigationView.setOnNavigationItemSelectedListener(mOnNavigationItemSelectedListener);
         data=new ArrayList<>();
@@ -79,7 +83,7 @@ public class Request extends AppCompatActivity {
                     String victim_place = snapshot.child("victim_hospital").getValue().toString();
                     String victim_phone =snapshot.child("phone").getValue().toString();
                     String victim_status =snapshot.child("victim_status").getValue().toString();
-                    String victim_units = "20";
+                    String victim_units = snapshot.child("units").getValue().toString();
                     data.add(new AddingItemsRequests(victim_name,victim_type,victim_place,victim_phone,victim_status,victim_units));
                 }
 
@@ -120,6 +124,10 @@ public class Request extends AppCompatActivity {
                         bottomSheetDialog.show();
                     }
                 });
+
+                loading.setVisibility(View.GONE);
+                mRecyclerView.setAlpha(1f);
+
             }
             @Override
             public void onCancelled(@NonNull DatabaseError databaseError) {

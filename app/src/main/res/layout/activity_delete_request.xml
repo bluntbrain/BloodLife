@@ -4,8 +4,9 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".DeleteRequest"
-    android:background="@drawable/deleteback">
+    android:background="@drawable/deleteback"
+    android:onClick="rootlayouttap"
+    tools:context=".DeleteRequest">
 
     <Button
         android:id="@+id/buttonfinaldelete"
@@ -74,6 +75,7 @@
 
     <EditText
         android:id="@+id/searchdonors"
+        android:imeOptions="actionDone"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginEnd="8dp"
@@ -152,9 +154,9 @@
         android:id="@+id/textView23"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="YOUR REQUEST"
         android:foregroundGravity="left"
         android:gravity="start"
+        android:text="YOUR REQUEST"
         android:textAlignment="textStart"
         android:textSize="18sp"
         android:textStyle="bold"

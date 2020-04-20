@@ -5,10 +5,12 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@drawable/signup"
+    android:onClick="rootlayouttap"
     tools:context=".RequestBlood">
 
     <EditText
         android:id="@+id/place"
+        android:imeOptions="actionDone"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:background="@drawable/textbox"
@@ -20,7 +22,20 @@
         app:layout_constraintHorizontal_bias="0.394"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.468" />
+        app:layout_constraintVertical_bias="0.45" />
+
+
+    <TextView
+        android:id="@+id/expirationinfo"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="request can be deleted anytime by user"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.46"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.6" />
 
     <Spinner
         android:id="@+id/spinner2"
@@ -39,6 +54,7 @@
         android:layout_height="wrap_content"
         android:background="@drawable/textbox"
         android:gravity="center"
+        android:imeOptions="actionDone"
         android:hint="Units Required"
         android:inputType="textPersonName"
         app:layout_constraintBottom_toBottomOf="parent"
@@ -46,25 +62,27 @@
         app:layout_constraintHorizontal_bias="0.403"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.274" />
+        app:layout_constraintVertical_bias="0.25" />
 
     <EditText
         android:id="@+id/mobile"
+        android:imeOptions="actionDone"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:background="@drawable/textbox"
         android:gravity="center"
         android:hint="Mobile Number"
-        android:inputType="phone"
+        android:inputType="number"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.394"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.37" />
+        app:layout_constraintVertical_bias="0.35000002" />
 
     <EditText
         android:id="@+id/name"
+        android:imeOptions="actionDone"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:background="@drawable/textbox"
@@ -76,7 +94,7 @@
         app:layout_constraintHorizontal_bias="0.393"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.176" />
+        app:layout_constraintVertical_bias="0.14999998" />
 
     <ImageView
         android:id="@+id/maleimage"
@@ -113,6 +131,7 @@
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintVertical_bias="0.866" />
 
+
     <Button
         android:id="@+id/button3"
         android:layout_width="wrap_content"
@@ -136,6 +155,20 @@
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintVertical_bias="0.074"
         app:srcCompat="@drawable/back" />
+
+    <TextView
+        android:id="@+id/dateofbirth"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:background="@drawable/textbox"
+        android:gravity="center"
+        android:hint="Request Expiration Date"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.394"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.55" />
 
     <TextView
         android:id="@+id/textView5"

@@ -5,6 +5,7 @@ import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.view.View;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
@@ -271,6 +272,17 @@ public class DeleteRequest extends AppCompatActivity {
             }
         });
 
+    }
+
+    public void rootlayouttap(View view)
+    {
+        try {
+            InputMethodManager methodManager = (InputMethodManager) getSystemService(INPUT_METHOD_SERVICE);
+            methodManager.hideSoftInputFromWindow(getCurrentFocus().getWindowToken(), 0);
+        }catch (Exception e)
+        {
+
+        }
     }
 
 }

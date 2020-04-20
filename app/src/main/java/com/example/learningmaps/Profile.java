@@ -23,6 +23,7 @@ import com.google.firebase.database.ValueEventListener;
 import com.squareup.picasso.Picasso;
 
 import de.hdodenhof.circleimageview.CircleImageView;
+import pl.droidsonroids.gif.GifImageView;
 
 public class Profile extends AppCompatActivity {
 
@@ -30,7 +31,7 @@ public class Profile extends AppCompatActivity {
     private TextView logouttext;
     private TextView nameprofile,unitsprofile,typeprofile;
     private CircleImageView profilepic;
-
+    private GifImageView loading;
     private DatabaseReference mReference;
     private FirebaseUser mUser;
 
@@ -48,6 +49,7 @@ public class Profile extends AppCompatActivity {
         unitsprofile=findViewById(R.id.unitsprofile);
         typeprofile=findViewById(R.id.typeprofile);
        // statusprofile=findViewById(R.id.imagestatus);
+        loading=findViewById(R.id.profile_loading);
         profilepic=findViewById(R.id.profilepic);
         logoutlogo=findViewById(R.id.logoutlogo);
         logouttext=findViewById(R.id.logouttext);
@@ -175,8 +177,11 @@ public class Profile extends AppCompatActivity {
                 {
                     Picasso.get().load(img).into(profilepic);
 
+
                 }
 
+                loading.setVisibility(View.GONE);
+                profilepic.setVisibility(View.VISIBLE);
 
             }
 

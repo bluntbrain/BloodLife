@@ -2,6 +2,8 @@ package com.example.learningmaps;
 
 import android.content.Intent;
 import android.content.pm.PackageManager;
+import android.graphics.Bitmap;
+import android.graphics.drawable.BitmapDrawable;
 import android.location.Location;
 import android.net.Uri;
 import android.os.Bundle;
@@ -27,6 +29,7 @@ import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.SupportMapFragment;
+import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import com.google.android.gms.maps.model.CameraPosition;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.Marker;
@@ -49,6 +52,8 @@ import com.parse.ParseQuery;
 
 import java.util.List;
 
+import pl.droidsonroids.gif.GifImageView;
+
 public class MainActivity extends FragmentActivity implements OnMapReadyCallback {
 
     //private LatLng userLocation;
@@ -65,7 +70,8 @@ public class MainActivity extends FragmentActivity implements OnMapReadyCallback
     private static final int DEFAULT_ZOOM = 12;
     private static final int PERMISSIONS_REQUEST_ACCESS_FINE_LOCATION = 1;
     private boolean mLocationPermissionGranted;
-
+    private GifImageView mapLoading;
+    private TextView upper,lower;
     private DatabaseReference mReference;
 
     // The geographical location where the device is currently located. That is, the last-known
@@ -92,6 +98,9 @@ public class MainActivity extends FragmentActivity implements OnMapReadyCallback
         }
 
         setContentView(R.layout.activity_main); // Rendering of the map
+        mapLoading=findViewById(R.id.map_loading);
+        upper=findViewById(R.id.no_req_text1);
+        lower=findViewById(R.id.no_req_text2);
         // Construct a PlacesClient
         Places.initialize(getApplicationContext(), getString(R.string.map_key));
         mPlacesClient = Places.createClient(this);
@@ -341,26 +350,42 @@ public class MainActivity extends FragmentActivity implements OnMapReadyCallback
 
    private void addallrequests()
     {
+
         mReference= FirebaseDatabase.getInstance().getReference("BloodRequests");
         mReference.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-
+                int flag=0;
                 for(DataSnapshot snapshot: dataSnapshot.getChildren()){
+                    flag=1;
                     Double Lat = Double.parseDouble(snapshot.child("victim_lat").getValue().toString());
                     Double Long = Double.parseDouble(snapshot.child("victim_long").getValue().toString());
+                    String bloodType=snapshot.child("victim_bloodtype").getValue().toString();
                     String Title = snapshot.child("victim_name").getValue().toString()+"-"+
-                            "12"+"-"+
+                            snapshot.child("units").getValue().toString()+"-"+
                             snapshot.child("victim_bloodtype").getValue().toString()+"-"+
                             snapshot.child("victim_status").getValue().toString()+"-"+
                             snapshot.child("victim_gender").getValue().toString()+"-"+
                             snapshot.child("victim_hospital").getValue().toString()+"-"+
                             snapshot.child("phone").getValue().toString()+"-"
                             ;
+
+                    Bitmap smallMarker=getMarkerImage(bloodType);
+
                     LatLng Location = new LatLng(Lat,Long);
-                    Marker requestmarker =mMap.addMarker(new MarkerOptions().position(Location).title(Title));
+                    Marker requestmarker =mMap.addMarker(new MarkerOptions().position(Location).title(Title).icon(BitmapDescriptorFactory.fromBitmap(smallMarker))
+                            );
+
                     requestmarker.hideInfoWindow();
 
+                }
+                mapLoading.setAlpha(0f);
+                mapLoading.setVisibility(View.GONE);
+                if(flag==0){
+                    upper.setAlpha(1f);
+                    lower.setAlpha(1f);
+                    upper.setVisibility(View.VISIBLE);
+                    lower.setVisibility(View.VISIBLE);
                 }
             }
 
@@ -368,7 +393,35 @@ public class MainActivity extends FragmentActivity implements OnMapReadyCallback
             public void onCancelled(@NonNull DatabaseError databaseError) {
                 Toast.makeText(MainActivity.this,"Server Respond :"+databaseError.getMessage(),Toast.LENGTH_LONG).show();
             }
+
         });
+
+    }
+
+    private Bitmap getMarkerImage(String bloodType){
+
+        BitmapDrawable bitmapDrawable;
+        if(bloodType.equals("AB-")){
+            bitmapDrawable = (BitmapDrawable) getResources().getDrawable(R.drawable.custommarkerabminus);
+
+        }else if(bloodType.equals("AB+")) {
+            bitmapDrawable = (BitmapDrawable) getResources().getDrawable(R.drawable.custommarkerabpos);
+        }else if(bloodType.equals("O+")) {
+            bitmapDrawable = (BitmapDrawable) getResources().getDrawable(R.drawable.custommarkeropos);
+        }else if(bloodType.equals("O-")) {
+            bitmapDrawable = (BitmapDrawable) getResources().getDrawable(R.drawable.custommarkeroneg);
+        }else if(bloodType.equals("A+")) {
+            bitmapDrawable = (BitmapDrawable) getResources().getDrawable(R.drawable.custommarkerapos);
+        }else if(bloodType.equals("A-")) {
+            bitmapDrawable = (BitmapDrawable) getResources().getDrawable(R.drawable.custommarkeraneg);
+        }else if(bloodType.equals("B+")) {
+            bitmapDrawable = (BitmapDrawable) getResources().getDrawable(R.drawable.custommarkerbpos);
+        }else {
+            bitmapDrawable = (BitmapDrawable) getResources().getDrawable(R.drawable.custommarkerbneg);
+        }
+
+        Bitmap smallMarker=Bitmap.createScaledBitmap(bitmapDrawable.getBitmap(),90,140,false);
+        return smallMarker;
     }
 
     private BottomNavigationView.OnNavigationItemSelectedListener mOnNavigationItemSelectedListener

@@ -15,6 +15,8 @@
         android:background="@drawable/textbox"
         android:gravity="center"
         android:hint="E-Mail"
+        android:imeOptions="actionDone"
+
         android:inputType="textPersonName"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
@@ -30,6 +32,8 @@
         android:background="@drawable/textbox"
         android:gravity="center"
         android:hint="Phone No"
+        android:imeOptions="actionDone"
+
         android:inputType="phone"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
@@ -45,6 +49,8 @@
         android:background="@drawable/textbox"
         android:gravity="center"
         android:hint="Name"
+        android:imeOptions="actionDone"
+
         android:inputType="textPersonName"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
@@ -60,6 +66,8 @@
         android:background="@drawable/textbox"
         android:gravity="center"
         android:hint="Password"
+        android:imeOptions="actionDone"
+
         android:inputType="textPassword"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"

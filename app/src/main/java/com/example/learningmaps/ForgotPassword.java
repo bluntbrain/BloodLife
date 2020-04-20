@@ -3,6 +3,7 @@ package com.example.learningmaps;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
@@ -65,5 +66,16 @@ public class ForgotPassword extends AppCompatActivity {
         });
 
 
+    }
+
+    public void rootlayouttap(View view)
+    {
+        try {
+            InputMethodManager methodManager = (InputMethodManager) getSystemService(INPUT_METHOD_SERVICE);
+            methodManager.hideSoftInputFromWindow(getCurrentFocus().getWindowToken(), 0);
+        }catch (Exception e)
+        {
+
+        }
     }
 }

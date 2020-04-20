@@ -111,61 +111,6 @@ public class SignupActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 registerUser();
-                /*
-                if(name.getText()==null ||email.getText()==null || phoneno.getText()==null|| password.getText()==null || gender==null)
-                {
-                    Toast.makeText(SignupActivity.this,"Fields Empty",Toast.LENGTH_LONG).show();
-               // }
-               // else if(phoneno.getTextSize()>10){
-                   // Toast.makeText(SignupActivity.this,"Invalid Number",Toast.LENGTH_LONG).show();
-                }else {
-
-                    final ProgressDialog progressDialog=new ProgressDialog(SignupActivity.this);
-                    progressDialog.setMessage("Signing Up");
-                    progressDialog.show();
-                    ParseUser user = new ParseUser();
-                    user.setUsername(phoneno.getText().toString());
-                    user.setPassword(password.getText().toString());
-                    user.setEmail(email.getText().toString());
-
-                    user.signUpInBackground(new SignUpCallback() {
-                        @Override
-                        public void done(ParseException e) {
-                            if (e == null) {
-
-                                ParseObject profile =new ParseObject("Profile");
-                                profile.put("username",phoneno.getText().toString());
-                                profile.put("name",name.getText().toString());
-                                profile.put("type",spinner.getSelectedItem().toString());
-                                profile.put("email",email.getText().toString());
-                                profile.put("gender",gender);
-                                profile.saveInBackground(new SaveCallback() {
-                                    @Override
-                                    public void done(ParseException e) {
-                                        if(e==null){
-                                            Intent i = new Intent(SignupActivity.this, SliderActivity.class);
-                                            startActivity(i);
-                                        }
-                                        else{
-                                            Toast.makeText(SignupActivity.this, e.toString(), Toast.LENGTH_LONG).show();
-                                        }
-
-
-                                    }
-                                });
-
-                            } else {
-                                Toast.makeText(SignupActivity.this, e.toString(), Toast.LENGTH_LONG).show();
-                            }
-                        }
-                    });
-
-
-                    progressDialog.dismiss();
-
-                }
-                */
-
 
             }
         });
@@ -195,7 +140,7 @@ public class SignupActivity extends AppCompatActivity {
             Toast.makeText(SignupActivity.this,"Please enter email in correct format",Toast.LENGTH_LONG).show();
 
         }else{
-            ProgressDialog progressDialog=new ProgressDialog(SignupActivity.this);
+            final ProgressDialog progressDialog=new ProgressDialog(SignupActivity.this);
             progressDialog.setMessage("Signing Up");
             progressDialog.show();
 
@@ -228,6 +173,7 @@ public class SignupActivity extends AppCompatActivity {
 
                                     Intent intent=new Intent(SignupActivity.this,UploadPicture.class);
                                     intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_NEW_TASK);
+                                    progressDialog.dismiss();
                                     startActivity(intent);
                                     finish();
 
@@ -254,7 +200,7 @@ public class SignupActivity extends AppCompatActivity {
 
                 }
             });
-            progressDialog.dismiss();
+
 
         }
     }

@@ -9,10 +9,11 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.daimajia.androidanimations.library.Techniques;
-import com.daimajia.androidanimations.library.YoYo;
-import com.flaviofaria.kenburnsview.KenBurnsView;
-import com.flaviofaria.kenburnsview.Transition;
+import com.anychart.AnyChart;
+import com.anychart.AnyChartView;
+import com.anychart.chart.common.dataentry.DataEntry;
+import com.anychart.chart.common.dataentry.ValueDataEntry;
+import com.anychart.charts.Pie;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
@@ -21,26 +22,24 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
 import java.util.ArrayList;
+import java.util.List;
 
 public class LeaderBoard extends AppCompatActivity {
     private BottomNavigationView mBottomNavigationView;
-    private KenBurnsView kbv ;
     private int flag;
-
     private RecyclerView mRecyclerView;
     private BHeroCustomAdapter mAdapter;
     private RecyclerView.LayoutManager mLayoutManager;
     private DatabaseReference mReference;
     private ArrayList<AddingItemsBHero> data;
+    private AnyChartView chart;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_leader_board);
-        kbv= findViewById(R.id.kenburns);
-
         data=new ArrayList<>();
-
+        chart=findViewById(R.id.chart);
         mRecyclerView=findViewById(R.id.bherocontainer);
         mRecyclerView.setHasFixedSize(true);
         mLayoutManager=new LinearLayoutManager(this);
@@ -48,43 +47,13 @@ public class LeaderBoard extends AppCompatActivity {
 
         addheroes();
 
+        addchartValues();
 
 
 
         mBottomNavigationView=findViewById(R.id.bottomNavigation);
         mBottomNavigationView.setOnNavigationItemSelectedListener(mOnNavigationItemSelectedListener);
 
-        kbv.setTransitionListener(new KenBurnsView.TransitionListener() {
-            @Override
-            public void onTransitionStart(Transition transition) {
-
-            }
-
-            @Override
-            public void onTransitionEnd(Transition transition) {
-                if(flag==0){
-                    YoYo.with(Techniques.FadeOut)
-                            .duration(1400)
-                            .playOn(findViewById(R.id.dialoglay));
-                    kbv.setImageResource(R.drawable.pictwo); flag++;
-                YoYo.with(Techniques.FadeIn)
-                        .duration(1400)
-                        .playOn(findViewById(R.id.dialoglay));}
-                else if(flag==1){
-                    kbv.setImageResource(R.drawable.picthree); flag++;}
-                else if(flag==2){
-                    kbv.setImageResource(R.drawable.picone); flag++;}
-                else if(flag==3){
-                    kbv.setImageResource(R.drawable.pictwo); flag++;}
-                else if(flag==4){
-                        kbv.setImageResource(R.drawable.picthree); flag=0;}
-
-
-
-
-
-            }
-        });
     }
 
     private void addheroes(){
@@ -143,6 +112,25 @@ public class LeaderBoard extends AppCompatActivity {
             return false;
         }
     };
+
+    public void addchartValues(){
+
+        String[] types={"A+","A-","B+","B-","O+","O-","AB-","AB+"};
+        int[] nos={2,4,1,7,2,1,4,5};
+        List<DataEntry> dataEntries=new ArrayList<>();
+        for(int i=0;i<types.length;i++){
+            dataEntries.add(new ValueDataEntry(types[i],nos[i]));
+
+        }
+        Pie pie= AnyChart.pie();
+        pie.innerRadius("70%");
+        pie.title("Registered Donors");
+        pie.labels().format("{%x} {%value}");
+
+
+        pie.data(dataEntries);
+        chart.setChart(pie);
+    }
 
     public void onBackPressed(){
         finishAffinity();

@@ -1,15 +1,19 @@
 package com.example.learningmaps;
 
+import android.app.DatePickerDialog;
 import android.content.Intent;
 import android.os.Bundle;
 import android.text.TextUtils;
 import android.view.View;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
+import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.Spinner;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
@@ -29,6 +33,7 @@ import com.google.firebase.database.ValueEventListener;
 import com.parse.Parse;
 
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.HashMap;
 
 public class RequestBlood extends AppCompatActivity {
@@ -40,8 +45,15 @@ public class RequestBlood extends AppCompatActivity {
     private EditText name, mobile, units, place;
     private String CurrentUserName;
 
+
     private DatabaseReference mReference;
     private FirebaseUser mUser;
+
+    private DatePicker datePicker;
+    private Calendar calendar;
+    private TextView dob;
+    private int year, month, day;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -65,6 +77,13 @@ public class RequestBlood extends AppCompatActivity {
         mobile=findViewById(R.id.mobile);
         place=findViewById(R.id.place);
         units=findViewById(R.id.units);
+
+        dob=findViewById(R.id.dateofbirth);
+        calendar = Calendar.getInstance();
+        //SimpleDateFormat myDateFormat = new SimpleDateFormat("MM.dd.yyyy.");
+        month = calendar.get(Calendar.MONTH);
+        day = calendar.get(Calendar.DAY_OF_MONTH);
+
         Spinner spinner = findViewById(R.id.spinner);
         Spinner spinner2 =findViewById(R.id.spinner2);
         ArrayList<String> arrayList = new ArrayList<>();
@@ -113,6 +132,20 @@ public class RequestBlood extends AppCompatActivity {
             }
         });
 
+        dob.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                long nextdate=1000*60*60*24;
+                long maxdate=1000*60*60*24*12;
+                DatePickerDialog datePickerDialog = new DatePickerDialog(RequestBlood.this,myDateListener, year, month, day);
+                datePickerDialog.getDatePicker().setMinDate(calendar.getTimeInMillis()+nextdate);
+                datePickerDialog.getDatePicker().setMaxDate(calendar.getTimeInMillis()+maxdate);
+                datePickerDialog.show();
+            }
+
+
+        });
+
 
 //IMAGE CODE
         i1=findViewById(R.id.maleimage);
@@ -148,32 +181,6 @@ public class RequestBlood extends AppCompatActivity {
 
                     uploadRequest();
                 }
-                /*
-                 {
-                    ParseObject parseObject = new ParseObject("Requests");
-                    parseObject.put("username", ParseUser.getCurrentUser().getUsername());
-                    parseObject.put("victimname", name.getText().toString());
-                    parseObject.put("victimplace", place.getText().toString());
-                    parseObject.put("victimunits", Integer.parseInt(units.getText().toString()));
-                    parseObject.put("victimphone", mobile.getText().toString());
-                    parseObject.put("victimgender", Gender);
-                    parseObject.put("victimstatus", Status);
-                    parseObject.put("victimlocation",userlocation);
-                    parseObject.put("victimtype", BloodGroup);
-                    parseObject.saveInBackground(new SaveCallback() {
-                        @Override
-                        public void done(ParseException e) {
-                            if (e == null) {
-                                Toast.makeText(RequestBlood.this, "Successful Request", Toast.LENGTH_LONG).show();
-                                Intent i = new Intent(RequestBlood.this, MainActivity.class);
-                                startActivity(i);
-                            } else {
-                                Toast.makeText(RequestBlood.this, e.toString(), Toast.LENGTH_LONG).show();
-                            }
-                        }
-                    });
-                }
-                */
             }
         });
 
@@ -217,6 +224,8 @@ public class RequestBlood extends AppCompatActivity {
         hashMap.put("phone",mobile.getText().toString());
         hashMap.put("victim_lat",mycoordinates.latitude+"");
         hashMap.put("victim_long",mycoordinates.longitude+"");
+        hashMap.put("units",units.getText().toString());
+        hashMap.put("expiry_date",dob.getText().toString());
 
 
         mReference.child("BloodRequests").push().setValue(hashMap).addOnCompleteListener(new OnCompleteListener<Void>() {
@@ -242,5 +251,28 @@ public class RequestBlood extends AppCompatActivity {
                 Toast.makeText(RequestBlood.this,e.getMessage(),Toast.LENGTH_LONG).show();
             }
         });
+    }
+
+
+     DatePickerDialog.OnDateSetListener myDateListener = new DatePickerDialog.OnDateSetListener() {
+        @Override
+        public void onDateSet(DatePicker arg0, int arg1, int arg2, int arg3) {
+            // arg1 = year
+            // arg2 = month
+            // arg3 = day
+            dob.setText(new StringBuilder().append(arg3).append("/")
+                    .append(arg2).append("/").append(arg1));
+        }
+    };
+
+    public void rootlayouttap(View view)
+    {
+        try {
+            InputMethodManager methodManager = (InputMethodManager) getSystemService(INPUT_METHOD_SERVICE);
+            methodManager.hideSoftInputFromWindow(getCurrentFocus().getWindowToken(), 0);
+        }catch (Exception e)
+        {
+
+        }
     }
 }

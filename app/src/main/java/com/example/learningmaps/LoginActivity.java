@@ -98,16 +98,18 @@ public class LoginActivity extends AppCompatActivity {
 
         }else
         {
-            ProgressDialog progressDialog =new ProgressDialog(LoginActivity.this);
+            final ProgressDialog progressDialog =new ProgressDialog(LoginActivity.this);
             progressDialog.setMessage("Signing In");
             progressDialog.setCancelable(false);
             progressDialog.show();
+
             mAuth.signInWithEmailAndPassword(emailbtn,passwordbtn).addOnCompleteListener(new OnCompleteListener<AuthResult>() {
                 @Override
                 public void onComplete(@NonNull Task<AuthResult> task) {
                     if(task.isSuccessful())
                     {
                         Intent intent=new Intent(LoginActivity.this,MainActivity.class);
+                        progressDialog.dismiss();
                         intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_NEW_TASK);
                         startActivity(intent);
                         finish();
@@ -125,7 +127,6 @@ public class LoginActivity extends AppCompatActivity {
                 }
             });
 
-            progressDialog.dismiss();
 
         }
 
