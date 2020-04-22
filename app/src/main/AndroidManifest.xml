@@ -18,9 +18,16 @@
         android:icon="@mipmap/applogoo"
         android:label="@string/app_name"
         android:roundIcon="@mipmap/applogoo"
+        android:screenOrientation="portrait"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity android:name=".DeleteRequest"></activity>
+        <activity android:name=".ProfileFinal"></activity>
+        <activity android:name=".EditProfilePhone" />
+        <activity android:name=".EditProfilePassword" />
+        <activity android:name=".EditProfileEmail" />
+        <activity android:name=".EditProfile" />
+        <activity android:name=".SearchUsers" />
+        <activity android:name=".DeleteRequest" />
         <activity android:name=".ForgotPassword" />
         <activity android:name=".BloodCampBottomSheet" />
         <activity android:name=".RequestBottomSheet" />
@@ -41,7 +48,6 @@
             </intent-filter>
         </activity>
         <activity android:name=".Request" />
-        <activity android:name=".Profile" />
         <activity android:name=".LeaderBoard" />
         <activity android:name=".SliderActivity" />
         <activity android:name=".MainActivity">

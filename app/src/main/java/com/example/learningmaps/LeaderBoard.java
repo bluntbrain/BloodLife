@@ -97,7 +97,7 @@ public class LeaderBoard extends AppCompatActivity {
                     break;
 
                 case R.id.profile_icon:
-                    Intent b=new Intent(LeaderBoard.this,Profile.class);
+                    Intent b=new Intent(LeaderBoard.this,ProfileFinal.class);
                     startActivity(b);
                     break;
 

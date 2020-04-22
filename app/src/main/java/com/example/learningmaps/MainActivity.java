@@ -441,7 +441,7 @@ public class MainActivity extends FragmentActivity implements OnMapReadyCallback
                     break;
 
                 case R.id.profile_icon:
-                    Intent b=new Intent(MainActivity.this,Profile.class);
+                    Intent b=new Intent(MainActivity.this,ProfileFinal.class);
                     startActivity(b);
                     break;
 

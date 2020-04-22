@@ -31,6 +31,7 @@ public class WelcomeLoading extends AppCompatActivity {
                 .server("https://parseapi.back4app.com")
                 .build()
         );
+        
         mFirebaseUser= FirebaseAuth.getInstance().getCurrentUser();
 
         flag=0;

@@ -178,6 +178,7 @@ public class SignupActivity extends AppCompatActivity {
                                     finish();
 
                                 }else{
+                                    progressDialog.dismiss();
                                     Toast.makeText(SignupActivity.this,task.getException().getMessage(),Toast.LENGTH_LONG).show();
 
                                 }
@@ -185,6 +186,7 @@ public class SignupActivity extends AppCompatActivity {
                         }).addOnFailureListener(new OnFailureListener() {
                             @Override
                             public void onFailure(@NonNull Exception e) {
+                                progressDialog.dismiss();
                                 Toast.makeText(SignupActivity.this,e.getMessage(),Toast.LENGTH_LONG).show();
 
                             }
@@ -194,6 +196,7 @@ public class SignupActivity extends AppCompatActivity {
 
                     }else
                     {
+                        progressDialog.dismiss();
                         Toast.makeText(SignupActivity.this,task.getException().getMessage(),Toast.LENGTH_LONG).show();
 
                     }

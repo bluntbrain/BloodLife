@@ -169,7 +169,7 @@ public class Request extends AppCompatActivity {
                     break;
 
                 case R.id.profile_icon:
-                    Intent b=new Intent(Request.this,Profile.class);
+                    Intent b=new Intent(Request.this,ProfileFinal.class);
                     startActivity(b);
                     break;
 

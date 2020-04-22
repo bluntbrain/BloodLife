@@ -1,5 +1,6 @@
 package com.example.learningmaps;
 
+import android.app.ProgressDialog;
 import android.content.Intent;
 import android.os.Bundle;
 import android.text.Editable;
@@ -123,6 +124,10 @@ public class DeleteRequest extends AppCompatActivity {
             @Override
             public void onClick(View v) {
               //  mReference= FirebaseDatabase.getInstance().getReference("BloodRequests");
+                final ProgressDialog progressDialog =new ProgressDialog(DeleteRequest.this);
+                progressDialog.setMessage("Deleting Request");
+                progressDialog.setCancelable(false);
+                progressDialog.show();
                 Query query =FirebaseDatabase.getInstance().getReference("BloodRequests").orderByChild("victim_name").equalTo(deletename.getText().toString());
                 query.addValueEventListener(new ValueEventListener() {
                     @Override
@@ -164,6 +169,7 @@ public class DeleteRequest extends AppCompatActivity {
 
                                                     Intent i = new Intent(getApplicationContext(), MainActivity.class);
                                                     i.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_NEW_TASK);
+                                                    progressDialog.dismiss();
                                                     startActivity(i);
                                                     finish();
                                                 }
@@ -174,6 +180,7 @@ public class DeleteRequest extends AppCompatActivity {
 
                                                     Intent i = new Intent(getApplicationContext(), MainActivity.class);
                                                     i.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_NEW_TASK);
+                                                    progressDialog.dismiss();
                                                     startActivity(i);
                                                     finish();
                                                 }
@@ -184,6 +191,7 @@ public class DeleteRequest extends AppCompatActivity {
 
                                             Intent i = new Intent(getApplicationContext(), MainActivity.class);
                                             i.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_NEW_TASK);
+                                            progressDialog.dismiss();
                                             startActivity(i);
                                             finish();
                                         }

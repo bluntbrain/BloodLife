@@ -9,6 +9,7 @@ import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
@@ -31,7 +32,8 @@ public class FragmentOldRequest extends Fragment {
     private ArrayList<AddingItemsOldRequests> data;
     private DatabaseReference mReference;
     private FirebaseUser mUser;
-
+    private ConstraintLayout getconnect;
+    private TextView connect;
 
     View view;
     @Nullable
@@ -41,8 +43,15 @@ public class FragmentOldRequest extends Fragment {
         mUser=FirebaseAuth.getInstance().getCurrentUser();
 
         data=new ArrayList<>();
-
-
+        getconnect=view.findViewById(R.id.getconnect);
+        connect=view.findViewById(R.id.connect);
+        connect.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent= new Intent(view.getContext(),SearchUsers.class);
+                startActivity(intent);
+            }
+        });
         mRecyclerView=view.findViewById(R.id.oldrequestcontainer);
         mRecyclerView.setHasFixedSize(true);
         mLayoutManager=new LinearLayoutManager(view.getContext());
@@ -70,6 +79,7 @@ public class FragmentOldRequest extends Fragment {
                         String victim_status =snapshot.child("victim_status").getValue().toString();
                         String victim_units = "20";
                         data.add(new AddingItemsOldRequests(victim_name,victim_type,victim_place,victim_phone,victim_status,victim_units));
+                        getconnect.setVisibility(View.VISIBLE);
                     }
                 }
                 if(data.size()!=0){

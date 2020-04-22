@@ -1,6 +1,7 @@
 package com.example.learningmaps;
 
 import android.app.DatePickerDialog;
+import android.app.ProgressDialog;
 import android.content.Intent;
 import android.os.Bundle;
 import android.text.TextUtils;
@@ -150,7 +151,7 @@ public class RequestBlood extends AppCompatActivity {
 //IMAGE CODE
         i1=findViewById(R.id.maleimage);
         i2=findViewById(R.id.femaleimage);
-        done=findViewById(R.id.button3);
+        done=findViewById(R.id.change_password_btn);
         i1.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -212,6 +213,10 @@ public class RequestBlood extends AppCompatActivity {
     }
 
     private void uploadRequest(){
+        final ProgressDialog progressDialog =new ProgressDialog(RequestBlood.this);
+        progressDialog.setMessage("Request Uploading");
+        progressDialog.setCancelable(false);
+        progressDialog.show();
          mReference = FirebaseDatabase.getInstance().getReference();
         HashMap<String,String> hashMap= new HashMap<>();
         hashMap.put("id",mUser.getUid());
@@ -235,6 +240,7 @@ public class RequestBlood extends AppCompatActivity {
                     Toast.makeText(RequestBlood.this, "Request Successful", Toast.LENGTH_LONG).show();
                     Intent i = new Intent(RequestBlood.this, MainActivity.class);
                     i.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_NEW_TASK);
+                    progressDialog.dismiss();
                     startActivity(i);
                     finish();
 

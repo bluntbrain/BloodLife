@@ -115,6 +115,7 @@ public class LoginActivity extends AppCompatActivity {
                         finish();
 
                     }else {
+                        progressDialog.dismiss();
                         Toast.makeText(LoginActivity.this,task.getException().getMessage(),Toast.LENGTH_LONG).show();
 
                     }
@@ -122,6 +123,7 @@ public class LoginActivity extends AppCompatActivity {
             }).addOnFailureListener(new OnFailureListener() {
                 @Override
                 public void onFailure(@NonNull Exception e) {
+                    progressDialog.dismiss();
                     Toast.makeText(LoginActivity.this,e.getMessage(),Toast.LENGTH_LONG).show();
 
                 }
