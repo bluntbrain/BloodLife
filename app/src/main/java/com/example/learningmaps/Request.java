@@ -25,6 +25,7 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 
 import pl.droidsonroids.gif.GifImageView;
 
@@ -33,23 +34,25 @@ public class Request extends AppCompatActivity {
     private RecyclerView mRecyclerView;
     private RequestsCustomAdapter mAdapter;
     private RecyclerView.LayoutManager mLayoutManager;
-   // private RippleBackground mRippleBackground;
-   // private ImageView mImageView;
+
     private DatabaseReference mReference;
     private ArrayList<AddingItemsRequests> data;
     private GifImageView loading;
+    private HashMap<Integer,ModelBottomSheetRequest> dataofall;
+
 
     BottomNavigationView mBottomNavigationView;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_request);
-       // mImageView=findViewById(R.id.requests_backbutton);
-       // mRippleBackground=findViewById(R.id.ripple);
-       // mRippleBackground.startRippleAnimation();
+
         loading=findViewById(R.id.request_loading);
+
         mBottomNavigationView=findViewById(R.id.bottomNavigation);
+        mBottomNavigationView.setSelectedItemId(R.id.request_blood_icon);
         mBottomNavigationView.setOnNavigationItemSelectedListener(mOnNavigationItemSelectedListener);
+        dataofall=new HashMap<>();
         data=new ArrayList<>();
 
         addlistdata();
@@ -75,7 +78,7 @@ public class Request extends AppCompatActivity {
         mReference.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-
+                int count=0;
                 for(DataSnapshot snapshot: dataSnapshot.getChildren()){
 
                     String victim_type = snapshot.child("victim_bloodtype").getValue().toString();
@@ -85,28 +88,36 @@ public class Request extends AppCompatActivity {
                     String victim_status =snapshot.child("victim_status").getValue().toString();
                     String victim_units = snapshot.child("units").getValue().toString();
                     data.add(new AddingItemsRequests(victim_name,victim_type,victim_place,victim_phone,victim_status,victim_units));
+                    dataofall.put(count,new ModelBottomSheetRequest(victim_name,victim_units,victim_type,victim_status,snapshot.child("victim_gender").getValue().toString(),victim_place,victim_phone));
+                    count++;
                 }
-
+                //Collections.reverse(data);
                 mAdapter= new RequestsCustomAdapter(data);
                 mRecyclerView.setAdapter(mAdapter);
 
                 mAdapter.setOnItemClickListener(new RequestsCustomAdapter.OnItemClickListener() {
                     @Override
                     public void OnItemClick(int position) {
+
                         View v= mRecyclerView.getLayoutManager().findViewByPosition(position);
-                        TextView alldata= v.findViewById(R.id.dataofitem);
-                        String sheetdata = alldata.getText().toString();
-                        String[] allsheetdata = sheetdata.split("-");
+                        ModelBottomSheetRequest ans=dataofall.get(position);
                         BottomSheetDialog bottomSheetDialog = new BottomSheetDialog(Request.this, R.style.BottomSheetDialogTheme);
                         View bottomSheetView = LayoutInflater.from(getApplicationContext()).inflate(R.layout.activity_request_bottom_sheet, (RelativeLayout) findViewById(R.id.bottomsheetcontainer));
 
-                        TextView namesheet =bottomSheetView.findViewById(R.id.namesheet);namesheet.setText(allsheetdata[0]);
-                        TextView statussheet =bottomSheetView.findViewById(R.id.statussheets);statussheet.setText(allsheetdata[3]);
-                        TextView unitssheet =bottomSheetView.findViewById(R.id.unitssheet);unitssheet.setText(allsheetdata[1]);
-                        TextView bloodtypesheet =bottomSheetView.findViewById(R.id.bloodtypesheet);bloodtypesheet.setText(allsheetdata[2]);
-                        TextView gendersheet =bottomSheetView.findViewById(R.id.gendersheet);gendersheet.setText(allsheetdata[4]);
-                        TextView hospitalsheet =bottomSheetView.findViewById(R.id.locationsheet);hospitalsheet.setText(allsheetdata[5]);
-                        final TextView phonesheet =bottomSheetView.findViewById(R.id.phonesheet);phonesheet.setText(allsheetdata[6]);
+                        TextView namesheet =bottomSheetView.findViewById(R.id.namesheet);//namesheet.setText(allsheetdata[0]);
+                        TextView statussheet =bottomSheetView.findViewById(R.id.statussheets);//statussheet.setText(allsheetdata[3]);
+                        TextView unitssheet =bottomSheetView.findViewById(R.id.unitssheet);//unitssheet.setText(allsheetdata[1]);
+                        TextView bloodtypesheet =bottomSheetView.findViewById(R.id.bloodtypesheet);//bloodtypesheet.setText(allsheetdata[2]);
+                        TextView gendersheet =bottomSheetView.findViewById(R.id.gendersheet);////gendersheet.setText(allsheetdata[4]);
+                        TextView hospitalsheet =bottomSheetView.findViewById(R.id.locationsheet);//hospitalsheet.setText(allsheetdata[5]);
+                        final TextView phonesheet =bottomSheetView.findViewById(R.id.phonesheet);//phonesheet.setText(allsheetdata[6]);
+
+                        namesheet.setText(ans.getName());
+                        statussheet.setText(ans.getStatus());
+                        unitssheet.setText(ans.getUnits());
+                        bloodtypesheet.setText(ans.getBloodtype());
+                        gendersheet.setText(ans.getGender());
+                        hospitalsheet.setText(ans.getPlace());
 
                         Button btnsheet = bottomSheetView.findViewById(R.id.buttonsheet);
                         btnsheet.setOnClickListener(new View.OnClickListener() {
@@ -159,21 +170,24 @@ public class Request extends AppCompatActivity {
             switch (menuItem.getItemId())
             {
                 case R.id.map_icon:
+
                     Intent c=new Intent(Request.this,MainActivity.class);
                     startActivity(c);
                     break;
 
                 case R.id.leaderboard_icon:
+
                     Intent a=new Intent(Request.this,BheroLoading.class);
                     startActivity(a);
                     break;
 
                 case R.id.profile_icon:
+
                     Intent b=new Intent(Request.this,ProfileFinal.class);
                     startActivity(b);
                     break;
 
-                case R.id.request_blood:
+                case R.id.request_blood_icon:
 
                     break;
 

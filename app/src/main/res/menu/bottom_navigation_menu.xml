@@ -17,7 +17,7 @@
         android:title="@string/navigationbar_profile"/>
 
     <item
-        android:id="@+id/request_blood"
+        android:id="@+id/request_blood_icon"
         android:icon="@drawable/ic_ivbag"
         android:title="@string/navigationbar_request"
         />

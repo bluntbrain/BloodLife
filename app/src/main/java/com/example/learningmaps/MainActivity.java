@@ -50,6 +50,7 @@ import com.parse.ParseException;
 import com.parse.ParseObject;
 import com.parse.ParseQuery;
 
+import java.util.HashMap;
 import java.util.List;
 
 import pl.droidsonroids.gif.GifImageView;
@@ -73,6 +74,7 @@ public class MainActivity extends FragmentActivity implements OnMapReadyCallback
     private GifImageView mapLoading;
     private TextView upper,lower;
     private DatabaseReference mReference;
+    private HashMap<Marker,ModelBottomSheetRequest> dataofallmarkers;
 
     // The geographical location where the device is currently located. That is, the last-known
     // location retrieved by the Fused Location Provider.
@@ -102,6 +104,7 @@ public class MainActivity extends FragmentActivity implements OnMapReadyCallback
         upper=findViewById(R.id.no_req_text1);
         lower=findViewById(R.id.no_req_text2);
         // Construct a PlacesClient
+        dataofallmarkers=new HashMap<>();
         Places.initialize(getApplicationContext(), getString(R.string.map_key));
         mPlacesClient = Places.createClient(this);
 
@@ -184,17 +187,24 @@ public class MainActivity extends FragmentActivity implements OnMapReadyCallback
 
                 }else {
 
-                    String[] allsheetdata=marker.getTitle().split("-");
                     BottomSheetDialog bottomSheetDialog = new BottomSheetDialog(MainActivity.this, R.style.BottomSheetDialogTheme);
                     View bottomSheetView = LayoutInflater.from(getApplicationContext()).inflate(R.layout.activity_request_bottom_sheet, (RelativeLayout) findViewById(R.id.bottomsheetcontainer));
-                    TextView namesheet =bottomSheetView.findViewById(R.id.namesheet);namesheet.setText(allsheetdata[0]);
-                    TextView statussheet =bottomSheetView.findViewById(R.id.statussheets);statussheet.setText(allsheetdata[3]);
-                    TextView unitssheet =bottomSheetView.findViewById(R.id.unitssheet);unitssheet.setText(allsheetdata[1]);
-                    TextView bloodtypesheet =bottomSheetView.findViewById(R.id.bloodtypesheet);bloodtypesheet.setText(allsheetdata[2]);
-                    TextView gendersheet =bottomSheetView.findViewById(R.id.gendersheet);gendersheet.setText(allsheetdata[4]);
-                    TextView hospitalsheet =bottomSheetView.findViewById(R.id.locationsheet);hospitalsheet.setText(allsheetdata[5]);
-                    final TextView phonesheet =bottomSheetView.findViewById(R.id.phonesheet);phonesheet.setText(allsheetdata[6]);
+                    TextView namesheet =bottomSheetView.findViewById(R.id.namesheet);//namesheet.setText(allsheetdata[0]);
+                    TextView statussheet =bottomSheetView.findViewById(R.id.statussheets);//statussheet.setText(allsheetdata[3]);
+                    TextView unitssheet =bottomSheetView.findViewById(R.id.unitssheet);//unitssheet.setText(allsheetdata[1]);
+                    TextView bloodtypesheet =bottomSheetView.findViewById(R.id.bloodtypesheet);//bloodtypesheet.setText(allsheetdata[2]);
+                    TextView gendersheet =bottomSheetView.findViewById(R.id.gendersheet);//gendersheet.setText(allsheetdata[4]);
+                    TextView hospitalsheet =bottomSheetView.findViewById(R.id.locationsheet);//hospitalsheet.setText(allsheetdata[5]);
+                    final TextView phonesheet =bottomSheetView.findViewById(R.id.phonesheet);//phonesheet.setText(allsheetdata[6]);
 
+                    ModelBottomSheetRequest model=dataofallmarkers.get(marker);
+                    namesheet.setText(model.getName());
+                    statussheet.setText(model.getStatus());
+                    unitssheet.setText(model.getUnits());
+                    bloodtypesheet.setText(model.getBloodtype());
+                    gendersheet.setText(model.getGender());
+                    hospitalsheet.setText(model.getPlace());
+                    phonesheet.setText(model.getPhone());
                     Button btnsheet = bottomSheetView.findViewById(R.id.buttonsheet);
                     btnsheet.setOnClickListener(new View.OnClickListener() {
                         @Override
@@ -204,6 +214,8 @@ public class MainActivity extends FragmentActivity implements OnMapReadyCallback
                             startActivity(intent);
                         }
                     });
+
+
                     bottomSheetDialog.setContentView(bottomSheetView);
                     bottomSheetDialog.show();
                 }
@@ -361,20 +373,20 @@ public class MainActivity extends FragmentActivity implements OnMapReadyCallback
                     Double Lat = Double.parseDouble(snapshot.child("victim_lat").getValue().toString());
                     Double Long = Double.parseDouble(snapshot.child("victim_long").getValue().toString());
                     String bloodType=snapshot.child("victim_bloodtype").getValue().toString();
-                    String Title = snapshot.child("victim_name").getValue().toString()+"-"+
-                            snapshot.child("units").getValue().toString()+"-"+
-                            snapshot.child("victim_bloodtype").getValue().toString()+"-"+
-                            snapshot.child("victim_status").getValue().toString()+"-"+
-                            snapshot.child("victim_gender").getValue().toString()+"-"+
-                            snapshot.child("victim_hospital").getValue().toString()+"-"+
-                            snapshot.child("phone").getValue().toString()+"-"
-                            ;
+
 
                     Bitmap smallMarker=getMarkerImage(bloodType);
 
                     LatLng Location = new LatLng(Lat,Long);
-                    Marker requestmarker =mMap.addMarker(new MarkerOptions().position(Location).title(Title).icon(BitmapDescriptorFactory.fromBitmap(smallMarker))
+                    Marker requestmarker =mMap.addMarker(new MarkerOptions().position(Location).title(snapshot.child("victim_name").getValue().toString()).icon(BitmapDescriptorFactory.fromBitmap(smallMarker))
                             );
+                    dataofallmarkers.put(requestmarker,new ModelBottomSheetRequest(snapshot.child("victim_name").getValue().toString(),
+                            snapshot.child("units").getValue().toString(),
+                            snapshot.child("victim_bloodtype").getValue().toString(),
+                            snapshot.child("victim_status").getValue().toString(),
+                            snapshot.child("victim_gender").getValue().toString(),
+                            snapshot.child("victim_hospital").getValue().toString(),
+                            snapshot.child("phone").getValue().toString()));
 
                     requestmarker.hideInfoWindow();
 
@@ -445,7 +457,9 @@ public class MainActivity extends FragmentActivity implements OnMapReadyCallback
                     startActivity(b);
                     break;
 
-                case R.id.request_blood: Intent c=new Intent(MainActivity.this,Request.class);
+                case R.id.request_blood_icon:
+
+                    Intent c=new Intent(MainActivity.this,Request.class);
                     startActivity(c);
 
                     break;

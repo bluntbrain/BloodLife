@@ -41,6 +41,7 @@ public class ProfileFinal extends AppCompatActivity {
         mUser= FirebaseAuth.getInstance().getCurrentUser();
 
         mBottomNavigationView=findViewById(R.id.bottomNavigation);
+        mBottomNavigationView.setSelectedItemId(R.id.profile_icon);
         mBottomNavigationView.setOnNavigationItemSelectedListener(mOnNavigationItemSelectedListener);
 
         profilefinal_name=findViewById(R.id.profilefinal_name);
@@ -122,11 +123,13 @@ public class ProfileFinal extends AppCompatActivity {
             switch (menuItem.getItemId())
             {
                 case R.id.map_icon:
+
                     Intent c=new Intent(ProfileFinal.this,MainActivity.class);
                     startActivity(c);
                     break;
 
                 case R.id.leaderboard_icon:
+
                     Intent a=new Intent(ProfileFinal.this,BheroLoading.class);
                     startActivity(a);
                     break;
@@ -135,7 +138,8 @@ public class ProfileFinal extends AppCompatActivity {
 
                     break;
 
-                case R.id.request_blood:
+                case R.id.request_blood_icon:
+
                     Intent b=new Intent(ProfileFinal.this,Request.class);
                     startActivity(b);
 

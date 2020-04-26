@@ -11,18 +11,20 @@
         android:id="@+id/linearview"
         android:layout_width="match_parent"
         android:layout_height="200dp"
-        android:background="#EF2558"
+        android:background="@drawable/requesttable"
         android:orientation="vertical"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintBottom_toTopOf="@id/recyclerView">
+        app:layout_constraintBottom_toTopOf="@id/recyclerView"
+        android:gravity="center">
 
 
         <pl.droidsonroids.gif.GifImageView
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:src="@drawable/requestsgif" />
+            android:layout_height="120dp"
+            android:src="@drawable/requestsone"
+            android:layout_gravity="center"/>
     </LinearLayout>
 
 
@@ -63,6 +65,7 @@
         app:labelVisibilityMode="labeled"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
+        app:itemIconTint="@drawable/selector"
         app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"

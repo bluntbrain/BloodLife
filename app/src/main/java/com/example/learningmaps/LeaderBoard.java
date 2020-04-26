@@ -3,6 +3,8 @@ package com.example.learningmaps;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.MenuItem;
+import android.view.View;
+import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
@@ -19,9 +21,11 @@ import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.Query;
 import com.google.firebase.database.ValueEventListener;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 public class LeaderBoard extends AppCompatActivity {
@@ -33,6 +37,7 @@ public class LeaderBoard extends AppCompatActivity {
     private DatabaseReference mReference;
     private ArrayList<AddingItemsBHero> data;
     private AnyChartView chart;
+    private TextView connectBtn,livesSaved;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -44,6 +49,8 @@ public class LeaderBoard extends AppCompatActivity {
         mRecyclerView.setHasFixedSize(true);
         mLayoutManager=new LinearLayoutManager(this);
         mRecyclerView.setLayoutManager(mLayoutManager);
+        connectBtn=findViewById(R.id.connect_btn);
+        livesSaved=findViewById(R.id.lives_saved);
 
         addheroes();
 
@@ -51,23 +58,38 @@ public class LeaderBoard extends AppCompatActivity {
 
 
 
+        connectBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent i=new Intent(LeaderBoard.this,SearchUsers.class);
+                startActivity(i);
+            }
+        });
         mBottomNavigationView=findViewById(R.id.bottomNavigation);
+        mBottomNavigationView.setSelectedItemId(R.id.leaderboard_icon);
         mBottomNavigationView.setOnNavigationItemSelectedListener(mOnNavigationItemSelectedListener);
 
     }
 
     private void addheroes(){
 
+
         mReference= FirebaseDatabase.getInstance().getReference("Donoted");
         mReference.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                int count=0;
                 for(DataSnapshot snapshot : dataSnapshot.getChildren()){
-                    String name = snapshot.child("name").getValue().toString();
-                    String dp = snapshot.child("imageURl").getValue().toString();
-                    data.add(new AddingItemsBHero(name,dp));
-                }
+                    count++;
+                    if(count<10) {
+                        String name = snapshot.child("name").getValue().toString();
+                        String dp = snapshot.child("imageURl").getValue().toString();
+                        data.add(new AddingItemsBHero(name, dp));
+                    }
 
+                }
+                livesSaved.setText(count+" Lives");
+                Collections.reverse(data);
                 mAdapter= new BHeroCustomAdapter(data);
                 mRecyclerView.setAdapter(mAdapter);
             }
@@ -88,6 +110,7 @@ public class LeaderBoard extends AppCompatActivity {
             switch (menuItem.getItemId())
             {
                 case R.id.map_icon:
+
                     Intent a=new Intent(LeaderBoard.this,MainActivity.class);
                     startActivity(a);
                     break;
@@ -97,11 +120,13 @@ public class LeaderBoard extends AppCompatActivity {
                     break;
 
                 case R.id.profile_icon:
+
                     Intent b=new Intent(LeaderBoard.this,ProfileFinal.class);
                     startActivity(b);
                     break;
 
-                case R.id.request_blood:
+                case R.id.request_blood_icon:
+
                     Intent c=new Intent(LeaderBoard.this,Request.class);
                     startActivity(c);
                     break;
@@ -115,21 +140,54 @@ public class LeaderBoard extends AppCompatActivity {
 
     public void addchartValues(){
 
-        String[] types={"A+","A-","B+","B-","O+","O-","AB-","AB+"};
-        int[] nos={2,4,1,7,2,1,4,5};
-        List<DataEntry> dataEntries=new ArrayList<>();
-        for(int i=0;i<types.length;i++){
-            dataEntries.add(new ValueDataEntry(types[i],nos[i]));
+        Query query= FirebaseDatabase.getInstance().getReference("Users").orderByChild("bloodtype");
+        query.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                int aplus=0,aneg=0,bplus=0,bneg=0,oplus=0,oneg=0,abplus=0,abneg=0;
+                for(DataSnapshot snapshot:dataSnapshot.getChildren()){
+                    if(snapshot.child("bloodtype").getValue().toString().equals("A+")){
+                        aplus++;
+                    }else if(snapshot.child("bloodtype").getValue().toString().equals("A-")){
+                        aneg++;
+                    }else if(snapshot.child("bloodtype").getValue().toString().equals("B+")){
+                        bplus++;
+                    }else if(snapshot.child("bloodtype").getValue().toString().equals("B-")){
+                        bneg++;
+                    }else if(snapshot.child("bloodtype").getValue().toString().equals("O+")){
+                        oplus++;
+                    }else if(snapshot.child("bloodtype").getValue().toString().equals("O-")){
+                        oneg++;
+                    }else if(snapshot.child("bloodtype").getValue().toString().equals("AB+")){
+                        abplus++;
+                    }else{
+                        abneg++;
+                    }
+                }
+                int[] nos={aplus,aneg,bplus,bneg,oplus,oneg,abplus,abneg};
+                String[] types={"A+","A-","B+","B-","O+","O-","AB-","AB+"};
 
-        }
-        Pie pie= AnyChart.pie();
-        pie.innerRadius("70%");
-        pie.title("Registered Donors");
-        pie.labels().format("{%x} {%value}");
+                List<DataEntry> dataEntries=new ArrayList<>();
+                for(int i=0;i<types.length;i++){
+                    dataEntries.add(new ValueDataEntry(types[i],nos[i]));
+
+                }
+                Pie pie= AnyChart.pie();
+                pie.innerRadius("70%");
+                pie.title("Registered Donors");
+                pie.labels().format("{%x} {%value}");
 
 
-        pie.data(dataEntries);
-        chart.setChart(pie);
+                pie.data(dataEntries);
+                chart.setChart(pie);
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {
+
+            }
+        });
+
     }
 
     public void onBackPressed(){

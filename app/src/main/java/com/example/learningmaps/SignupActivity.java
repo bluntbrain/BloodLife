@@ -12,6 +12,7 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.Spinner;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
@@ -24,7 +25,6 @@ import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
-import com.parse.Parse;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -35,7 +35,7 @@ public class SignupActivity extends AppCompatActivity {
     private Button done;
     private EditText name,email,phoneno,password;
     private String BloodGroup,gender;
-
+    private TextView TnC,Policy;
     private FirebaseAuth mAuth;
     private DatabaseReference mDatabaseReference;
 
@@ -44,14 +44,23 @@ public class SignupActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_signup);
-        Parse.initialize(new Parse.Configuration.Builder(this)
-                .applicationId("EpQmd1UQ4LCPsqG65sqHKSJ04Yk5V1e4VK631IKc")
-                .clientKey("Vm0egZoggfRMZFVfXCaOkm3XfErzApy6BXqZjHUk")
-                .server("https://parseapi.back4app.com")
-                .build()
-        );
 //SPINNER CODE
         mAuth=FirebaseAuth.getInstance();
+        TnC=findViewById(R.id.textView19);
+        TnC.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+            }
+        });
+
+        Policy=findViewById(R.id.textView22);
+        Policy.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+            }
+        });
 
         final Spinner spinner = findViewById(R.id.spinner);
         ArrayList<String> arrayList = new ArrayList<>();
@@ -133,9 +142,9 @@ public class SignupActivity extends AppCompatActivity {
         if(TextUtils.isEmpty(name.getText()) || TextUtils.isEmpty(email.getText()) || TextUtils.isEmpty(phoneno.getText()) || TextUtils.isEmpty(password.getText()) || TextUtils.isEmpty(gender) || TextUtils.isEmpty(BloodGroup))
         {
             Toast.makeText(SignupActivity.this,"Fields Empty",Toast.LENGTH_LONG).show();
-        }else if(password.length() < 4 || password.length() > 10)
+        }else if(password.length() <6)
         {
-            Toast.makeText(SignupActivity.this,"A min 4 length password must be set",Toast.LENGTH_LONG).show();
+            Toast.makeText(SignupActivity.this,"A password should be min of 6 characters",Toast.LENGTH_LONG).show();
         }else if(!android.util.Patterns.EMAIL_ADDRESS.matcher(email.getText()).matches()){
             Toast.makeText(SignupActivity.this,"Please enter email in correct format",Toast.LENGTH_LONG).show();
 

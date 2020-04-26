@@ -92,9 +92,9 @@ public class LoginActivity extends AppCompatActivity {
             Toast.makeText(LoginActivity.this,"Fields Empty",Toast.LENGTH_LONG).show();
 
         }
-        else if(passwordbtn.length()<4 && passwordbtn.length()>10)
+        else if(passwordbtn.length()<6 )
         {
-            Toast.makeText(LoginActivity.this,"Password length should between 4 to 10",Toast.LENGTH_LONG).show();
+            Toast.makeText(LoginActivity.this,"Password length should min of 6 characters",Toast.LENGTH_LONG).show();
 
         }else
         {

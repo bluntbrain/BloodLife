@@ -150,6 +150,7 @@
         android:layout_alignParentBottom="true"
         app:labelVisibilityMode="labeled"
         android:background="@color/white"
+        app:itemIconTint="@drawable/selector"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.0"

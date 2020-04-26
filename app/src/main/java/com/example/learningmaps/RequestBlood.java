@@ -31,14 +31,12 @@ import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
-import com.parse.Parse;
 
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.HashMap;
 
 public class RequestBlood extends AppCompatActivity {
-   // private ParseGeoPoint userlocation;
     private LatLng mycoordinates;
     private ImageView i1,i2;
     private Button done;
@@ -59,12 +57,6 @@ public class RequestBlood extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_request_blood);
-        Parse.initialize(new Parse.Configuration.Builder(this)
-                .applicationId("EpQmd1UQ4LCPsqG65sqHKSJ04Yk5V1e4VK631IKc")
-                .clientKey("Vm0egZoggfRMZFVfXCaOkm3XfErzApy6BXqZjHUk")
-                .server("https://parseapi.back4app.com")
-                .build()
-        );
 
         mUser= FirebaseAuth.getInstance().getCurrentUser();
 
@@ -151,7 +143,7 @@ public class RequestBlood extends AppCompatActivity {
 //IMAGE CODE
         i1=findViewById(R.id.maleimage);
         i2=findViewById(R.id.femaleimage);
-        done=findViewById(R.id.change_password_btn);
+        done=findViewById(R.id.reques_btn);
         i1.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
