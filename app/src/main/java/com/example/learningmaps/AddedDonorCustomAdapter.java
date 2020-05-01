@@ -79,6 +79,7 @@ public class AddedDonorCustomAdapter extends RecyclerView.Adapter<AddedDonorCust
         holder.added_name.setText(currentItem.getAddedname());
         if(currentItem.getAddedimgURL().equals("Default"))
         {
+            Picasso.get().load(R.drawable.tryimage).into(holder.added_dp);
 
         }else{
             Picasso.get().load(currentItem.getAddedimgURL()).into(holder.added_dp);

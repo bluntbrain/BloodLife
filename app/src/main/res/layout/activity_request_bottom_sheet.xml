@@ -32,36 +32,39 @@
                 android:background="@drawable/bottomsheet"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintHorizontal_bias="0.0"
+                app:layout_constraintHorizontal_bias="1.0"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent"
                 app:layout_constraintVertical_bias="0.0" />
 
             <TextView
                 android:id="@+id/namesheet"
-                android:layout_width="180dp"
+                android:layout_width="160dp"
                 android:layout_height="wrap_content"
-                android:text="Victim Name"
-                android:textAlignment="center"
+                android:gravity="start"
+                android:maxLines="1"
+                android:text="vvvvvvvvvvvvvvvvvv"
+                android:textAlignment="textStart"
                 android:textSize="20sp"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintHorizontal_bias="0.1"
+                app:layout_constraintHorizontal_bias="0.05"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent"
                 app:layout_constraintVertical_bias="0.120000005" />
 
             <TextView
                 android:id="@+id/unitssheet"
-                android:layout_width="40dp"
+                android:layout_width="60dp"
                 android:layout_height="wrap_content"
                 android:gravity="start"
-                android:text="100"
+                android:maxLines="1"
+                android:text="99999"
                 android:textAlignment="textStart"
                 android:textSize="18sp"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintHorizontal_bias="0.12"
+                app:layout_constraintHorizontal_bias="0.13"
                 app:layout_constraintStart_toStartOf="@+id/bottomsheet"
                 app:layout_constraintTop_toTopOf="parent"
                 app:layout_constraintVertical_bias="0.44" />
@@ -71,6 +74,7 @@
                 android:layout_width="50dp"
                 android:layout_height="wrap_content"
                 android:gravity="start"
+                android:maxLines="1"
                 android:text="O+"
                 android:textAlignment="textStart"
                 android:textSize="18sp"
@@ -79,19 +83,20 @@
                 app:layout_constraintHorizontal_bias="0.13"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent"
-                app:layout_constraintVertical_bias="0.64" />
+                app:layout_constraintVertical_bias="0.65999997" />
 
             <TextView
                 android:id="@+id/statussheets"
                 android:layout_width="80dp"
                 android:layout_height="wrap_content"
                 android:gravity="start"
+                android:maxLines="1"
                 android:text="Emergency"
                 android:textAlignment="textStart"
                 android:textSize="16sp"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintHorizontal_bias="0.14"
+                app:layout_constraintHorizontal_bias="0.13"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent"
                 app:layout_constraintVertical_bias="0.888" />
@@ -101,12 +106,13 @@
                 android:layout_width="100dp"
                 android:layout_height="wrap_content"
                 android:gravity="start"
-                android:text="kasturba"
+                android:maxLines="1"
+                android:text="aaaaaaaaaaaaaaaaaaaaaa"
                 android:textAlignment="textStart"
                 android:textSize="16sp"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintHorizontal_bias="0.94"
+                app:layout_constraintHorizontal_bias="0.93"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent"
                 app:layout_constraintVertical_bias="0.64" />
@@ -116,12 +122,13 @@
                 android:layout_width="100dp"
                 android:layout_height="wrap_content"
                 android:gravity="start"
+                android:maxLines="1"
                 android:text="9413119401"
                 android:textAlignment="textStart"
                 android:textSize="16sp"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintHorizontal_bias="0.94"
+                app:layout_constraintHorizontal_bias="0.93"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent"
                 app:layout_constraintVertical_bias="0.9" />
@@ -131,7 +138,8 @@
                 android:layout_width="60dp"
                 android:layout_height="wrap_content"
                 android:gravity="start"
-                android:text="Female"
+                android:maxLines="1"
+                android:text="male"
                 android:textAlignment="textStart"
                 android:textSize="16sp"
                 app:layout_constraintBottom_toBottomOf="parent"
@@ -151,14 +159,40 @@
         android:layout_height="match_parent"
         android:gravity="center"
         android:layout_marginBottom="30dp">
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
 
-        <Button
-            android:id="@+id/buttonsheet"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+            <TextView
+                android:id="@+id/share_request_btn"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="4dp"
+                android:layout_marginEnd="12dp"
+                android:background="@drawable/sharebtn"
+                android:gravity="center"
+                android:text="Share"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toStartOf="@+id/buttonsheet"
+                app:layout_constraintHorizontal_bias="1.0"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
 
-            android:layout_centerHorizontal="true"
-            android:background="@drawable/acceptbutton" />
+            <Button
+                android:id="@+id/buttonsheet"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerHorizontal="true"
+                android:layout_marginEnd="12dp"
+                android:background="@drawable/acceptbutton"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintHorizontal_bias="1.0"
+                app:layout_constraintStart_toStartOf="@+id/share_request_btn"
+                app:layout_constraintTop_toTopOf="parent" />
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
 
 
     </LinearLayout>

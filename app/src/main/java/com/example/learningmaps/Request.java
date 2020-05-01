@@ -40,7 +40,6 @@ public class Request extends AppCompatActivity {
     private GifImageView loading;
     private HashMap<Integer,ModelBottomSheetRequest> dataofall;
 
-
     BottomNavigationView mBottomNavigationView;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -48,7 +47,6 @@ public class Request extends AppCompatActivity {
         setContentView(R.layout.activity_request);
 
         loading=findViewById(R.id.request_loading);
-
         mBottomNavigationView=findViewById(R.id.bottomNavigation);
         mBottomNavigationView.setSelectedItemId(R.id.request_blood_icon);
         mBottomNavigationView.setOnNavigationItemSelectedListener(mOnNavigationItemSelectedListener);
@@ -91,7 +89,7 @@ public class Request extends AppCompatActivity {
                     dataofall.put(count,new ModelBottomSheetRequest(victim_name,victim_units,victim_type,victim_status,snapshot.child("victim_gender").getValue().toString(),victim_place,victim_phone));
                     count++;
                 }
-                //Collections.reverse(data);
+
                 mAdapter= new RequestsCustomAdapter(data);
                 mRecyclerView.setAdapter(mAdapter);
 
@@ -104,12 +102,13 @@ public class Request extends AppCompatActivity {
                         BottomSheetDialog bottomSheetDialog = new BottomSheetDialog(Request.this, R.style.BottomSheetDialogTheme);
                         View bottomSheetView = LayoutInflater.from(getApplicationContext()).inflate(R.layout.activity_request_bottom_sheet, (RelativeLayout) findViewById(R.id.bottomsheetcontainer));
 
-                        TextView namesheet =bottomSheetView.findViewById(R.id.namesheet);//namesheet.setText(allsheetdata[0]);
-                        TextView statussheet =bottomSheetView.findViewById(R.id.statussheets);//statussheet.setText(allsheetdata[3]);
-                        TextView unitssheet =bottomSheetView.findViewById(R.id.unitssheet);//unitssheet.setText(allsheetdata[1]);
-                        TextView bloodtypesheet =bottomSheetView.findViewById(R.id.bloodtypesheet);//bloodtypesheet.setText(allsheetdata[2]);
-                        TextView gendersheet =bottomSheetView.findViewById(R.id.gendersheet);////gendersheet.setText(allsheetdata[4]);
-                        TextView hospitalsheet =bottomSheetView.findViewById(R.id.locationsheet);//hospitalsheet.setText(allsheetdata[5]);
+                        final TextView namesheet =bottomSheetView.findViewById(R.id.namesheet);//namesheet.setText(allsheetdata[0]);
+                        final TextView statussheet =bottomSheetView.findViewById(R.id.statussheets);//statussheet.setText(allsheetdata[3]);
+                        final TextView unitssheet =bottomSheetView.findViewById(R.id.unitssheet);//unitssheet.setText(allsheetdata[1]);
+                        final TextView bloodtypesheet =bottomSheetView.findViewById(R.id.bloodtypesheet);//bloodtypesheet.setText(allsheetdata[2]);
+                        final TextView gendersheet =bottomSheetView.findViewById(R.id.gendersheet);////gendersheet.setText(allsheetdata[4]);
+                        final TextView hospitalsheet =bottomSheetView.findViewById(R.id.locationsheet);//hospitalsheet.setText(allsheetdata[5]);
+                        final TextView sharebtn = bottomSheetView.findViewById(R.id.share_request_btn);//phonesheet.setText(allsheetdata[6]);
                         final TextView phonesheet =bottomSheetView.findViewById(R.id.phonesheet);//phonesheet.setText(allsheetdata[6]);
 
                         namesheet.setText(ans.getName());
@@ -118,6 +117,23 @@ public class Request extends AppCompatActivity {
                         bloodtypesheet.setText(ans.getBloodtype());
                         gendersheet.setText(ans.getGender());
                         hospitalsheet.setText(ans.getPlace());
+
+                        sharebtn.setOnClickListener(new View.OnClickListener() {
+                            @Override
+                            public void onClick(View v) {
+
+                                Intent shareIntent = new Intent();
+                                shareIntent.setAction(Intent.ACTION_SEND);
+                                shareIntent.putExtra(Intent.EXTRA_TEXT, "*Bloodtype "+ bloodtypesheet.getText().toString() +" is urgently required at "
+                                        + hospitalsheet.getText().toString()+"*" +"\nDetails -\n"+"Name : " +namesheet.getText().toString()+ "\nUnits required : "+unitssheet.getText().toString()+
+                                        "\nEmergency Status : "+statussheet.getText().toString()+"\nContact : "+phonesheet.getText().toString()+
+                                        "\nHelp to Donate and bring life back to power "+getEmojiByUnicode(0x270B)+
+                                        "\n\nHelp to save more lives by becoming donors at our platform BloodLife, Manipal's first blood donation platform"+
+                                        "\napp link...");
+                                shareIntent.setType("text/plain");
+                                startActivity(Intent.createChooser(shareIntent, "Share with"));
+                            }
+                        });
 
                         Button btnsheet = bottomSheetView.findViewById(R.id.buttonsheet);
                         btnsheet.setOnClickListener(new View.OnClickListener() {
@@ -197,4 +213,8 @@ public class Request extends AppCompatActivity {
             return false;
         }
     };
+
+    public String getEmojiByUnicode(int unicode){
+        return new String(Character.toChars(unicode));
+    }
 }

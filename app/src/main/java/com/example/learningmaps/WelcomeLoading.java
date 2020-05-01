@@ -12,7 +12,6 @@ import com.daimajia.androidanimations.library.Techniques;
 import com.daimajia.androidanimations.library.YoYo;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
-import com.parse.Parse;
 
 public class WelcomeLoading extends AppCompatActivity {
 
@@ -25,12 +24,7 @@ public class WelcomeLoading extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_welcome_loading);
-        Parse.initialize(new Parse.Configuration.Builder(this)
-                .applicationId("EpQmd1UQ4LCPsqG65sqHKSJ04Yk5V1e4VK631IKc")
-                .clientKey("Vm0egZoggfRMZFVfXCaOkm3XfErzApy6BXqZjHUk")
-                .server("https://parseapi.back4app.com")
-                .build()
-        );
+
         
         mFirebaseUser= FirebaseAuth.getInstance().getCurrentUser();
 

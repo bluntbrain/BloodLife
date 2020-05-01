@@ -76,9 +76,9 @@ public class OldRequestCustomAdapter extends RecyclerView.Adapter<OldRequestCust
         holder.request_type.setText(currentItem.getType());
         holder.request_units.setText("Units Required: "+currentItem.getUnits());
         holder.request_name.setText(currentItem.getName());
-        holder.alldataofitme.setText(currentItem.getName()+"="+currentItem.getUnits()+"="
-                +currentItem.getType()+"="+currentItem.getStatus()+"="+"Male"+"="+currentItem.getLocation()+"="
-                +currentItem.getMobile()
+        holder.alldataofitme.setText(currentItem.getName()+"/=/=/"+currentItem.getUnits()+"/=/=/"
+                +currentItem.getType()+"/=/=/"+currentItem.getStatus()+"/=/=/"+currentItem.getGender()+"/=/=/"+currentItem.getLocation()+"/=/=/"
+                +currentItem.getMobile()+"/=/=/"+currentItem.getRequest_id()
         );
     }
 

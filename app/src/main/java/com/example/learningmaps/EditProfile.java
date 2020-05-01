@@ -18,12 +18,10 @@ import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
-import com.google.firebase.database.DataSnapshot;
-import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
-import com.google.firebase.database.Query;
-import com.google.firebase.database.ValueEventListener;
+
+import java.util.HashMap;
 
 public class EditProfile extends AppCompatActivity {
 
@@ -41,16 +39,16 @@ public class EditProfile extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_edit_profile);
 
-        edit_profile_phone=findViewById(R.id.edit_profile_phone);
-        edit_profile_email=findViewById(R.id.edit_profile_email);
-        edit_profile_password=findViewById(R.id.edit_profile_password);
-        delete_profile_btn=findViewById(R.id.delete_profile_btn);
-        mUser= FirebaseAuth.getInstance().getCurrentUser();
+        edit_profile_phone = findViewById(R.id.edit_profile_phone);
+        edit_profile_email = findViewById(R.id.edit_profile_email);
+        edit_profile_password = findViewById(R.id.edit_profile_password);
+        delete_profile_btn = findViewById(R.id.delete_profile_btn);
+        mUser = FirebaseAuth.getInstance().getCurrentUser();
 
         edit_profile_password.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent=new Intent(getApplicationContext(),EditProfilePassword.class);
+                Intent intent = new Intent(getApplicationContext(), EditProfilePassword.class);
                 startActivity(intent);
             }
         });
@@ -58,7 +56,7 @@ public class EditProfile extends AppCompatActivity {
         edit_profile_email.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent=new Intent(getApplicationContext(),EditProfileEmail.class);
+                Intent intent = new Intent(getApplicationContext(), EditProfileEmail.class);
                 startActivity(intent);
             }
         });
@@ -66,7 +64,7 @@ public class EditProfile extends AppCompatActivity {
         edit_profile_phone.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent=new Intent(getApplicationContext(),EditProfilePhone.class);
+                Intent intent = new Intent(getApplicationContext(), EditProfilePhone.class);
                 startActivity(intent);
             }
         });
@@ -99,58 +97,43 @@ public class EditProfile extends AppCompatActivity {
         });
     }
 
-    private void deleteUser(){
-        final ProgressDialog progressDialog=new ProgressDialog(EditProfile.this);
+    private void deleteUser() {
+        final ProgressDialog progressDialog = new ProgressDialog(EditProfile.this);
         progressDialog.setMessage("Loading");
         progressDialog.show();
-        String id=mUser.getUid();
-        mReference= FirebaseDatabase.getInstance().getReference("Users").child(id);
-        Query query = mReference.orderByChild("id").equalTo(id);
-        query.addListenerForSingleValueEvent(new ValueEventListener() {
+        final String id = mUser.getUid();
+
+        FirebaseAuth.getInstance().getCurrentUser().delete().addOnCompleteListener(new OnCompleteListener<Void>() {
             @Override
-            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                dataSnapshot.getRef().removeValue().addOnCompleteListener(new OnCompleteListener<Void>() {
-                    @Override
-                    public void onComplete(@NonNull Task<Void> task) {
-
-                        if (task.isSuccessful()){
-                            mUser.delete().addOnCompleteListener(new OnCompleteListener<Void>() {
-                                @Override
-                                public void onComplete(@NonNull Task<Void> task) {
-                                    if(task.isSuccessful()){
-
-                                        Intent i =new Intent(getApplicationContext(),LoginActivity.class);
-                                        i.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_NEW_TASK);
-                                        FirebaseAuth.getInstance().signOut();
-                                        progressDialog.dismiss();
-                                        startActivity(i);
-                                        finish();
-
-                                    }
-
-                                }
-                            }).addOnFailureListener(new OnFailureListener() {
-                                @Override
-                                public void onFailure(@NonNull Exception e) {
-
-                                }
-                            });
-                    }
-
-                    }
-                }).addOnFailureListener(new OnFailureListener() {
-                    @Override
-                    public void onFailure(@NonNull Exception e) {
-                        Toast.makeText(getApplicationContext(),e.getMessage(),Toast.LENGTH_SHORT).show();
-                    }
-                });
+            public void onComplete(@NonNull Task<Void> task) {
+                if (task.isSuccessful()) {
+                    mReference = FirebaseDatabase.getInstance().getReference("Users").child(id);
+                    HashMap<String, Object> hashMap = new HashMap<>();
+                    hashMap.put("id", "--");
+                    hashMap.put("name", "--");
+                    hashMap.put("bloodtype", "--");
+                    mReference.updateChildren(hashMap).addOnCompleteListener(new OnCompleteListener<Void>() {
+                        @Override
+                        public void onComplete(@NonNull Task<Void> task) {
+                            Intent i = new Intent(EditProfile.this, LoginActivity.class);
+                            i.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_NEW_TASK);
+                            progressDialog.dismiss();
+                            startActivity(i);
+                        }
+                    });
+                }
             }
 
+        }).addOnFailureListener(new OnFailureListener() {
             @Override
-            public void onCancelled(@NonNull DatabaseError databaseError) {
-
+            public void onFailure(@NonNull Exception e) {
+                Toast.makeText(EditProfile.this,e.getMessage(),Toast.LENGTH_SHORT).show();
+                Intent i = new Intent(EditProfile.this, LoginActivity.class);
+                i.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_NEW_TASK);
+                progressDialog.dismiss();
+                startActivity(i);
             }
         });
-
     }
+
 }

@@ -27,7 +27,8 @@
         <activity android:name=".EditProfileEmail" />
         <activity android:name=".EditProfile" />
         <activity android:name=".SearchUsers" />
-        <activity android:name=".DeleteRequest" />
+        <activity android:name=".DeleteRequest"
+            android:windowSoftInputMode="adjustPan"/>
         <activity android:name=".ForgotPassword" />
         <activity android:name=".BloodCampBottomSheet" />
         <activity android:name=".RequestBottomSheet" />
@@ -47,16 +48,11 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+
         <activity android:name=".Request" />
         <activity android:name=".LeaderBoard" />
         <activity android:name=".SliderActivity" />
-        <activity android:name=".MainActivity">
-            <intent-filter>
-                <action android:name="android.intent.action.MAIN" />
-
-                <category android:name="android.intent.category.LAUNCHER" />
-            </intent-filter>
-        </activity>
+        <activity android:name=".MainActivity"/>
 
         <meta-data
             android:name="com.google.android.geo.API_KEY"
@@ -65,5 +61,7 @@
             android:name="preloaded_fonts"
             android:resource="@array/preloaded_fonts" />
     </application>
+
+
 
 </manifest>

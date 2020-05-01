@@ -75,8 +75,9 @@ public class SearchDonorsCustomAdapter extends RecyclerView.Adapter<SearchDonors
         AddingItemsSearchDonors currentItem=mlist.get(position);
 
         holder.donor_name.setText(currentItem.getSearchname());
-        if(currentItem.getSearchimgURL().equals("Default"))
+        if(currentItem.getSearchimgURL().equals("default"))
         {
+            Picasso.get().load(R.drawable.tryimage).into(holder.donor_dp);
 
         }else{
             Picasso.get().load(currentItem.getSearchimgURL()).into(holder.donor_dp);

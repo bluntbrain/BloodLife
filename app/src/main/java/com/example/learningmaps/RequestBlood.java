@@ -23,18 +23,26 @@ import androidx.appcompat.app.AppCompatActivity;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnFailureListener;
+import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.auth.GetTokenResult;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
+import com.google.firebase.firestore.DocumentReference;
+import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.iid.FirebaseInstanceId;
+import com.google.firebase.messaging.FirebaseMessaging;
 
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.HashMap;
+import java.util.Map;
+import java.util.Random;
 
 public class RequestBlood extends AppCompatActivity {
     private LatLng mycoordinates;
@@ -43,6 +51,9 @@ public class RequestBlood extends AppCompatActivity {
     private String Status,BloodGroup,Gender;
     private EditText name, mobile, units, place;
     private String CurrentUserName;
+    private FirebaseFirestore mFirestore;
+    private FirebaseAuth mAuth;
+    private String tokenId;
 
 
     private DatabaseReference mReference;
@@ -59,9 +70,11 @@ public class RequestBlood extends AppCompatActivity {
         setContentView(R.layout.activity_request_blood);
 
         mUser= FirebaseAuth.getInstance().getCurrentUser();
+        mAuth=FirebaseAuth.getInstance();
+        mFirestore=FirebaseFirestore.getInstance();gettingCurrentUserName();
 
-        gettingCurrentUserName();
-
+        gettingCurrentTokenID();
+        tryFCM();
         Bundle bundle = getIntent().getParcelableExtra("bundle");
         mycoordinates = bundle.getParcelable("userlocation");
         //SPINNER CODE
@@ -204,14 +217,32 @@ public class RequestBlood extends AppCompatActivity {
 
     }
 
+    public void tryFCM(){
+
+        FirebaseMessaging.getInstance().subscribeToTopic("donors").addOnCompleteListener(new OnCompleteListener<Void>() {
+            @Override
+            public void onComplete(@NonNull Task<Void> task) {
+
+            }
+        }).addOnFailureListener(new OnFailureListener() {
+            @Override
+            public void onFailure(@NonNull Exception e) {
+                Toast.makeText(RequestBlood.this,e.getMessage(),Toast.LENGTH_SHORT).show();
+            }
+        });
+
+    }
+
     private void uploadRequest(){
         final ProgressDialog progressDialog =new ProgressDialog(RequestBlood.this);
         progressDialog.setMessage("Request Uploading");
         progressDialog.setCancelable(false);
+        progressDialog.setCanceledOnTouchOutside(false);
         progressDialog.show();
          mReference = FirebaseDatabase.getInstance().getReference();
         HashMap<String,String> hashMap= new HashMap<>();
         hashMap.put("id",mUser.getUid());
+        hashMap.put("request_id",mUser.getUid()+name.getText().toString()+BloodGroup+units.getText().toString());
         hashMap.put("name",CurrentUserName);
         hashMap.put("victim_name",name.getText()+"");
         hashMap.put("victim_hospital",place.getText()+"");
@@ -229,6 +260,7 @@ public class RequestBlood extends AppCompatActivity {
             @Override
             public void onComplete(@NonNull Task<Void> task) {
                 if(task.isSuccessful()){
+                    postNotification();
                     Toast.makeText(RequestBlood.this, "Request Successful", Toast.LENGTH_LONG).show();
                     Intent i = new Intent(RequestBlood.this, MainActivity.class);
                     i.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_NEW_TASK);
@@ -239,13 +271,14 @@ public class RequestBlood extends AppCompatActivity {
 
                 }else{
                     Toast.makeText(RequestBlood.this,task.getException().getMessage(),Toast.LENGTH_LONG).show();
-
+                    progressDialog.dismiss();
                 }
 
             }
         }).addOnFailureListener(new OnFailureListener() {
             @Override
             public void onFailure(@NonNull Exception e) {
+                progressDialog.dismiss();
                 Toast.makeText(RequestBlood.this,e.getMessage(),Toast.LENGTH_LONG).show();
             }
         });
@@ -263,6 +296,67 @@ public class RequestBlood extends AppCompatActivity {
         }
     };
 
+    public void postNotification(){
+
+        String[] quotes={"Take a step and do the nobel donation","You don't have to be a doctor to save lives",
+        "Blood is meant to circulate, pass it around","Donate and make your blood divine"};
+
+        Random rand = new Random();
+        Integer int1= rand.nextInt(4);
+
+        Map<String, Object> notificationmanager = new HashMap<>();
+        notificationmanager.put("message",  quotes[int1]);
+        notificationmanager.put("title", "Blood Type "+BloodGroup+" is required in neighborhood");
+
+        mFirestore.collection("Users").document(mUser.getUid())
+                .collection("Notifications")
+                .add(notificationmanager)
+                .addOnSuccessListener(new OnSuccessListener<DocumentReference>() {
+                    @Override
+                    public void onSuccess(DocumentReference documentReference) {
+
+                    }
+                }).addOnFailureListener(new OnFailureListener() {
+            @Override
+            public void onFailure(@NonNull Exception e) {
+                Toast.makeText(RequestBlood.this, e.getMessage(), Toast.LENGTH_SHORT).show();
+
+            }
+        });
+    }
+
+    public void gettingCurrentTokenID(){
+        mAuth.getCurrentUser().getIdToken(true).addOnSuccessListener(new OnSuccessListener<GetTokenResult>() {
+            @Override
+            public void onSuccess(GetTokenResult getTokenResult) {
+
+                tokenId= FirebaseInstanceId.getInstance().getToken();
+                Map<String,Object> tokenMap=new HashMap<>();
+                tokenMap.put("token_id",tokenId);
+
+                mFirestore.collection("Users").document(mUser.getUid()).set(tokenMap)
+                        .addOnSuccessListener(new OnSuccessListener<Void>() {
+                            @Override
+                            public void onSuccess(Void aVoid) {
+                            }
+                        }).addOnFailureListener(new OnFailureListener() {
+                    @Override
+                    public void onFailure(@NonNull Exception e) {
+                        Toast.makeText(RequestBlood.this,e.getMessage(),Toast.LENGTH_SHORT).show();
+
+                    }
+                });
+
+            }
+        }).addOnFailureListener(new OnFailureListener() {
+            @Override
+            public void onFailure(@NonNull Exception e) {
+
+                Toast.makeText(RequestBlood.this,e.getMessage(),Toast.LENGTH_SHORT).show();
+
+            }
+        });
+    }
     public void rootlayouttap(View view)
     {
         try {

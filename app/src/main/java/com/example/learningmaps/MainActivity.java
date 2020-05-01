@@ -45,13 +45,9 @@ import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
-import com.parse.FindCallback;
-import com.parse.ParseException;
-import com.parse.ParseObject;
-import com.parse.ParseQuery;
+import com.google.firebase.messaging.FirebaseMessaging;
 
 import java.util.HashMap;
-import java.util.List;
 
 import pl.droidsonroids.gif.GifImageView;
 
@@ -75,7 +71,7 @@ public class MainActivity extends FragmentActivity implements OnMapReadyCallback
     private TextView upper,lower;
     private DatabaseReference mReference;
     private HashMap<Marker,ModelBottomSheetRequest> dataofallmarkers;
-
+    private HashMap<Marker,ModelBottomSheetCamp> dataofallcamps;
     // The geographical location where the device is currently located. That is, the last-known
     // location retrieved by the Fused Location Provider.
     private Location mLastKnownLocation;
@@ -99,12 +95,14 @@ public class MainActivity extends FragmentActivity implements OnMapReadyCallback
             mCameraPosition = savedInstanceState.getParcelable(KEY_CAMERA_POSITION);
         }
 
+        FirebaseMessaging.getInstance().subscribeToTopic("donors");
         setContentView(R.layout.activity_main); // Rendering of the map
         mapLoading=findViewById(R.id.map_loading);
         upper=findViewById(R.id.no_req_text1);
         lower=findViewById(R.id.no_req_text2);
         // Construct a PlacesClient
         dataofallmarkers=new HashMap<>();
+        dataofallcamps=new HashMap<>();
         Places.initialize(getApplicationContext(), getString(R.string.map_key));
         mPlacesClient = Places.createClient(this);
 
@@ -169,33 +167,58 @@ public class MainActivity extends FragmentActivity implements OnMapReadyCallback
         getDeviceLocation();
 
         //showCurrentPlace();
-         addallrequests();
-        //allcamps();
+        allcamps();
+        addallrequests();
+
 
         mMap.setOnMarkerClickListener(new GoogleMap.OnMarkerClickListener() {
             @Override
             public boolean onMarkerClick(Marker marker) {
                 marker.hideInfoWindow();
-                if(marker.getTitle()=="Camp")
+                if(marker.getTitle().equals("camp"))
                 {
-                    Toast.makeText(MainActivity.this,"Camping",Toast.LENGTH_LONG).show();
-                    BottomSheetDialog bottomSheetDialogCamp = new BottomSheetDialog(MainActivity.this, R.style.BottomSheetDialogTheme);
-                    View bottomSheetView = LayoutInflater.from(getApplicationContext()).inflate(R.layout.activity_blood_camp_bottom_sheet, (RelativeLayout) findViewById(R.id.campbottomsheetcontainer));
-                    //   bottomSheetView.findViewById(R.id.)
-                    bottomSheetDialogCamp.setContentView(bottomSheetView);
-                    bottomSheetDialogCamp.show();
+                    BottomSheetDialog bottomSheetDialog =new BottomSheetDialog(MainActivity.this,R.style.BottomSheetDialogTheme);
+                    View bottomSheetView = LayoutInflater.from(getApplicationContext()).inflate(R.layout.activity_blood_camp_bottom_sheet,(RelativeLayout) findViewById(R.id.campbottomsheetcontainer));
+                    TextView campname = bottomSheetView.findViewById(R.id.blood_camp_name);
+                    TextView camporganisation = bottomSheetView.findViewById(R.id.blood_camp_organisation);
+                    TextView campdate = bottomSheetView.findViewById(R.id.blood_camp_date);
+                    TextView campplace = bottomSheetView.findViewById(R.id.blood_camp_place);
+                    TextView camptime = bottomSheetView.findViewById(R.id.blood_camp_time);
+                    final TextView campcontact = bottomSheetView.findViewById(R.id.blood_camp_contact);
+                    Button btn= bottomSheetView.findViewById(R.id.buttonsheetcamp);
+
+                    ModelBottomSheetCamp yolo=dataofallcamps.get(marker);
+                    campname.setText(yolo.getCampName());
+                    camporganisation.setText(yolo.getCampOrganisation());
+                    campdate.setText(yolo.getCampDate());
+                    campplace.setText(yolo.getCampPlace());
+                    camptime.setText(yolo.getCampTime());
+                    campcontact.setText(yolo.getCampContact());
+
+                    btn.setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View v) {
+                            Intent calIntent = new Intent(Intent.ACTION_MAIN);
+                            calIntent.addCategory(Intent.CATEGORY_APP_CALENDAR);
+                            startActivity(calIntent);
+                        }
+                    });
+
+                    bottomSheetDialog.setContentView(bottomSheetView);
+                    bottomSheetDialog.show();
 
                 }else {
 
                     BottomSheetDialog bottomSheetDialog = new BottomSheetDialog(MainActivity.this, R.style.BottomSheetDialogTheme);
                     View bottomSheetView = LayoutInflater.from(getApplicationContext()).inflate(R.layout.activity_request_bottom_sheet, (RelativeLayout) findViewById(R.id.bottomsheetcontainer));
-                    TextView namesheet =bottomSheetView.findViewById(R.id.namesheet);//namesheet.setText(allsheetdata[0]);
-                    TextView statussheet =bottomSheetView.findViewById(R.id.statussheets);//statussheet.setText(allsheetdata[3]);
-                    TextView unitssheet =bottomSheetView.findViewById(R.id.unitssheet);//unitssheet.setText(allsheetdata[1]);
-                    TextView bloodtypesheet =bottomSheetView.findViewById(R.id.bloodtypesheet);//bloodtypesheet.setText(allsheetdata[2]);
+                    final TextView namesheet =bottomSheetView.findViewById(R.id.namesheet);//namesheet.setText(allsheetdata[0]);
+                    final TextView statussheet =bottomSheetView.findViewById(R.id.statussheets);//statussheet.setText(allsheetdata[3]);
+                    final TextView unitssheet =bottomSheetView.findViewById(R.id.unitssheet);//unitssheet.setText(allsheetdata[1]);
+                    final TextView bloodtypesheet =bottomSheetView.findViewById(R.id.bloodtypesheet);//bloodtypesheet.setText(allsheetdata[2]);
                     TextView gendersheet =bottomSheetView.findViewById(R.id.gendersheet);//gendersheet.setText(allsheetdata[4]);
-                    TextView hospitalsheet =bottomSheetView.findViewById(R.id.locationsheet);//hospitalsheet.setText(allsheetdata[5]);
-                    final TextView phonesheet =bottomSheetView.findViewById(R.id.phonesheet);//phonesheet.setText(allsheetdata[6]);
+                    final TextView hospitalsheet =bottomSheetView.findViewById(R.id.locationsheet);//hospitalsheet.setText(allsheetdata[5]);
+                    final TextView phonesheet =bottomSheetView.findViewById(R.id.phonesheet);
+                    TextView sharebtn = bottomSheetView.findViewById(R.id.share_request_btn);//phonesheet.setText(allsheetdata[6]);
 
                     ModelBottomSheetRequest model=dataofallmarkers.get(marker);
                     namesheet.setText(model.getName());
@@ -206,6 +229,22 @@ public class MainActivity extends FragmentActivity implements OnMapReadyCallback
                     hospitalsheet.setText(model.getPlace());
                     phonesheet.setText(model.getPhone());
                     Button btnsheet = bottomSheetView.findViewById(R.id.buttonsheet);
+                    sharebtn.setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View v) {
+
+                            Intent shareIntent = new Intent();
+                            shareIntent.setAction(Intent.ACTION_SEND);
+                            shareIntent.putExtra(Intent.EXTRA_TEXT, "*Bloodtype "+ bloodtypesheet.getText().toString() +" is urgently required at "
+                            + hospitalsheet.getText().toString()+"*" +"\nDetails -\n"+"Name : " +namesheet.getText().toString()+ "\nUnits required : "+unitssheet.getText().toString()+
+                                    "\nEmergency Status : "+statussheet.getText().toString()+"\nContact : "+phonesheet.getText().toString()+
+                            "\nHelp to Donate and bring life back to power "+getEmojiByUnicode(0x270B)+
+                                    "\n\nHelp to save more lives by becoming donors at BloodLife, Manipal's own blood donation platform"+
+                                    "\napp link...");
+                            shareIntent.setType("text/plain");
+                            startActivity(Intent.createChooser(shareIntent, "Share with"));
+                        }
+                    });
                     btnsheet.setOnClickListener(new View.OnClickListener() {
                         @Override
                         public void onClick(View v) {
@@ -334,28 +373,33 @@ public class MainActivity extends FragmentActivity implements OnMapReadyCallback
      */
     private void allcamps()
     {
-        ParseQuery<ParseObject> campAll = ParseQuery.getQuery("Camps");
-        campAll.whereExists("camplocation");
-        campAll.findInBackground(new FindCallback<ParseObject>() {
+        mReference=FirebaseDatabase.getInstance().getReference("Camps");
+        mReference.addValueEventListener(new ValueEventListener() {
             @Override
-            public void done(List<ParseObject> objects, ParseException e) {
-                if(e==null) {
-                    if (objects.size() > 0) {
-                        for (int i = 0; i < objects.size(); i++) {
-                            LatLng Location = new LatLng(objects.get(i).getParseGeoPoint("camplocation").getLatitude(), objects.get(i).getParseGeoPoint("camplocation").getLongitude());
-                            //MarkerOptions campmarker=new MarkerOptions().position(Location).title("Camp");
-                            //campmarker.setIcon(BitmapDescriptorFactory.fromResource(R.drawable.my_marker_icon)));
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                int flag=0;
+                for(DataSnapshot snapshot : dataSnapshot.getChildren()){
+                    flag=1;
+                    Double Lat = Double.parseDouble(snapshot.child("camp_lat").getValue().toString());
+                    Double Long = Double.parseDouble(snapshot.child("camp_long").getValue().toString());
+                    LatLng Location = new LatLng(Lat,Long);
+                    String campName=snapshot.child("camp_name").getValue().toString();
+                    String campOrganisation=snapshot.child("organisation_name").getValue().toString();
+                    String campPlace=snapshot.child("address").getValue().toString();
+                    String campTime=snapshot.child("time").getValue().toString();
+                    String campDate=snapshot.child("date").getValue().toString();
+                    String campContact=snapshot.child("phone").getValue().toString();
 
-                            Marker marker = mMap.addMarker(new MarkerOptions().position(Location).title("Camp"));
-                            marker.showInfoWindow();
-                          //  marker.setIcon(BitmapDescriptorFactory.fromResource(R.drawable.ic_mapmarker2));
-                        }
-
-                    }
-                }else {
-                    Toast.makeText(MainActivity.this,e.toString(),Toast.LENGTH_LONG).show();
-
+                    BitmapDrawable bitmapDrawable = (BitmapDrawable) getResources().getDrawable(R.drawable.camp_marker);
+                    Bitmap smallMarker=Bitmap.createScaledBitmap(bitmapDrawable.getBitmap(),120,120,false);
+                    Marker requestmarker =mMap.addMarker(new MarkerOptions().position(Location).title("camp").icon(BitmapDescriptorFactory.fromBitmap(smallMarker)));
+                    dataofallcamps.put(requestmarker,new ModelBottomSheetCamp(campName,campOrganisation,campDate,campPlace,campTime,campContact));
                 }
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {
+
             }
         });
     }
@@ -470,6 +514,11 @@ public class MainActivity extends FragmentActivity implements OnMapReadyCallback
             return false;
         }
     };
+
+    public String getEmojiByUnicode(int unicode){
+        return new String(Character.toChars(unicode));
+    }
+
 
     public void onBackPressed(){
         finishAffinity();

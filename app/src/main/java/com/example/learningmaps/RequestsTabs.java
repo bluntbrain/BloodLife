@@ -29,9 +29,9 @@ public class RequestsTabs extends AppCompatActivity {
         appbarlayout=findViewById(R.id.appbarid);
         backbutton=findViewById(R.id.requesttab_backbutton);
         ViewPagerAdapter adapter=new ViewPagerAdapter(getSupportFragmentManager());
-        adapter.AddFragment(new FragmentOldRequest(),"Requested");
+        adapter.AddFragment(new FragmentOldRequest(),"Your Requests");
         adapter.AddFragment(new FragmentMakeRequests(),"Request Blood");
-        adapter.AddFragment(new FragmentPostCamp(),"Post Camp");
+        adapter.AddFragment(new FragmentPostCamp(),"Post camps" );
 
         Bundle bundle = getIntent().getParcelableExtra("bundle");
         mycoordinates = bundle.getParcelable("userlocation");

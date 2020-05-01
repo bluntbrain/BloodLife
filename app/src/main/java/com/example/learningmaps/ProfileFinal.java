@@ -32,7 +32,7 @@ public class ProfileFinal extends AppCompatActivity {
     private DatabaseReference mReference;
     private FirebaseUser mUser;
     BottomNavigationView mBottomNavigationView;
-    private TextView logout_btn,edit_btn;
+    private TextView logout_btn,edit_btn,shareBtn;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -45,6 +45,7 @@ public class ProfileFinal extends AppCompatActivity {
         mBottomNavigationView.setOnNavigationItemSelectedListener(mOnNavigationItemSelectedListener);
 
         profilefinal_name=findViewById(R.id.profilefinal_name);
+        shareBtn=findViewById(R.id.share_app_profile_btn);
         profilefinal_bloodtype=findViewById(R.id.profilefinal_bloodtype);
         profilefinal_gender=findViewById(R.id.profilefinal_gender);
         profilefinal_phone=findViewById(R.id.profilefinal_phone);
@@ -59,6 +60,8 @@ public class ProfileFinal extends AppCompatActivity {
             public void onClick(View v) {
                 ProgressDialog progressDialog=new ProgressDialog(ProfileFinal.this);
                 progressDialog.setMessage("Logging Out");
+                progressDialog.setCanceledOnTouchOutside(false);
+                progressDialog.setCancelable(false);
                 progressDialog.show();
                 FirebaseAuth.getInstance().signOut();
                 Intent intent= new Intent(ProfileFinal.this,LoginActivity.class);
@@ -66,6 +69,19 @@ public class ProfileFinal extends AppCompatActivity {
                 progressDialog.dismiss();
                 startActivity(intent);
 
+            }
+        });
+
+        shareBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent shareIntent = new Intent(Intent.ACTION_SEND);
+                shareIntent.setType("text/plain");
+                shareIntent.putExtra(Intent.EXTRA_SUBJECT, "BloodLife");
+                String shareMessage= "Manipal's own blood donation platform is here, download it now and save lives in no time\n*Remember! Heroes come in all types and sizes*\n";
+                shareMessage = shareMessage + "playstore link....";
+                shareIntent.putExtra(Intent.EXTRA_TEXT, shareMessage);
+                startActivity(Intent.createChooser(shareIntent, "choose one"));
             }
         });
         edit_btn.setOnClickListener(new View.OnClickListener() {

@@ -1,6 +1,8 @@
 package com.example.learningmaps;
 
+import android.app.AlertDialog;
 import android.app.ProgressDialog;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.text.Editable;
@@ -35,16 +37,16 @@ import java.util.List;
 
 public class DeleteRequest extends AppCompatActivity {
 
-    private TextView deletename,deletetype,deletestatus,deleteunits,deletegender,deletelocation,deletemobile;
+    private TextView deletename,request_id,deletetype,deletestatus,deleteunits,deletegender,deletelocation,deletemobile;
     private EditText searchuser;
     private Button adddonorsbtn, buttonfinaldelete;
     private Integer flag;
-
+    private AlertDialog.Builder builder;
     private RecyclerView mRecyclerView;
     private SearchDonorsCustomAdapter mAdapter;
     private RecyclerView.LayoutManager mLayoutManager;
     private ArrayList<AddingItemsSearchDonors> data;
-
+    private AlertDialog dialog;
     private RecyclerView addedRecyclerView;
     private AddedDonorCustomAdapter addedAdapter;
     private RecyclerView.LayoutManager addedLayoutManager;
@@ -59,6 +61,7 @@ public class DeleteRequest extends AppCompatActivity {
         data=new ArrayList<>();
         addeddata=new ArrayList<>();
         flag=0;
+        request_id=findViewById(R.id.request_id_delete);
         deletename=findViewById(R.id.deletename);
         buttonfinaldelete=findViewById(R.id.buttonfinaldelete);
         deletegender=findViewById(R.id.deletegender);
@@ -73,7 +76,7 @@ public class DeleteRequest extends AppCompatActivity {
         Bundle b = getIntent().getExtras();
         String j =(String) b.get("dataset");
 
-        String[] actualdata= j.split("=");
+        String[] actualdata= j.split("/=/=/");
 
         deletename.setText(actualdata[0]);
         deleteunits.setText("units required: "+actualdata[1]);
@@ -82,6 +85,7 @@ public class DeleteRequest extends AppCompatActivity {
         deletegender.setText("/ "+actualdata[4]);
         deletelocation.setText(actualdata[5]);
         deletemobile.setText(actualdata[6]);
+        request_id.setText(actualdata[7]);
 
         mRecyclerView=findViewById(R.id.searchdonorcontainer);
         mRecyclerView.setHasFixedSize(true);
@@ -119,108 +123,33 @@ public class DeleteRequest extends AppCompatActivity {
             }
         });
 
-
         buttonfinaldelete.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-              //  mReference= FirebaseDatabase.getInstance().getReference("BloodRequests");
-                final ProgressDialog progressDialog =new ProgressDialog(DeleteRequest.this);
-                progressDialog.setMessage("Deleting Request");
-                progressDialog.setCancelable(false);
-                progressDialog.show();
-                Query query =FirebaseDatabase.getInstance().getReference("BloodRequests").orderByChild("victim_name").equalTo(deletename.getText().toString());
-                query.addValueEventListener(new ValueEventListener() {
+                builder = new AlertDialog.Builder(DeleteRequest.this);
+                builder.setTitle("Delete Request ?");
+                builder.setPositiveButton("Yes", new DialogInterface.OnClickListener() {
                     @Override
-                    public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                        for (DataSnapshot snapshot: dataSnapshot.getChildren()){
-                            snapshot.getRef().removeValue().addOnCompleteListener(new OnCompleteListener<Void>() {
-                                @Override
-                                public void onComplete(@NonNull Task<Void> task) {
-                                    if(task.isSuccessful()){
-
-
-                                        if(flag!=0) {
-                                            mReference = FirebaseDatabase.getInstance().getReference();
-
-                                            List<HashMap<String, String>> hashMapList = new ArrayList<>();
-
-                                            for (int i = 0; i < addedAdapter.getItemCount(); i++) {
-
-                                                View v = addedRecyclerView.getLayoutManager().findViewByPosition(i);
-                                                TextView name = v.findViewById(R.id.addeddonorname);
-                                                TextView idplusurl = v.findViewById(R.id.addeddonorid);
-                                                String[] yoolo = idplusurl.getText().toString().split("=,=,=");
-
-                                                HashMap<String, String> hashMap = new HashMap<>();
-                                                hashMap.put("name", name.getText().toString());
-                                                hashMap.put("imageURl", yoolo[1]);
-                                                hashMap.put("id", yoolo[0]);
-
-                                                hashMapList.add(hashMap);
-                                            }
-
-                                            for (int j = 0; j < hashMapList.size() - 1; j++) {
-                                                mReference.child("Donoted").push().setValue(hashMapList.get(j));
-                                            }
-                                            mReference.child("Donoted").push().setValue(hashMapList.get(hashMapList.size() - 1)).addOnCompleteListener(new OnCompleteListener<Void>() {
-                                                @Override
-                                                public void onComplete(@NonNull Task<Void> task) {
-                                                    Toast.makeText(getApplicationContext(), "Request Deleted", Toast.LENGTH_LONG).show();
-
-                                                    Intent i = new Intent(getApplicationContext(), MainActivity.class);
-                                                    i.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_NEW_TASK);
-                                                    progressDialog.dismiss();
-                                                    startActivity(i);
-                                                    finish();
-                                                }
-                                            }).addOnFailureListener(new OnFailureListener() {
-                                                @Override
-                                                public void onFailure(@NonNull Exception e) {
-                                                    Toast.makeText(getApplicationContext(), "Request Deleted", Toast.LENGTH_LONG).show();
-
-                                                    Intent i = new Intent(getApplicationContext(), MainActivity.class);
-                                                    i.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_NEW_TASK);
-                                                    progressDialog.dismiss();
-                                                    startActivity(i);
-                                                    finish();
-                                                }
-                                            });
-
-                                        }else{
-                                            Toast.makeText(getApplicationContext(), "Request Deleted", Toast.LENGTH_LONG).show();
-
-                                            Intent i = new Intent(getApplicationContext(), MainActivity.class);
-                                            i.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_NEW_TASK);
-                                            progressDialog.dismiss();
-                                            startActivity(i);
-                                            finish();
-                                        }
-
-                                    }else{
-                                        Toast.makeText(getApplicationContext(),task.getException().getMessage(),Toast.LENGTH_LONG).show();
-
-                                    }
-                                }
-                            }).addOnFailureListener(new OnFailureListener() {
-                                @Override
-                                public void onFailure(@NonNull Exception e) {
-                                    Toast.makeText(getApplicationContext(),e.getMessage(),Toast.LENGTH_LONG).show();
-
-                                }
-                            });
-                        }
+                    public void onClick(DialogInterface dialog, int which) {
+                        deleteUser();
                     }
-
-                    @Override
-                    public void onCancelled(@NonNull DatabaseError databaseError) {
-                        Toast.makeText(getApplicationContext(),databaseError.getMessage(),Toast.LENGTH_LONG).show();
-
-                    }
-
-
                 });
+
+                builder.setNegativeButton("No", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+
+                    }
+                });
+
+                dialog = builder.create();
+                dialog.show();
             }
         });
+
+
+
+
     }
 
     public void searchUsers(String s){
@@ -278,6 +207,111 @@ public class DeleteRequest extends AppCompatActivity {
             public void onCancelled(@NonNull DatabaseError databaseError) {
 
             }
+        });
+
+    }
+
+    public void deleteUser(){
+
+
+
+        final ProgressDialog progressDialog =new ProgressDialog(DeleteRequest.this);
+        progressDialog.setMessage("Deleting Request");
+        progressDialog.setCancelable(false);
+        progressDialog.setCanceledOnTouchOutside(false);
+        progressDialog.show();
+        Query query =FirebaseDatabase.getInstance().getReference("BloodRequests").orderByChild("request_id").equalTo(request_id.getText().toString());
+        query.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                for (DataSnapshot snapshot: dataSnapshot.getChildren()){
+                    snapshot.getRef().removeValue().addOnCompleteListener(new OnCompleteListener<Void>() {
+                        @Override
+                        public void onComplete(@NonNull Task<Void> task) {
+                            if(task.isSuccessful()){
+
+
+                                if(flag!=0) {
+                                    mReference = FirebaseDatabase.getInstance().getReference();
+
+                                    List<HashMap<String, String>> hashMapList = new ArrayList<>();
+
+                                    for (int i = 0; i < addedAdapter.getItemCount(); i++) {
+
+                                        View v = addedRecyclerView.getLayoutManager().findViewByPosition(i);
+                                        TextView name = v.findViewById(R.id.addeddonorname);
+                                        TextView idplusurl = v.findViewById(R.id.addeddonorid);
+                                        String[] yoolo = idplusurl.getText().toString().split("=,=,=");
+
+                                        HashMap<String, String> hashMap = new HashMap<>();
+                                        hashMap.put("name", name.getText().toString());
+                                        hashMap.put("imageURl", yoolo[1]);
+                                        hashMap.put("id", yoolo[0]);
+
+                                        hashMapList.add(hashMap);
+                                    }
+
+                                    for (int j = 0; j < hashMapList.size() - 1; j++) {
+                                        mReference.child("Donoted").push().setValue(hashMapList.get(j));
+                                    }
+                                    mReference.child("Donoted").push().setValue(hashMapList.get(hashMapList.size() - 1)).addOnCompleteListener(new OnCompleteListener<Void>() {
+                                        @Override
+                                        public void onComplete(@NonNull Task<Void> task) {
+                                            Toast.makeText(getApplicationContext(), "Request Deleted", Toast.LENGTH_LONG).show();
+
+                                            Intent i = new Intent(getApplicationContext(), MainActivity.class);
+                                            i.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_NEW_TASK);
+                                            progressDialog.dismiss();
+                                            startActivity(i);
+                                            finish();
+                                        }
+                                    }).addOnFailureListener(new OnFailureListener() {
+                                        @Override
+                                        public void onFailure(@NonNull Exception e) {
+                                            Toast.makeText(getApplicationContext(), "Request Deleted", Toast.LENGTH_LONG).show();
+
+                                            Intent i = new Intent(getApplicationContext(), MainActivity.class);
+                                            i.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_NEW_TASK);
+                                            progressDialog.dismiss();
+                                            startActivity(i);
+                                            finish();
+                                        }
+                                    });
+
+                                }else{
+                                    Toast.makeText(getApplicationContext(), "Request Deleted", Toast.LENGTH_LONG).show();
+
+                                    Intent i = new Intent(getApplicationContext(), MainActivity.class);
+                                    i.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_NEW_TASK);
+                                    progressDialog.dismiss();
+                                    startActivity(i);
+                                    finish();
+                                }
+
+                            }else{
+                                progressDialog.dismiss();
+                                Toast.makeText(getApplicationContext(),task.getException().getMessage(),Toast.LENGTH_LONG).show();
+
+                            }
+                        }
+                    }).addOnFailureListener(new OnFailureListener() {
+                        @Override
+                        public void onFailure(@NonNull Exception e) {
+                            progressDialog.dismiss();
+                            Toast.makeText(getApplicationContext(),e.getMessage(),Toast.LENGTH_LONG).show();
+
+                        }
+                    });
+                }
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {
+                Toast.makeText(getApplicationContext(),databaseError.getMessage(),Toast.LENGTH_LONG).show();
+
+            }
+
+
         });
 
     }

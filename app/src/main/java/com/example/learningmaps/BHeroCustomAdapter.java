@@ -21,8 +21,8 @@ public class BHeroCustomAdapter extends RecyclerView.Adapter<BHeroCustomAdapter.
 
     private ArrayList<AddingItemsBHero> mlist;
 
-    private String[] congratslist ={"saved a life today :)","you are a saviour","new hero in town ;",
-    "keep saving lives"};
+    private String[] congratslist ={"saved a life today "+getEmojiByUnicode(0x1F60A),"you are a saviour "+getEmojiByUnicode(0x1F60D),"new hero in town "+getEmojiByUnicode(	0x1F64C),
+    "keep saving lives "+getEmojiByUnicode(0x2764),"an act of humanity "+getEmojiByUnicode(0x1F64F),"you have our gratitude "+getEmojiByUnicode(0x1F525),"shine like a star "+getEmojiByUnicode(0x2B50),"proud of you "+getEmojiByUnicode(0x1F645)};
 
 
 
@@ -62,7 +62,7 @@ public class BHeroCustomAdapter extends RecyclerView.Adapter<BHeroCustomAdapter.
         AddingItemsBHero currentItem=mlist.get(position);
 
         Random rand = new Random();
-        Integer int1= rand.nextInt(3);
+        Integer int1= rand.nextInt(8);
         String namo = currentItem.getBheroname();
         if(namo.length()>14){
             holder.bhero_name.setText(namo.substring(0,13)+"  "+congratslist[int1]);
@@ -82,6 +82,10 @@ public class BHeroCustomAdapter extends RecyclerView.Adapter<BHeroCustomAdapter.
     @Override
     public int getItemCount() {
         return mlist.size();
+    }
+
+    public String getEmojiByUnicode(int unicode){
+        return new String(Character.toChars(unicode));
     }
 }
 

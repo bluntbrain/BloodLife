@@ -19,6 +19,7 @@ import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.messaging.FirebaseMessaging;
 
 public class LoginActivity extends AppCompatActivity {
 
@@ -35,19 +36,20 @@ public class LoginActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
 
-        mAuth=FirebaseAuth.getInstance();
-
         signup=findViewById(R.id.signuptext2);
         username=findViewById(R.id.username);
         password=findViewById(R.id.password);
         login=findViewById(R.id.login);
         clicktoforgot=findViewById(R.id.clicktoforget);
 
+        mAuth=FirebaseAuth.getInstance();
+        if(FirebaseAuth.getInstance().getCurrentUser()!=null) {
+            FirebaseAuth.getInstance().signOut();
+        }
+
         login.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-
-                FirebaseAuth.getInstance().signOut();
                 loginUser();
             }
         });
@@ -101,6 +103,7 @@ public class LoginActivity extends AppCompatActivity {
             final ProgressDialog progressDialog =new ProgressDialog(LoginActivity.this);
             progressDialog.setMessage("Signing In");
             progressDialog.setCancelable(false);
+            progressDialog.setCanceledOnTouchOutside(false);
             progressDialog.show();
 
             mAuth.signInWithEmailAndPassword(emailbtn,passwordbtn).addOnCompleteListener(new OnCompleteListener<AuthResult>() {
@@ -108,6 +111,7 @@ public class LoginActivity extends AppCompatActivity {
                 public void onComplete(@NonNull Task<AuthResult> task) {
                     if(task.isSuccessful())
                     {
+                        FirebaseMessaging.getInstance().subscribeToTopic("donors");
                         Intent intent=new Intent(LoginActivity.this,MainActivity.class);
                         progressDialog.dismiss();
                         intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_NEW_TASK);

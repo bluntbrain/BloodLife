@@ -37,7 +37,7 @@ public class LeaderBoard extends AppCompatActivity {
     private DatabaseReference mReference;
     private ArrayList<AddingItemsBHero> data;
     private AnyChartView chart;
-    private TextView connectBtn,livesSaved;
+    private TextView connectBtn,livesSaved,shareBtn;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -45,6 +45,7 @@ public class LeaderBoard extends AppCompatActivity {
         setContentView(R.layout.activity_leader_board);
         data=new ArrayList<>();
         chart=findViewById(R.id.chart);
+        shareBtn=findViewById(R.id.share_app_button);
         mRecyclerView=findViewById(R.id.bherocontainer);
         mRecyclerView.setHasFixedSize(true);
         mLayoutManager=new LinearLayoutManager(this);
@@ -69,6 +70,19 @@ public class LeaderBoard extends AppCompatActivity {
         mBottomNavigationView.setSelectedItemId(R.id.leaderboard_icon);
         mBottomNavigationView.setOnNavigationItemSelectedListener(mOnNavigationItemSelectedListener);
 
+        shareBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent shareIntent = new Intent(Intent.ACTION_SEND);
+                shareIntent.setType("text/plain");
+                shareIntent.putExtra(Intent.EXTRA_SUBJECT, "BloodLife");
+                String shareMessage= "Manipal's own blood donation platform is here, download it now and save lives in no time\n*Remember !Heroes come in all types and sizes*\n\n";
+                shareMessage = shareMessage + "playstore link....";
+                shareIntent.putExtra(Intent.EXTRA_TEXT, shareMessage);
+                startActivity(Intent.createChooser(shareIntent, "choose one"));
+            }
+        });
+
     }
 
     private void addheroes(){
@@ -79,16 +93,22 @@ public class LeaderBoard extends AppCompatActivity {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                 int count=0;
-                for(DataSnapshot snapshot : dataSnapshot.getChildren()){
-                    count++;
-                    if(count<10) {
-                        String name = snapshot.child("name").getValue().toString();
-                        String dp = snapshot.child("imageURl").getValue().toString();
-                        data.add(new AddingItemsBHero(name, dp));
-                    }
-
+                int size=0;
+                for(DataSnapshot snapshotone : dataSnapshot.getChildren()){
+                    size++;
                 }
-                livesSaved.setText(count+" Lives");
+                for(DataSnapshot snapshot : dataSnapshot.getChildren()) {
+                    count++;
+                    if (size - 10< count) {
+                        if (count <= size) {
+                            String name = snapshot.child("name").getValue().toString();
+                            String dp = snapshot.child("imageURl").getValue().toString();
+                            data.add(new AddingItemsBHero(name, dp));
+                        }
+                    }
+                }
+
+                livesSaved.setText(size+" Lives");
                 Collections.reverse(data);
                 mAdapter= new BHeroCustomAdapter(data);
                 mRecyclerView.setAdapter(mAdapter);
@@ -160,7 +180,7 @@ public class LeaderBoard extends AppCompatActivity {
                         oneg++;
                     }else if(snapshot.child("bloodtype").getValue().toString().equals("AB+")){
                         abplus++;
-                    }else{
+                    }else if(snapshot.child("bloodtype").getValue().toString().equals("AB-")){
                         abneg++;
                     }
                 }

@@ -25,6 +25,7 @@ import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.messaging.FirebaseMessaging;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -151,6 +152,8 @@ public class SignupActivity extends AppCompatActivity {
         }else{
             final ProgressDialog progressDialog=new ProgressDialog(SignupActivity.this);
             progressDialog.setMessage("Signing Up");
+            progressDialog.setCanceledOnTouchOutside(false);
+            progressDialog.setCancelable(false);
             progressDialog.show();
 
             mAuth.createUserWithEmailAndPassword(email.getText()+"",password.getText()+"").addOnFailureListener(new OnFailureListener() {
@@ -174,12 +177,13 @@ public class SignupActivity extends AppCompatActivity {
                         hashMap.put("units_donated","0");
                         hashMap.put("bloodtype",BloodGroup);
                         hashMap.put("phone",phoneno.getText()+"");
+                        hashMap.put("imageURL","default");
 
                         mDatabaseReference.setValue(hashMap).addOnCompleteListener(new OnCompleteListener<Void>() {
                             @Override
                             public void onComplete(@NonNull Task<Void> task) {
                                 if(task.isSuccessful()){
-
+                                    FirebaseMessaging.getInstance().subscribeToTopic("donors");
                                     Intent intent=new Intent(SignupActivity.this,UploadPicture.class);
                                     intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_NEW_TASK);
                                     progressDialog.dismiss();
@@ -211,9 +215,19 @@ public class SignupActivity extends AppCompatActivity {
                     }
 
                 }
+            }).addOnFailureListener(new OnFailureListener() {
+                @Override
+                public void onFailure(@NonNull Exception e) {
+                    progressDialog.dismiss();
+                    Toast.makeText(SignupActivity.this,e.getMessage()+ " Try Again after some time",Toast.LENGTH_LONG).show();
+
+                }
             });
 
 
         }
     }
+
+
+
 }

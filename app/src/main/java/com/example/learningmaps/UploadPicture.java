@@ -38,7 +38,7 @@ import de.hdodenhof.circleimageview.CircleImageView;
 
 public class UploadPicture extends AppCompatActivity {
 
-    private TextView upload;
+    private TextView upload, skip;
     private CircleImageView profilepic;
     private static final int PERMISSION_REQUEST_CODE = 1;
     private static final int FILE_SELECT_CODE = 0;
@@ -57,11 +57,32 @@ public class UploadPicture extends AppCompatActivity {
         setContentView(R.layout.activity_upload_picture);
 
         isStoragePermissionGranted();
-        mUser= FirebaseAuth.getInstance().getCurrentUser();
-        mStorageReference= FirebaseStorage.getInstance().getReference("uploads");
-        upload=findViewById(R.id.nextto);
-        profilechange=findViewById(R.id.changepic);
-        profilepic=findViewById(R.id.profilepiconstart);
+        mUser = FirebaseAuth.getInstance().getCurrentUser();
+        mStorageReference = FirebaseStorage.getInstance().getReference("uploads");
+        upload = findViewById(R.id.nextto);
+        skip = findViewById(R.id.skipupload);
+        profilechange = findViewById(R.id.changepic);
+        profilepic = findViewById(R.id.profilepiconstart);
+
+        skip.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                final ProgressDialog progressDialog = new ProgressDialog(UploadPicture.this);
+                progressDialog.setMessage("Uploading");
+                progressDialog.setCanceledOnTouchOutside(false);
+                progressDialog.setCancelable(false);
+                progressDialog.show();
+                mReference = FirebaseDatabase.getInstance().getReference("Users").child(mUser.getUid());
+                HashMap<String, Object> hashMap = new HashMap<>();
+                hashMap.put("imageURL", "default");
+                mReference.updateChildren(hashMap);
+                progressDialog.dismiss();
+                Intent i = new Intent(UploadPicture.this, SliderActivity.class);
+                i.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_NEW_TASK);
+                startActivity(i);
+                finish();
+            }
+        });
 
 
         profilechange.setOnClickListener(new View.OnClickListener() {
@@ -91,7 +112,6 @@ public class UploadPicture extends AppCompatActivity {
     }
 
 
-
     public void isStoragePermissionGranted() {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
             if (checkSelfPermission(android.Manifest.permission.WRITE_EXTERNAL_STORAGE)
@@ -108,50 +128,47 @@ public class UploadPicture extends AppCompatActivity {
         intent.setType("image/*");
         intent.setAction(Intent.ACTION_GET_CONTENT);
         intent.addCategory(Intent.CATEGORY_OPENABLE);
-        startActivityForResult(intent,IMAGE_REQUEST);
+        startActivityForResult(intent, IMAGE_REQUEST);
     }
 
 
     @Override
     public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
         super.onRequestPermissionsResult(requestCode, permissions, grantResults);
-        if (requestCode==PERMISSION_REQUEST_CODE){
-                if(grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED)
-                {
+        if (requestCode == PERMISSION_REQUEST_CODE) {
+            if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
 
-                }else
-                {
+            } else {
 
-                }
+            }
         }
     }
 
-    private String getFileExtension(Uri imageUri)
-    {
-        ContentResolver contentResolver= UploadPicture.this.getContentResolver();
-        MimeTypeMap mimeTypeMap= MimeTypeMap.getSingleton();
+    private String getFileExtension(Uri imageUri) {
+        ContentResolver contentResolver = UploadPicture.this.getContentResolver();
+        MimeTypeMap mimeTypeMap = MimeTypeMap.getSingleton();
         return mimeTypeMap.getExtensionFromMimeType(contentResolver.getType(imageUri));
     }
 
-    private void setImage(Uri imageUri){
-        if(imageUri!=null)
-        {
+    private void setImage(Uri imageUri) {
+        if (imageUri != null) {
             profilepic.setImageURI(null);
             profilepic.setImageURI(imageUri);
         }
     }
 
-    private void uploadImage()
-    {
-        final ProgressDialog progressDialog=new ProgressDialog(UploadPicture.this);
-        progressDialog.setMessage("Uploading file");
+    private void uploadImage() {
+        final ProgressDialog progressDialog = new ProgressDialog(UploadPicture.this);
+        progressDialog.setMessage("Uploading");
+        progressDialog.setCancelable(false);
+        progressDialog.setCanceledOnTouchOutside(false);
         progressDialog.show();
 
 
-        if(imageUri!=null) {
+        if (imageUri != null) {
             final StorageReference fileReference = mStorageReference.child(System.currentTimeMillis() + "." + getFileExtension(imageUri));
-            uploadTask=fileReference.putFile(imageUri);
-            uploadTask.continueWithTask(new Continuation<UploadTask.TaskSnapshot,Task<Uri>>() {
+            uploadTask = fileReference.putFile(imageUri);
+            uploadTask.continueWithTask(new Continuation<UploadTask.TaskSnapshot, Task<Uri>>() {
                 @Override
                 public Task<Uri> then(@NonNull Task task) throws Exception {
                     if (!task.isSuccessful()) {
@@ -162,23 +179,34 @@ public class UploadPicture extends AppCompatActivity {
             }).addOnCompleteListener(new OnCompleteListener<Uri>() {
                 @Override
                 public void onComplete(@NonNull Task<Uri> task) {
-                    if(task.isSuccessful())
-                    {
-                        Uri downloadUri=task.getResult();
-                        String mUri= downloadUri.toString();
+                    if (task.isSuccessful()) {
+                        Uri downloadUri = task.getResult();
+                        String mUri = downloadUri.toString();
 
-                        mReference= FirebaseDatabase.getInstance().getReference("Users").child(mUser.getUid());
-                        HashMap<String,Object> hashMap= new HashMap<>();
-                        hashMap.put("imageURL",mUri);
-                        mReference.updateChildren(hashMap);
-                        progressDialog.dismiss();
-                        Intent i=new Intent(UploadPicture.this,SliderActivity.class);
-                        i.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_NEW_TASK);
-                        startActivity(i);
-                        finish();
+                        mReference = FirebaseDatabase.getInstance().getReference("Users").child(mUser.getUid());
+                        HashMap<String, Object> hashMap = new HashMap<>();
+                        hashMap.put("imageURL", mUri);
+                        mReference.updateChildren(hashMap).addOnCompleteListener(new OnCompleteListener<Void>() {
+                            @Override
+                            public void onComplete(@NonNull Task<Void> task) {
+                                progressDialog.dismiss();
+                                Intent i = new Intent(UploadPicture.this, SliderActivity.class);
+                                i.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_NEW_TASK);
+                                startActivity(i);
+                                finish();
+                            }
+                        }).addOnFailureListener(new OnFailureListener() {
+                            @Override
+                            public void onFailure(@NonNull Exception e) {
+                                progressDialog.dismiss();
+                                Toast.makeText(UploadPicture.this, e.getMessage()+" skip for now !", Toast.LENGTH_SHORT).show();
 
-                    }else{
-                        Toast.makeText(UploadPicture.this,task.getException().getMessage(),Toast.LENGTH_SHORT).show();
+                            }
+                        });
+
+
+                    } else {
+                        Toast.makeText(UploadPicture.this, task.getException().getMessage()+" skip for now !", Toast.LENGTH_SHORT).show();
                         progressDialog.dismiss();
                     }
 
@@ -186,11 +214,12 @@ public class UploadPicture extends AppCompatActivity {
             }).addOnFailureListener(new OnFailureListener() {
                 @Override
                 public void onFailure(@NonNull Exception e) {
-                    Toast.makeText(UploadPicture.this,e.getMessage(),Toast.LENGTH_SHORT).show();
+                    progressDialog.dismiss();
+                    Toast.makeText(UploadPicture.this, e.getMessage()+ "skip for now !", Toast.LENGTH_SHORT).show();
 
                 }
             });
-        }else {
+        } else {
             Toast.makeText(UploadPicture.this, "No image select", Toast.LENGTH_SHORT).show();
         }
     }
@@ -199,20 +228,18 @@ public class UploadPicture extends AppCompatActivity {
     protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
 
-        if(requestCode==IMAGE_REQUEST && resultCode== RESULT_OK && data!=null && data.getData()!=null){
-                imageUri =data.getData();
-            if(uploadTask!=null && uploadTask.isInProgress()){
-                Toast.makeText(UploadPicture.this,"Image set",Toast.LENGTH_SHORT).show();
+        if (requestCode == IMAGE_REQUEST && resultCode == RESULT_OK && data != null && data.getData() != null) {
+            imageUri = data.getData();
+            if (uploadTask != null && uploadTask.isInProgress()) {
+                Toast.makeText(UploadPicture.this, "Image set", Toast.LENGTH_SHORT).show();
 
-            }else {
+            } else {
                 setImage(imageUri);
             }
 
         }
 
 
-
     }
 
 }
-

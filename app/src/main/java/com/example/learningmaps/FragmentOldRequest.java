@@ -54,6 +54,7 @@ public class FragmentOldRequest extends Fragment {
         });
         mRecyclerView=view.findViewById(R.id.oldrequestcontainer);
         mRecyclerView.setHasFixedSize(true);
+
         mLayoutManager=new LinearLayoutManager(view.getContext());
         mRecyclerView.setLayoutManager(mLayoutManager);
 
@@ -72,13 +73,15 @@ public class FragmentOldRequest extends Fragment {
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                 for(DataSnapshot snapshot : dataSnapshot.getChildren()){
                     if(snapshot.child("id").getValue().toString().equals(mUser.getUid())){
+                        String request_id=snapshot.child("request_id").getValue().toString();
                         String victim_type = snapshot.child("victim_bloodtype").getValue().toString();
                         String victim_name = snapshot.child("victim_name").getValue().toString();
                         String victim_place = snapshot.child("victim_hospital").getValue().toString();
                         String victim_phone =snapshot.child("phone").getValue().toString();
                         String victim_status =snapshot.child("victim_status").getValue().toString();
-                        String victim_units = "20";
-                        data.add(new AddingItemsOldRequests(victim_name,victim_type,victim_place,victim_phone,victim_status,victim_units));
+                        String victim_units = snapshot.child("units").getValue().toString();
+                        String victim_gender = snapshot.child("victim_gender").getValue().toString();
+                        data.add(new AddingItemsOldRequests(victim_gender,request_id,victim_name,victim_type,victim_place,victim_phone,victim_status,victim_units));
                         getconnect.setVisibility(View.VISIBLE);
                     }
                 }
