@@ -40,23 +40,20 @@
             android:orientation="vertical">
 
             <androidx.constraintlayout.widget.ConstraintLayout
-                android:id="@+id/layout_zero"
                 android:layout_width="match_parent"
-                android:layout_height="150dp"
-                android:background="@drawable/layoutzeroback">
+                android:layout_height="140dp"
+                android:background="@drawable/proudback">
 
             </androidx.constraintlayout.widget.ConstraintLayout>
 
 
 
             <androidx.constraintlayout.widget.ConstraintLayout
-                android:id="@+id/layout_one"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginVertical="20dp">
 
                 <androidx.appcompat.widget.AppCompatImageView
-                    android:id="@+id/appCompatImageView8"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
                     app:layout_constraintBottom_toBottomOf="parent"
@@ -92,7 +89,6 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="2dp"
-                    android:text="12 Lives"
                     android:textColor="#5ABD86"
                     android:textSize="20dp"
                     android:textStyle="bold"
@@ -108,13 +104,11 @@
 
 
             <androidx.constraintlayout.widget.ConstraintLayout
-                android:id="@+id/layout_two"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 app:layout_constraintBottom_toTopOf="@id/layout_three">
 
                 <androidx.appcompat.widget.AppCompatImageView
-                    android:id="@+id/appCompatImageView4"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     app:layout_constraintBottom_toBottomOf="parent"
@@ -150,7 +144,6 @@
                 android:layout_marginVertical="20dp">
 
                 <androidx.appcompat.widget.AppCompatImageView
-                    android:id="@+id/appCompatImageView9"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     app:layout_constraintBottom_toBottomOf="parent"
@@ -175,8 +168,7 @@
 
             <androidx.constraintlayout.widget.ConstraintLayout
                 android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:id="@+id/layout_sixnine">
+                android:layout_height="match_parent">
 
                 <androidx.appcompat.widget.AppCompatImageView
                     android:layout_width="wrap_content"
@@ -218,13 +210,11 @@
             </androidx.constraintlayout.widget.ConstraintLayout>
 
             <androidx.constraintlayout.widget.ConstraintLayout
-                android:id="@+id/layout_four"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:layout_marginVertical="20dp">
 
                 <androidx.appcompat.widget.AppCompatImageView
-                    android:id="@+id/appCompatImageView10"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     app:layout_constraintBottom_toBottomOf="parent"
@@ -310,7 +300,6 @@
     </ScrollView>
 
     <androidx.cardview.widget.CardView
-        android:id="@+id/haha"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="16dp"

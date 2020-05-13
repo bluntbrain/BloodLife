@@ -5,17 +5,21 @@
     android:orientation="vertical" android:layout_width="match_parent"
     android:layout_height="match_parent">
 
-    <TextView
+
+    <androidx.appcompat.widget.AppCompatImageView
         android:id="@+id/textofnorequest"
-        android:layout_width="wrap_content"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="No request made"
+        android:layout_marginLeft="40dp"
+        android:layout_marginRight="40dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.52"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.45" />
+        app:layout_constraintVertical_bias="0.45"
+        app:srcCompat="@drawable/imfo_no_old_request"
+        android:alpha="0.6"/>
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/oldrequestcontainer"

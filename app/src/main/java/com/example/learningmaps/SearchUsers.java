@@ -127,24 +127,13 @@ public class SearchUsers extends AppCompatActivity {
                         TextView n=v.findViewById(R.id.user_names);
                         TextView p=v.findViewById(R.id.search_users_email);
 
-                        String message ="Hey "+n.getText().toString()+"....";
+                        String message ="Hey "+n.getText().toString()+", I'm trying to contact you regarding Blood Donation. Looking forward for your assist\nhere my contact number : {enter number }";
                         String subject="Blood Requirement";
-                        String[] to = {p.getText().toString()};
-                        Intent email = new Intent(Intent.ACTION_SEND);
-                        email.setData(Uri.parse("mailto:"));
-                        email.setType("text/plain");
-
-                        email.putExtra(Intent.EXTRA_EMAIL, to);
-                        email.putExtra(Intent.EXTRA_SUBJECT, subject);
-                        email.putExtra(Intent.EXTRA_TEXT, message);
-
-                        email.setType("message/rfc822");
-                        try {
-                            startActivity(Intent.createChooser(email, "Send mail"));
-                            // finish();
-                            //Log.i("Finished sending email...", "");
-                        } catch (android.content.ActivityNotFoundException ex) {
-                        }
+                        String to = p.getText().toString();
+                        Intent intent = new Intent (Intent.ACTION_VIEW , Uri.parse("mailto:" + to));
+                        intent.putExtra(Intent.EXTRA_SUBJECT, subject);
+                        intent.putExtra(Intent.EXTRA_TEXT, message);
+                        startActivity(intent);
                     }
                 });
 
@@ -185,24 +174,14 @@ public class SearchUsers extends AppCompatActivity {
                             TextView n=v.findViewById(R.id.user_names);
                             TextView p=v.findViewById(R.id.search_users_email);
 
-                            String message ="Hey "+n.getText().toString()+"....";
+                            String message ="Hey "+n.getText().toString()+", I'm trying to contact you regarding Blood Donation. Looking forward for your assist\nhere my contact number : {enter number}";
                             String subject="Blood Requirement";
-                            String[] to = {p.getText().toString()};
-                            Intent email = new Intent(Intent.ACTION_SEND);
-                            email.setData(Uri.parse("mailto:"));
-                            email.setType("text/plain");
+                            String to = p.getText().toString();
+                            Intent intent = new Intent (Intent.ACTION_VIEW , Uri.parse("mailto:" + to));
+                            intent.putExtra(Intent.EXTRA_SUBJECT, subject);
+                            intent.putExtra(Intent.EXTRA_TEXT, message);
+                            startActivity(intent);
 
-                            email.putExtra(Intent.EXTRA_EMAIL, to);
-                            email.putExtra(Intent.EXTRA_SUBJECT, subject);
-                            email.putExtra(Intent.EXTRA_TEXT, message);
-
-                            email.setType("message/rfc822");
-                            try {
-                                startActivity(Intent.createChooser(email, "Send mail"));
-                                // finish();
-                                //Log.i("Finished sending email...", "");
-                            } catch (android.content.ActivityNotFoundException ex) {
-                            }
                         }
                         }
                     );

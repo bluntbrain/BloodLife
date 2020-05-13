@@ -26,7 +26,6 @@
 
 
     <TextView
-        android:id="@+id/expirationinfo"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="request can be deleted anytime by user"
@@ -145,7 +144,6 @@
         app:layout_constraintVertical_bias="0.96" />
 
     <ImageView
-        android:id="@+id/imageView5"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         app:layout_constraintBottom_toBottomOf="parent"
@@ -171,7 +169,6 @@
         app:layout_constraintVertical_bias="0.55" />
 
     <TextView
-        android:id="@+id/textView5"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:background="@drawable/loginbutton"
@@ -187,7 +184,6 @@
         app:layout_constraintVertical_bias="0.056" />
 
     <TextView
-        android:id="@+id/Status"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="Status"

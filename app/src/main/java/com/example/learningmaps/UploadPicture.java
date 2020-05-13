@@ -5,9 +5,11 @@ import android.app.ProgressDialog;
 import android.content.ContentResolver;
 import android.content.Intent;
 import android.content.pm.PackageManager;
+import android.graphics.Bitmap;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
+import android.provider.MediaStore;
 import android.view.View;
 import android.webkit.MimeTypeMap;
 import android.widget.ImageView;
@@ -32,6 +34,8 @@ import com.google.firebase.storage.StorageReference;
 import com.google.firebase.storage.StorageTask;
 import com.google.firebase.storage.UploadTask;
 
+import java.io.ByteArrayOutputStream;
+import java.io.IOException;
 import java.util.HashMap;
 
 import de.hdodenhof.circleimageview.CircleImageView;
@@ -49,7 +53,7 @@ public class UploadPicture extends AppCompatActivity {
     private StorageReference mStorageReference;
     private DatabaseReference mReference;
     private FirebaseUser mUser;
-
+    private byte[] ans;
 
     @Override
     protected void onCreate(final Bundle savedInstanceState) {
@@ -167,7 +171,7 @@ public class UploadPicture extends AppCompatActivity {
 
         if (imageUri != null) {
             final StorageReference fileReference = mStorageReference.child(System.currentTimeMillis() + "." + getFileExtension(imageUri));
-            uploadTask = fileReference.putFile(imageUri);
+            uploadTask = fileReference.putBytes(ans);
             uploadTask.continueWithTask(new Continuation<UploadTask.TaskSnapshot, Task<Uri>>() {
                 @Override
                 public Task<Uri> then(@NonNull Task task) throws Exception {
@@ -230,16 +234,30 @@ public class UploadPicture extends AppCompatActivity {
 
         if (requestCode == IMAGE_REQUEST && resultCode == RESULT_OK && data != null && data.getData() != null) {
             imageUri = data.getData();
+            Bitmap bmp = null;
+            try {
+                bmp = MediaStore.Images.Media.getBitmap(getContentResolver(), imageUri);
+                ByteArrayOutputStream baos = new ByteArrayOutputStream();
+                bmp.compress(Bitmap.CompressFormat.JPEG, 12, baos);
+                ans = baos.toByteArray();
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+
+
             if (uploadTask != null && uploadTask.isInProgress()) {
                 Toast.makeText(UploadPicture.this, "Image set", Toast.LENGTH_SHORT).show();
 
             } else {
                 setImage(imageUri);
+
             }
 
         }
 
 
     }
+
+
 
 }

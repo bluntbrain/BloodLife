@@ -86,7 +86,7 @@ public class FragmentOldRequest extends Fragment {
                     }
                 }
                 if(data.size()!=0){
-                    view.findViewById(R.id.textofnorequest).setAlpha(0f);
+                    view.findViewById(R.id.textofnorequest).setVisibility(View.INVISIBLE);
                 }
                 mAdapter= new OldRequestCustomAdapter(data);
                 mRecyclerView.setAdapter(mAdapter);

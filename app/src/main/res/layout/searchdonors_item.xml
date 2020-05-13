@@ -46,8 +46,7 @@
                 android:layout_height="wrap_content"
                 android:layout_weight="0.15"
                 android:gravity="center"
-                android:maxLength="14"
-                android:text="Lovish Mahesh Badlani" />
+                android:maxLength="14" />
 
         </LinearLayout>
 

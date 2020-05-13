@@ -76,7 +76,7 @@ public class LeaderBoard extends AppCompatActivity {
                 Intent shareIntent = new Intent(Intent.ACTION_SEND);
                 shareIntent.setType("text/plain");
                 shareIntent.putExtra(Intent.EXTRA_SUBJECT, "BloodLife");
-                String shareMessage= "Manipal's own blood donation platform is here, download it now and save lives in no time\n*Remember !Heroes come in all types and sizes*\n\n";
+                String shareMessage= "Manipal's own blood donation platform is here, download it now and save lives in no time\n*Blood is a life, pass it on!*\n\n";
                 shareMessage = shareMessage + "playstore link....";
                 shareIntent.putExtra(Intent.EXTRA_TEXT, shareMessage);
                 startActivity(Intent.createChooser(shareIntent, "choose one"));

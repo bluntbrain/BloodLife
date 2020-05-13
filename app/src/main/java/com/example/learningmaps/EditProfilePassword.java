@@ -20,6 +20,8 @@ import com.google.firebase.auth.EmailAuthProvider;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 
+import es.dmoral.toasty.Toasty;
+
 public class EditProfilePassword extends AppCompatActivity {
 
     private EditText email;
@@ -73,7 +75,7 @@ public class EditProfilePassword extends AppCompatActivity {
                         public void onComplete(@NonNull Task<Void> task) {
 
                             if (task.isSuccessful()){
-                                Toast.makeText(getApplicationContext(),"Password Updated",Toast.LENGTH_SHORT).show();
+                                Toasty.success(getApplicationContext(), "Password Updated", Toast.LENGTH_LONG, true).show();
                                 Intent i =new Intent(getApplicationContext(),EditProfile.class);
                                 progressDialog.dismiss();
                                 startActivity(i);
@@ -84,6 +86,7 @@ public class EditProfilePassword extends AppCompatActivity {
                     }).addOnFailureListener(new OnFailureListener() {
                         @Override
                         public void onFailure(@NonNull Exception e) {
+                            progressDialog.dismiss();
                             Toast.makeText(getApplicationContext(),e.getMessage(),Toast.LENGTH_SHORT).show();
                             user.updatePassword(password.getText().toString());
 
@@ -95,6 +98,7 @@ public class EditProfilePassword extends AppCompatActivity {
         }).addOnFailureListener(new OnFailureListener() {
             @Override
             public void onFailure(@NonNull Exception e) {
+                progressDialog.dismiss();
                 Toast.makeText(getApplicationContext(),e.getMessage(),Toast.LENGTH_SHORT).show();
 
             }

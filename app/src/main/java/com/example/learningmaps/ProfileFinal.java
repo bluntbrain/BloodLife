@@ -1,10 +1,16 @@
 package com.example.learningmaps;
 
+import android.app.AlertDialog;
+import android.app.Dialog;
 import android.app.ProgressDialog;
+import android.content.DialogInterface;
 import android.content.Intent;
+import android.net.Uri;
 import android.os.Bundle;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.Window;
+import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -33,6 +39,10 @@ public class ProfileFinal extends AppCompatActivity {
     private FirebaseUser mUser;
     BottomNavigationView mBottomNavigationView;
     private TextView logout_btn,edit_btn,shareBtn;
+    private TextView feedback,rateus,aboutus,developers,TnC;
+    private AlertDialog dialog;
+    private AlertDialog.Builder builder;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -55,20 +65,46 @@ public class ProfileFinal extends AppCompatActivity {
         logout_btn=findViewById(R.id.profilefinal_logout_btn);
         edit_btn=findViewById(R.id.profilefinal_edit_btn);
 
+        feedback=findViewById(R.id.feedback_text);
+        rateus=findViewById(R.id.rate_us_text);
+        aboutus=findViewById(R.id.aboutus);
+        developers=findViewById(R.id.developers);
+        TnC=findViewById(R.id.tncc);
+
         logout_btn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                ProgressDialog progressDialog=new ProgressDialog(ProfileFinal.this);
-                progressDialog.setMessage("Logging Out");
-                progressDialog.setCanceledOnTouchOutside(false);
-                progressDialog.setCancelable(false);
-                progressDialog.show();
-                FirebaseAuth.getInstance().signOut();
-                Intent intent= new Intent(ProfileFinal.this,LoginActivity.class);
-                intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_NEW_TASK);
-                progressDialog.dismiss();
-                startActivity(intent);
 
+                builder = new AlertDialog.Builder(ProfileFinal.this);
+                builder.setTitle("Would you like to logout?");
+                builder.setMessage("You won't be able to access Blood Requests");
+                builder.setPositiveButton("Yes", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        logoutUser();
+                    }
+                });
+
+                builder.setNegativeButton("No", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+
+                    }
+                });
+
+                dialog = builder.create();
+                dialog.show();
+
+
+            }
+        });
+
+        TnC.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent i = new Intent(Intent.ACTION_VIEW);
+                i.setData(Uri.parse("https://www.websitepolicies.com/policies/view/pLXKb6oC"));
+                startActivity(i);
             }
         });
 
@@ -78,7 +114,7 @@ public class ProfileFinal extends AppCompatActivity {
                 Intent shareIntent = new Intent(Intent.ACTION_SEND);
                 shareIntent.setType("text/plain");
                 shareIntent.putExtra(Intent.EXTRA_SUBJECT, "BloodLife");
-                String shareMessage= "Manipal's own blood donation platform is here, download it now and save lives in no time\n*Remember! Heroes come in all types and sizes*\n";
+                String shareMessage= "Manipal's own blood donation platform is here, download it now and save lives in no time\n*Blood is a life, pass it on!*\n";
                 shareMessage = shareMessage + "playstore link....";
                 shareIntent.putExtra(Intent.EXTRA_TEXT, shareMessage);
                 startActivity(Intent.createChooser(shareIntent, "choose one"));
@@ -91,7 +127,58 @@ public class ProfileFinal extends AppCompatActivity {
                 startActivity(intent);
             }
         });
+
         loadProfile();
+
+        feedback.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                //Toast.makeText(ProfileFinal.this, "hello",Toast.LENGTH_SHORT).show();
+               // FeedBack feedBack=new FeedBack();
+               // feedBack.showDialog(ProfileFinal.this);
+
+                Dialog dialog = new Dialog(ProfileFinal.this);
+                dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
+                dialog.setContentView(R.layout.activity_feed_back);
+                ImageView mButton = dialog.findViewById(R.id.emailusbutton);
+                mButton.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        Intent intent = new Intent (Intent.ACTION_VIEW , Uri.parse("mailto:" + "bloodlifemanipal@gmail.com"));
+                        intent.putExtra(Intent.EXTRA_SUBJECT, "Bug Report");
+                        intent.putExtra(Intent.EXTRA_TEXT, "your_text");
+                        startActivity(intent);
+                    }
+                });
+                dialog.show();
+            }
+        });
+
+        aboutus.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent=new Intent(ProfileFinal.this,about_us_page.class);
+                startActivity(intent);
+            }
+        });
+
+        rateus.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Dialog dialog = new Dialog(ProfileFinal.this);
+                dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
+                dialog.setContentView(R.layout.activity_rate_us);
+                dialog.show();
+            }
+        });
+
+        developers.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+               Intent intent=new Intent(ProfileFinal.this,developers_page.class);
+               startActivity(intent);
+            }
+        });
     }
 
 
@@ -131,6 +218,21 @@ public class ProfileFinal extends AppCompatActivity {
         });
     }
 
+    private void logoutUser(){
+        ProgressDialog progressDialog=new ProgressDialog(ProfileFinal.this);
+        progressDialog.setMessage("Logging Out");
+        progressDialog.setCanceledOnTouchOutside(false);
+        progressDialog.setCancelable(false);
+        progressDialog.show();
+        FirebaseAuth.getInstance().signOut();
+        Intent intent= new Intent(ProfileFinal.this,LoginActivity.class);
+        intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_NEW_TASK);
+        progressDialog.dismiss();
+        startActivity(intent);
+
+
+    }
+
     private BottomNavigationView.OnNavigationItemSelectedListener mOnNavigationItemSelectedListener
             = new BottomNavigationView.OnNavigationItemSelectedListener() {
         @Override
@@ -146,7 +248,7 @@ public class ProfileFinal extends AppCompatActivity {
 
                 case R.id.leaderboard_icon:
 
-                    Intent a=new Intent(ProfileFinal.this,BheroLoading.class);
+                    Intent a=new Intent(ProfileFinal.this,LeaderBoard.class);
                     startActivity(a);
                     break;
 

@@ -21,6 +21,8 @@ import com.google.firebase.database.FirebaseDatabase;
 
 import java.util.HashMap;
 
+import es.dmoral.toasty.Toasty;
+
 public class EditProfilePhone extends AppCompatActivity {
 
     private TextView phone;
@@ -47,7 +49,7 @@ public class EditProfilePhone extends AppCompatActivity {
     private void updatePhone() {
 
         final ProgressDialog progressDialog =new ProgressDialog(EditProfilePhone.this);
-        progressDialog.setMessage("Signing In");
+        progressDialog.setMessage("Making changes");
         progressDialog.setCancelable(false);
         progressDialog.show();
 
@@ -58,7 +60,7 @@ public class EditProfilePhone extends AppCompatActivity {
             @Override
             public void onComplete(@NonNull Task<Void> task) {
                 if(task.isSuccessful()){
-                    Toast.makeText(getApplicationContext(),"Phone Number Updated",Toast.LENGTH_SHORT).show();
+                    Toasty.success(getApplicationContext(), "Phone Number Updated", Toast.LENGTH_LONG, true).show();
                     Intent i=new Intent(getApplicationContext(),EditProfile.class);
                     progressDialog.dismiss();
                     startActivity(i);
@@ -68,6 +70,7 @@ public class EditProfilePhone extends AppCompatActivity {
         }).addOnFailureListener(new OnFailureListener() {
             @Override
             public void onFailure(@NonNull Exception e) {
+                progressDialog.dismiss();
                 Toast.makeText(getApplicationContext(), e.getMessage(), Toast.LENGTH_SHORT).show();
             }
         });

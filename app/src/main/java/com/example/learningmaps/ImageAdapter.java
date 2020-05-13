@@ -1,20 +1,17 @@
 package com.example.learningmaps;
 import android.content.Context;
-
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Button;
 import android.widget.ImageView;
-import android.widget.Toast;
 
 import androidx.viewpager.widget.PagerAdapter;
 
 public class ImageAdapter extends PagerAdapter {
     private Context mContext;
-    Button b1;
-    private int[] mImageIds = new int[]{R.drawable.i3, R.drawable.i1, R.drawable.i4, R.drawable.i5, R.drawable.i2};
 
-    ImageAdapter(Context context) {
+    private int[] mImageIds = new int[]{R.drawable.cover1, R.drawable.cover2, R.drawable.cover3, R.drawable.cover4, R.drawable.cover5,R.drawable.cover6};
+
+    ImageAdapter(Context context,View view) {
         mContext = context;
     }
 
@@ -30,6 +27,9 @@ public class ImageAdapter extends PagerAdapter {
 
     @Override
     public Object instantiateItem(ViewGroup container, int position) {
+        if(position==5){
+
+        }
         ImageView imageView = new ImageView(mContext);
         imageView.setScaleType(ImageView.ScaleType.CENTER_CROP);
         imageView.setImageResource(mImageIds[position]);

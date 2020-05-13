@@ -17,6 +17,8 @@ import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
 
+import es.dmoral.toasty.Toasty;
+
 public class ForgotPassword extends AppCompatActivity {
 
     private ImageView backfromforgot;
@@ -47,7 +49,7 @@ public class ForgotPassword extends AppCompatActivity {
 
                                 if(task.isSuccessful())
                                 {
-                                    Toast.makeText(ForgotPassword.this,"Please Check Your email to Reset Password",Toast.LENGTH_SHORT).show();
+                                    Toasty.info(ForgotPassword.this, "Please Check Your email to Reset Password", Toast.LENGTH_LONG, true).show();
                                     startActivity(new Intent( ForgotPassword.this,LoginActivity.class));
                                 }else {
                                     Toast.makeText(ForgotPassword.this,task.getException().getMessage(),Toast.LENGTH_SHORT).show();

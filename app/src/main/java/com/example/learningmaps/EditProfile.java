@@ -20,8 +20,11 @@ import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.messaging.FirebaseMessaging;
 
 import java.util.HashMap;
+
+import es.dmoral.toasty.Toasty;
 
 public class EditProfile extends AppCompatActivity {
 
@@ -101,6 +104,7 @@ public class EditProfile extends AppCompatActivity {
         final ProgressDialog progressDialog = new ProgressDialog(EditProfile.this);
         progressDialog.setMessage("Loading");
         progressDialog.show();
+        tryFCM();
         final String id = mUser.getUid();
 
         FirebaseAuth.getInstance().getCurrentUser().delete().addOnCompleteListener(new OnCompleteListener<Void>() {
@@ -127,13 +131,33 @@ public class EditProfile extends AppCompatActivity {
         }).addOnFailureListener(new OnFailureListener() {
             @Override
             public void onFailure(@NonNull Exception e) {
-                Toast.makeText(EditProfile.this,e.getMessage(),Toast.LENGTH_SHORT).show();
-                Intent i = new Intent(EditProfile.this, LoginActivity.class);
-                i.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_NEW_TASK);
                 progressDialog.dismiss();
-                startActivity(i);
+                Toast.makeText(EditProfile.this,e.getMessage(),Toast.LENGTH_SHORT).show();
+                Toasty.error(getApplicationContext(), "error in deleting", Toast.LENGTH_LONG, true).show();
+
             }
         });
+    }
+
+    public void onBackPressed(){
+        startActivity(new Intent(EditProfile.this,ProfileFinal.class));
+
+    }
+
+    public void tryFCM(){
+
+        FirebaseMessaging.getInstance().unsubscribeFromTopic("donors").addOnCompleteListener(new OnCompleteListener<Void>() {
+            @Override
+            public void onComplete(@NonNull Task<Void> task) {
+
+            }
+        }).addOnFailureListener(new OnFailureListener() {
+            @Override
+            public void onFailure(@NonNull Exception e) {
+                Toast.makeText(EditProfile.this,e.getMessage(),Toast.LENGTH_SHORT).show();
+            }
+        });
+
     }
 
 }

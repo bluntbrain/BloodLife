@@ -21,19 +21,23 @@
         android:screenOrientation="portrait"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity android:name=".ProfileFinal"></activity>
+        <activity android:name=".HowToUseApp"></activity>
+        <activity android:name=".about_us_page" />
+        <activity android:name=".developers_page" />
+        <activity android:name=".GettingLocationPerm" />
+        <activity android:name=".ProfileFinal" />
         <activity android:name=".EditProfilePhone" />
         <activity android:name=".EditProfilePassword" />
         <activity android:name=".EditProfileEmail" />
         <activity android:name=".EditProfile" />
         <activity android:name=".SearchUsers" />
-        <activity android:name=".DeleteRequest"
-            android:windowSoftInputMode="adjustPan"/>
+        <activity
+            android:name=".DeleteRequest"
+            android:windowSoftInputMode="adjustPan" />
         <activity android:name=".ForgotPassword" />
         <activity android:name=".BloodCampBottomSheet" />
         <activity android:name=".RequestBottomSheet" />
         <activity android:name=".RequestsTabs" />
-        <activity android:name=".BheroLoading" />
         <activity android:name=".PostCamps" />
         <activity android:name=".UploadPicture" />
         <activity android:name=".RequestBlood" />
@@ -48,11 +52,10 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-
         <activity android:name=".Request" />
         <activity android:name=".LeaderBoard" />
         <activity android:name=".SliderActivity" />
-        <activity android:name=".MainActivity"/>
+        <activity android:name=".MainActivity" />
 
         <meta-data
             android:name="com.google.android.geo.API_KEY"
@@ -60,8 +63,8 @@
         <meta-data
             android:name="preloaded_fonts"
             android:resource="@array/preloaded_fonts" />
+
+
     </application>
-
-
 
 </manifest>

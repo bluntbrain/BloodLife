@@ -24,6 +24,8 @@ import com.google.firebase.database.FirebaseDatabase;
 
 import java.util.HashMap;
 
+import es.dmoral.toasty.Toasty;
+
 public class EditProfileEmail extends AppCompatActivity {
 
     private EditText email;
@@ -84,7 +86,7 @@ public class EditProfileEmail extends AppCompatActivity {
                                 mDatabaseReference.updateChildren(hashMap).addOnCompleteListener(new OnCompleteListener<Void>() {
                                     @Override
                                     public void onComplete(@NonNull Task<Void> task) {
-                                        Toast.makeText(getApplicationContext(),"Email Updated",Toast.LENGTH_SHORT).show();
+                                        Toasty.success(getApplicationContext(), "Email Updated", Toast.LENGTH_LONG, true).show();
                                         Intent i =new Intent(getApplicationContext(),EditProfile.class);
                                         progressDialog.dismiss();
                                         startActivity(i);
@@ -94,6 +96,7 @@ public class EditProfileEmail extends AppCompatActivity {
                                 }).addOnFailureListener(new OnFailureListener() {
                                     @Override
                                     public void onFailure(@NonNull Exception e) {
+                                        progressDialog.dismiss();
                                         Toast.makeText(getApplicationContext(),e.getMessage(),Toast.LENGTH_SHORT).show();
                                         user.updateEmail(email.getText().toString());
                                     }
@@ -105,6 +108,7 @@ public class EditProfileEmail extends AppCompatActivity {
                     }).addOnFailureListener(new OnFailureListener() {
                         @Override
                         public void onFailure(@NonNull Exception e) {
+                            progressDialog.dismiss();
                             Toast.makeText(getApplicationContext(),e.getMessage(),Toast.LENGTH_SHORT).show();
                         }
                     });
@@ -113,10 +117,13 @@ public class EditProfileEmail extends AppCompatActivity {
         }).addOnFailureListener(new OnFailureListener() {
             @Override
             public void onFailure(@NonNull Exception e) {
+                progressDialog.dismiss();
                 Toast.makeText(getApplicationContext(),e.getMessage(),Toast.LENGTH_SHORT).show();
 
             }
         });
     }
+
+
 
 }

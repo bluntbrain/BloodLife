@@ -80,7 +80,7 @@ public class SearchUsersCustomAdapter extends RecyclerView.Adapter<SearchUsersCu
         holder.user_email.setText(currentItem.getSearch_user_email());
         holder.user_name.setText(currentItem.getSearch_user_name());
         holder.user_bloodtype.setText(currentItem.getSearch_user_bloodtype());
-        if(currentItem.getSearch_user_imgID().equals("Default"))
+        if(currentItem.getSearch_user_imgID().equals("default"))
         {
             Picasso.get().load(R.drawable.tryimage).into(holder.user_dp);
 

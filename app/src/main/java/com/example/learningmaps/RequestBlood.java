@@ -1,7 +1,9 @@
 package com.example.learningmaps;
 
+import android.app.AlertDialog;
 import android.app.DatePickerDialog;
 import android.app.ProgressDialog;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.text.TextUtils;
@@ -44,6 +46,8 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.Random;
 
+import es.dmoral.toasty.Toasty;
+
 public class RequestBlood extends AppCompatActivity {
     private LatLng mycoordinates;
     private ImageView i1,i2;
@@ -54,7 +58,8 @@ public class RequestBlood extends AppCompatActivity {
     private FirebaseFirestore mFirestore;
     private FirebaseAuth mAuth;
     private String tokenId;
-
+    private AlertDialog.Builder builder;
+    private AlertDialog dialog;
 
     private DatabaseReference mReference;
     private FirebaseUser mUser;
@@ -75,7 +80,7 @@ public class RequestBlood extends AppCompatActivity {
 
         gettingCurrentTokenID();
         tryFCM();
-        Bundle bundle = getIntent().getParcelableExtra("bundle");
+        final Bundle bundle = getIntent().getParcelableExtra("bundle");
         mycoordinates = bundle.getParcelable("userlocation");
         //SPINNER CODE
 
@@ -185,7 +190,27 @@ public class RequestBlood extends AppCompatActivity {
                     Toast.makeText(RequestBlood.this, "Fields Empty", Toast.LENGTH_LONG).show();
                 }else{
 
-                    uploadRequest();
+                    builder = new AlertDialog.Builder(RequestBlood.this);
+                    builder.setTitle("Request Blood");
+                    builder.setMessage("No changes are allowed once request is made. Nearby donors will receive notification regarding your blood emergency");
+                    builder.setPositiveButton("Yes", new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialog, int which) {
+                            uploadRequest();
+                        }
+                    });
+
+                    builder.setNegativeButton("No", new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialog, int which) {
+
+                        }
+                    });
+
+                    dialog = builder.create();
+                    dialog.show();
+
+
                 }
             }
         });
@@ -239,7 +264,7 @@ public class RequestBlood extends AppCompatActivity {
         progressDialog.setCancelable(false);
         progressDialog.setCanceledOnTouchOutside(false);
         progressDialog.show();
-         mReference = FirebaseDatabase.getInstance().getReference();
+        mReference = FirebaseDatabase.getInstance().getReference();
         HashMap<String,String> hashMap= new HashMap<>();
         hashMap.put("id",mUser.getUid());
         hashMap.put("request_id",mUser.getUid()+name.getText().toString()+BloodGroup+units.getText().toString());
@@ -261,8 +286,9 @@ public class RequestBlood extends AppCompatActivity {
             public void onComplete(@NonNull Task<Void> task) {
                 if(task.isSuccessful()){
                     postNotification();
-                    Toast.makeText(RequestBlood.this, "Request Successful", Toast.LENGTH_LONG).show();
+                    Toasty.success(getApplicationContext(), "Request Successful", Toast.LENGTH_LONG, true).show();
                     Intent i = new Intent(RequestBlood.this, MainActivity.class);
+                    i.putExtra("ripple","yes");
                     i.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_NEW_TASK);
                     progressDialog.dismiss();
                     startActivity(i);

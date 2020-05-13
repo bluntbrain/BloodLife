@@ -35,6 +35,8 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
+import es.dmoral.toasty.Toasty;
+
 public class DeleteRequest extends AppCompatActivity {
 
     private TextView deletename,request_id,deletetype,deletestatus,deleteunits,deletegender,deletelocation,deletemobile;
@@ -257,7 +259,7 @@ public class DeleteRequest extends AppCompatActivity {
                                     mReference.child("Donoted").push().setValue(hashMapList.get(hashMapList.size() - 1)).addOnCompleteListener(new OnCompleteListener<Void>() {
                                         @Override
                                         public void onComplete(@NonNull Task<Void> task) {
-                                            Toast.makeText(getApplicationContext(), "Request Deleted", Toast.LENGTH_LONG).show();
+                                            Toasty.success(getApplicationContext(), "Request Deleted", Toast.LENGTH_LONG, true).show();
 
                                             Intent i = new Intent(getApplicationContext(), MainActivity.class);
                                             i.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_NEW_TASK);
@@ -268,7 +270,7 @@ public class DeleteRequest extends AppCompatActivity {
                                     }).addOnFailureListener(new OnFailureListener() {
                                         @Override
                                         public void onFailure(@NonNull Exception e) {
-                                            Toast.makeText(getApplicationContext(), "Request Deleted", Toast.LENGTH_LONG).show();
+                                            Toasty.success(getApplicationContext(), "Request Deleted", Toast.LENGTH_LONG, true).show();
 
                                             Intent i = new Intent(getApplicationContext(), MainActivity.class);
                                             i.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_NEW_TASK);
@@ -279,7 +281,7 @@ public class DeleteRequest extends AppCompatActivity {
                                     });
 
                                 }else{
-                                    Toast.makeText(getApplicationContext(), "Request Deleted", Toast.LENGTH_LONG).show();
+                                    Toasty.success(getApplicationContext(), "Request Deleted", Toast.LENGTH_LONG, true).show();
 
                                     Intent i = new Intent(getApplicationContext(), MainActivity.class);
                                     i.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_NEW_TASK);

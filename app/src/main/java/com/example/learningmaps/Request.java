@@ -79,15 +79,20 @@ public class Request extends AppCompatActivity {
                 int count=0;
                 for(DataSnapshot snapshot: dataSnapshot.getChildren()){
 
-                    String victim_type = snapshot.child("victim_bloodtype").getValue().toString();
-                    String victim_name = snapshot.child("victim_name").getValue().toString();
-                    String victim_place = snapshot.child("victim_hospital").getValue().toString();
-                    String victim_phone =snapshot.child("phone").getValue().toString();
-                    String victim_status =snapshot.child("victim_status").getValue().toString();
-                    String victim_units = snapshot.child("units").getValue().toString();
-                    data.add(new AddingItemsRequests(victim_name,victim_type,victim_place,victim_phone,victim_status,victim_units));
-                    dataofall.put(count,new ModelBottomSheetRequest(victim_name,victim_units,victim_type,victim_status,snapshot.child("victim_gender").getValue().toString(),victim_place,victim_phone));
-                    count++;
+                        String victim_type = snapshot.child("victim_bloodtype").getValue().toString();
+                        String victim_name = snapshot.child("victim_name").getValue().toString();
+                        String victim_place = snapshot.child("victim_hospital").getValue().toString();
+                        String victim_phone = snapshot.child("phone").getValue().toString();
+                        String victim_status = snapshot.child("victim_status").getValue().toString();
+                        String victim_units = snapshot.child("units").getValue().toString();
+                        data.add(new AddingItemsRequests(victim_name, victim_type, victim_place, victim_phone, victim_status, victim_units));
+                        dataofall.put(count, new ModelBottomSheetRequest(victim_name, victim_units, victim_type, victim_status, snapshot.child("victim_gender").getValue().toString(), victim_place, victim_phone));
+                        count++;
+
+                }
+
+                if(count==0){
+                    findViewById(R.id.here).setVisibility(View.VISIBLE);
                 }
 
                 mAdapter= new RequestsCustomAdapter(data);
@@ -117,6 +122,7 @@ public class Request extends AppCompatActivity {
                         bloodtypesheet.setText(ans.getBloodtype());
                         gendersheet.setText(ans.getGender());
                         hospitalsheet.setText(ans.getPlace());
+                        phonesheet.setText(ans.getPhone());
 
                         sharebtn.setOnClickListener(new View.OnClickListener() {
                             @Override
@@ -193,7 +199,7 @@ public class Request extends AppCompatActivity {
 
                 case R.id.leaderboard_icon:
 
-                    Intent a=new Intent(Request.this,BheroLoading.class);
+                    Intent a=new Intent(Request.this,LeaderBoard.class);
                     startActivity(a);
                     break;
 

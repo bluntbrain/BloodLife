@@ -6,17 +6,6 @@
     android:layout_height="match_parent"
     tools:context=".Request">
 
-    <TextView
-        android:id="@+id/info"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="No blood Requests in your neighbourhood"
-        app:layout_constraintBottom_toBottomOf="@+id/recyclerView"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        android:visibility="invisible"/>
-
 
     <LinearLayout
         android:id="@+id/linearview"
@@ -39,9 +28,17 @@
     </LinearLayout>
 
 
-
-
-
+    <TextView
+        android:id="@+id/info"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Blood Emergencies nearby"
+        android:visibility="visible"
+        app:layout_constraintBottom_toBottomOf="@+id/linearview"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.93" />
 
     <pl.droidsonroids.gif.GifImageView
         android:id="@+id/request_loading"
@@ -67,6 +64,19 @@
 
 </androidx.recyclerview.widget.RecyclerView>
 
+    <androidx.appcompat.widget.AppCompatImageView
+        android:id="@+id/here"
+        android:layout_width="match_parent"
+        android:layout_height="100dp"
+        android:alpha="0.7"
+        android:visibility="invisible"
+        app:layout_constraintBottom_toBottomOf="@+id/recyclerView"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.65999997"
+        app:srcCompat="@drawable/imfo_no_request" />
+
 
     <com.google.android.material.bottomnavigation.BottomNavigationView
         android:id="@+id/bottomNavigation"
@@ -83,5 +93,7 @@
         android:background="@color/white"
         app:layout_constraintVertical_bias="1.0"
         app:menu="@menu/bottom_navigation_menu" />
+
+
 
 </androidx.constraintlayout.widget.ConstraintLayout>

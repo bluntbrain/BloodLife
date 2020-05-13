@@ -40,6 +40,8 @@ import com.google.android.libraries.places.api.Places;
 import com.google.android.libraries.places.api.net.PlacesClient;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.android.material.bottomsheet.BottomSheetDialog;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
@@ -64,11 +66,11 @@ public class MainActivity extends FragmentActivity implements OnMapReadyCallback
     private BottomNavigationView mBottomNavigationView;
     private FusedLocationProviderClient mFusedLocationProviderClient;
     private final LatLng mDefaultLocation = new LatLng(-3.3525, 74.7928); // set to MIT - to be used when permission i'snt granted
-    private static final int DEFAULT_ZOOM = 12;
+    private static final int DEFAULT_ZOOM = 10;
     private static final int PERMISSIONS_REQUEST_ACCESS_FINE_LOCATION = 1;
     private boolean mLocationPermissionGranted;
     private GifImageView mapLoading;
-    private TextView upper,lower;
+    private TextView upper;
     private DatabaseReference mReference;
     private HashMap<Marker,ModelBottomSheetRequest> dataofallmarkers;
     private HashMap<Marker,ModelBottomSheetCamp> dataofallcamps;
@@ -99,7 +101,7 @@ public class MainActivity extends FragmentActivity implements OnMapReadyCallback
         setContentView(R.layout.activity_main); // Rendering of the map
         mapLoading=findViewById(R.id.map_loading);
         upper=findViewById(R.id.no_req_text1);
-        lower=findViewById(R.id.no_req_text2);
+        //lower=findViewById(R.id.no_req_text2);
         // Construct a PlacesClient
         dataofallmarkers=new HashMap<>();
         dataofallcamps=new HashMap<>();
@@ -152,19 +154,15 @@ public class MainActivity extends FragmentActivity implements OnMapReadyCallback
     @Override
     public void onMapReady(GoogleMap googleMap) {
 
+        getLocationPermission();
 
         mMap = googleMap;
         //mMap.getUiSettings().setCompassEnabled(true);
-        mMap.getUiSettings().setZoomControlsEnabled(true);
-        mMap.getUiSettings().setMyLocationButtonEnabled(true);
-
-        getLocationPermission();
-
         // Turn on the My Location layer and the related control on the map.
         updateLocationUI();
 
         // Get the current location of the device and set the position of the map.
-        getDeviceLocation();
+
 
         //showCurrentPlace();
         allcamps();
@@ -318,6 +316,7 @@ public class MainActivity extends FragmentActivity implements OnMapReadyCallback
                 android.Manifest.permission.ACCESS_FINE_LOCATION)
                 == PackageManager.PERMISSION_GRANTED) {
             mLocationPermissionGranted = true;
+
         } else {
             ActivityCompat.requestPermissions(this,
                     new String[]{android.Manifest.permission.ACCESS_FINE_LOCATION},
@@ -339,10 +338,11 @@ public class MainActivity extends FragmentActivity implements OnMapReadyCallback
                 if (grantResults.length > 0
                         && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
                     mLocationPermissionGranted = true;
+
                 }
             }
         }
-        updateLocationUI();
+
     }
 
     /**
@@ -356,8 +356,13 @@ public class MainActivity extends FragmentActivity implements OnMapReadyCallback
             if (mLocationPermissionGranted) {
                 mMap.setMyLocationEnabled(true);
                 mMap.getUiSettings().setMyLocationButtonEnabled(true);
+                mMap.getUiSettings().setZoomControlsEnabled(true);
+                mMap.getUiSettings().setMyLocationButtonEnabled(true);
+                getDeviceLocation();
             } else {
                 mMap.setMyLocationEnabled(false);
+                mMap.getUiSettings().setMyLocationButtonEnabled(false);
+                mMap.getUiSettings().setZoomControlsEnabled(false);
                 mMap.getUiSettings().setMyLocationButtonEnabled(false);
                 mLastKnownLocation = null;
                 getLocationPermission();
@@ -406,42 +411,49 @@ public class MainActivity extends FragmentActivity implements OnMapReadyCallback
 
    private void addallrequests()
     {
-
+        final FirebaseUser fUser= FirebaseAuth.getInstance().getCurrentUser();
         mReference= FirebaseDatabase.getInstance().getReference("BloodRequests");
         mReference.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                 int flag=0;
-                for(DataSnapshot snapshot: dataSnapshot.getChildren()){
-                    flag=1;
-                    Double Lat = Double.parseDouble(snapshot.child("victim_lat").getValue().toString());
-                    Double Long = Double.parseDouble(snapshot.child("victim_long").getValue().toString());
-                    String bloodType=snapshot.child("victim_bloodtype").getValue().toString();
+                for(DataSnapshot snapshot: dataSnapshot.getChildren()) {
+                        flag=1;
+
+                        Double Lat = Double.parseDouble(snapshot.child("victim_lat").getValue().toString());
+                        Double Long = Double.parseDouble(snapshot.child("victim_long").getValue().toString());
+                        String bloodType = snapshot.child("victim_bloodtype").getValue().toString();
 
 
-                    Bitmap smallMarker=getMarkerImage(bloodType);
+                        Bitmap smallMarker = getMarkerImage(bloodType);
+                    if(snapshot.child("id").getValue().toString()==fUser.getUid()) {
+                        findViewById(R.id.check_request).setVisibility(View.VISIBLE);
+                    }
+                        LatLng Location = new LatLng(Lat, Long);
+                        Marker requestmarker = mMap.addMarker(new MarkerOptions().position(Location).title(snapshot.child("victim_name").getValue().toString()).icon(BitmapDescriptorFactory.fromBitmap(smallMarker))
+                        );
 
-                    LatLng Location = new LatLng(Lat,Long);
-                    Marker requestmarker =mMap.addMarker(new MarkerOptions().position(Location).title(snapshot.child("victim_name").getValue().toString()).icon(BitmapDescriptorFactory.fromBitmap(smallMarker))
-                            );
-                    dataofallmarkers.put(requestmarker,new ModelBottomSheetRequest(snapshot.child("victim_name").getValue().toString(),
-                            snapshot.child("units").getValue().toString(),
-                            snapshot.child("victim_bloodtype").getValue().toString(),
-                            snapshot.child("victim_status").getValue().toString(),
-                            snapshot.child("victim_gender").getValue().toString(),
-                            snapshot.child("victim_hospital").getValue().toString(),
-                            snapshot.child("phone").getValue().toString()));
+                            dataofallmarkers.put(requestmarker, new ModelBottomSheetRequest(snapshot.child("victim_name").getValue().toString(),
+                                    snapshot.child("units").getValue().toString(),
+                                    snapshot.child("victim_bloodtype").getValue().toString(),
+                                    snapshot.child("victim_status").getValue().toString(),
+                                    snapshot.child("victim_gender").getValue().toString(),
+                                    snapshot.child("victim_hospital").getValue().toString(),
+                                    snapshot.child("phone").getValue().toString()));
 
-                    requestmarker.hideInfoWindow();
+                            requestmarker.hideInfoWindow();
+                            if(snapshot.child("id").getValue().toString()==fUser.getUid()) {
+                                findViewById(R.id.check_request).setVisibility(View.VISIBLE);
+                            }
+
 
                 }
+
                 mapLoading.setAlpha(0f);
                 mapLoading.setVisibility(View.GONE);
                 if(flag==0){
                     upper.setAlpha(1f);
-                    lower.setAlpha(1f);
                     upper.setVisibility(View.VISIBLE);
-                    lower.setVisibility(View.VISIBLE);
                 }
             }
 
@@ -492,7 +504,7 @@ public class MainActivity extends FragmentActivity implements OnMapReadyCallback
                     break;
 
                 case R.id.leaderboard_icon:
-                    Intent a=new Intent(MainActivity.this,BheroLoading.class);
+                    Intent a=new Intent(MainActivity.this,LeaderBoard.class);
                     startActivity(a);
                     break;
 
@@ -525,4 +537,6 @@ public class MainActivity extends FragmentActivity implements OnMapReadyCallback
         finish();
 
     }
+
+
 }

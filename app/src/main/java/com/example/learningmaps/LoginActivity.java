@@ -112,7 +112,7 @@ public class LoginActivity extends AppCompatActivity {
                     if(task.isSuccessful())
                     {
                         FirebaseMessaging.getInstance().subscribeToTopic("donors");
-                        Intent intent=new Intent(LoginActivity.this,MainActivity.class);
+                        Intent intent=new Intent(LoginActivity.this,GettingLocationPerm.class);
                         progressDialog.dismiss();
                         intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_NEW_TASK);
                         startActivity(intent);
@@ -120,7 +120,6 @@ public class LoginActivity extends AppCompatActivity {
 
                     }else {
                         progressDialog.dismiss();
-                        Toast.makeText(LoginActivity.this,task.getException().getMessage(),Toast.LENGTH_LONG).show();
 
                     }
                 }

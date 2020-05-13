@@ -2,6 +2,7 @@ package com.example.learningmaps;
 
 import android.app.ProgressDialog;
 import android.content.Intent;
+import android.net.Uri;
 import android.os.Bundle;
 import android.text.TextUtils;
 import android.view.View;
@@ -51,7 +52,9 @@ public class SignupActivity extends AppCompatActivity {
         TnC.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-
+                Intent i = new Intent(Intent.ACTION_VIEW);
+                i.setData(Uri.parse("https://www.websitepolicies.com/policies/view/pLXKb6oC"));
+                startActivity(i);
             }
         });
 
